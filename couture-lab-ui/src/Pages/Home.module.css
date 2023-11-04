@@ -3,11 +3,3 @@
     flex-direction: column;
     font-family: "Inter";
 }
-
-.navbar {
-    justify-content: space-between;
-    font-family: 'Inter-Bold';
-    font-size: 1.2em;
-    color: 	#282a36;
-    margin: 1%;
-}
