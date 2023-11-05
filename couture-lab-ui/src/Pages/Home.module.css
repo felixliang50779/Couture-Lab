@@ -2,19 +2,27 @@
     display: flex;
     flex-direction: column;
     font-family: "Inter";
+    align-items: center;
+    justify-content: center;
 }
 
 .landing-content, .styling-tips, .virtual-closet {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 1em;
-    margin: 1%;
-    margin-top: 5%;
+    display: flex;
+    margin-top: 10%;
+    margin-left: 8%;
+    gap: 4em;
 }
 
-.landing-content img {
-    width: auto;
-    height: auto;
-    align-self: center;
+.section-title {
+    font-size: 4em;
+    max-width: 20em;
+}
+
+.section-desc {
+    font-size: 1.5em;
+    max-width: 30em;
+}
+
+.landing-img {
+    width: 15%;
 }

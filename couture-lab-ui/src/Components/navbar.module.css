@@ -5,7 +5,7 @@
     font-family: 'Inter-Bold';
     font-size: 1.2em;
     color:#282a36;
-    background-color: #fff;
+    background-color: #f8f8f2;
     margin: 0;
     padding: 30px 30px;
     box-shadow: 1px 1px 2px 1px #000000;
@@ -16,7 +16,8 @@
 
 .navbar a {
     color: #000000; 
-    transition: color 0.3s; 
+    transition: color 0.3s;
+    text-decoration: none;
 }
 
 .navbar a:hover {

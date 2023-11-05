@@ -1,0 +1,14 @@
+.button {
+    background-color: #282a36;
+    color: white;
+    padding: 2%;
+    font-size: 1.2em;
+    border-radius: 1em;
+    border-color: white;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    transform: scale(108%);
+}
