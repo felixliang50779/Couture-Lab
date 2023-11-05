@@ -5,13 +5,17 @@
     font-family: 'Inter-Bold';
     font-size: 1.2em;
     color:#282a36;
-    background-color: #f8f8f2;
     margin: 0;
     padding: 30px 30px;
-    box-shadow: 1px 1px 2px 1px #000000;
+    background-color: transparent;
     position: fixed;
     top: 0;
     width: 100%;
+}
+
+.scrollNavbar {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 1px 1px 2px 1px #000000;
 }
 
 .navbar a {
