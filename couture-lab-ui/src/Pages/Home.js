@@ -45,10 +45,34 @@ export default function Home() {
                     loading='lazy' />
             </div>
             <div id="closetDesc" className={styles['virtual-closet']}>
-
+                <div className={styles['section-text']}>
+                    <h1 className={styles['section-title']}>Discover Your Personal Style</h1>
+                    <h3 className={styles['section-desc']}>
+                        AI Powered Stylist Offering Personalized
+                        Recommendations To Help You Look And Feel Your Best
+                    </h3>
+                    <Button text="Go To Dashboard"/>
+                </div>
+                <img 
+                    className={styles['landing-img']}
+                    src={ClosetImage}
+                    alt="landingImg"
+                    loading="lazy" />
             </div>
-            <div className={styles['outfit-history']}>
-
+            <div id='outfitHistoryDesc' className={styles['outfit-history']}>
+                <div className={styles['section-text']}>
+                        <h1 className={styles['section-title']}>Discover Your Personal Style</h1>
+                        <h3 className={styles['section-desc']}>
+                            AI Powered Stylist Offering Personalized
+                            Recommendations To Help You Look And Feel Your Best
+                        </h3>
+                        <Button text="Go To Dashboard"/>
+                    </div>
+                    <img 
+                        className={styles['landing-img']}
+                        src={ClosetImage}
+                        alt="landingImg"
+                        loading="lazy" />
             </div>
         </div>
     )

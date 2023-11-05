@@ -20,7 +20,7 @@ export default function NavBar() {
             <div className={styles.NavbarInformation}>
                 <a href='#stylingDesc'>Styling Tips</a>
                 <a href='#closetDesc'>Virtual Closet</a>
-                <a>Outfit History</a>
+                <a href='#outfitHistoryDesc'>Outfit History</a>
             </div>
             <a>Sign In</a>
         </nav>

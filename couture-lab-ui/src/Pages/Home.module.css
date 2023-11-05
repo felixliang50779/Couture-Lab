@@ -8,9 +8,17 @@
 
 .landing-content, .styling-tips, .virtual-closet {
     display: flex;
-    margin-top: 10%;
-    margin-left: 8%;
+    padding-left: 8%;
     gap: 4em;
+}
+
+.landing-content {
+    padding-top: 10%;
+}
+
+.styling-tips, .virtual-closet, .outfit-history {
+    padding-top: 15%;
+    padding-bottom: 15%;
 }
 
 .section-title {
