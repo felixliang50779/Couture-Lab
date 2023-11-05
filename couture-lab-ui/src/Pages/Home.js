@@ -4,13 +4,14 @@ import Button from '../Components/button';
 import LandingImage from '../Assets/Images/landing-image.png';
 import StylingImage from '../Assets/Images/styling-image.png';
 import ClosetImage from '../Assets/Images/closet-image.png';
+import OutfitHistoryImage from '../Assets/Images/outfit-history.png';
 import styles from './Home.module.css';
 
 export default function Home() {
     return (
         <div className={styles['content-container']}>
             <NavBar />
-            <div className={styles['landing-content']}>
+            <div id="landingDesc" className={styles['landing-content']}>
                 <div className={styles['section-text']}>
                     <h1 className={styles['section-title']}>Discover Your Personal Style</h1>
                     <h3 className={styles['section-desc']}>
@@ -46,12 +47,11 @@ export default function Home() {
             </div>
             <div id="closetDesc" className={styles['virtual-closet']}>
                 <div className={styles['section-text']}>
-                    <h1 className={styles['section-title']}>Discover Your Personal Style</h1>
+                    <h1 className={styles['section-title']}>Your Entire Closet At Your Fingertips</h1>
                     <h3 className={styles['section-desc']}>
                         AI Powered Stylist Offering Personalized
                         Recommendations To Help You Look And Feel Your Best
                     </h3>
-                    <Button text="Go To Dashboard"/>
                 </div>
                 <img 
                     className={styles['landing-img']}
@@ -61,18 +61,17 @@ export default function Home() {
             </div>
             <div id='outfitHistoryDesc' className={styles['outfit-history']}>
                 <div className={styles['section-text']}>
-                        <h1 className={styles['section-title']}>Discover Your Personal Style</h1>
-                        <h3 className={styles['section-desc']}>
-                            AI Powered Stylist Offering Personalized
-                            Recommendations To Help You Look And Feel Your Best
-                        </h3>
-                        <Button text="Go To Dashboard"/>
-                    </div>
-                    <img 
-                        className={styles['landing-img']}
-                        src={ClosetImage}
-                        alt="landingImg"
-                        loading="lazy" />
+                    <h1 className={styles['section-title']}>Organize Your Outfits</h1>
+                    <h3 className={styles['section-desc']}>
+                        AI Powered Stylist Offering Personalized
+                        Recommendations To Help You Look And Feel Your Best
+                    </h3>
+                </div>
+                <img 
+                    className={styles['landing-img']}
+                    src={OutfitHistoryImage}
+                    alt="landingImg"
+                    loading="lazy" />
             </div>
         </div>
     )

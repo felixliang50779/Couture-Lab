@@ -6,7 +6,7 @@
     justify-content: center;
 }
 
-.landing-content, .styling-tips, .virtual-closet {
+.landing-content, .styling-tips, .virtual-closet, .outfit-history {
     display: flex;
     padding-left: 8%;
     gap: 4em;
