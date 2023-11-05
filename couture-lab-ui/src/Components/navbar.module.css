@@ -20,10 +20,12 @@
 }
 
 .navbar a:hover {
-    color: #FF1005; 
+    color: #e9967a;
+    cursor: pointer;
 }
 
 .NavbarInformation {
     display: flex;
+    width: 50%;
     justify-content: space-between;
 }
