@@ -8,11 +8,13 @@
     border-style: solid;
     border-width: 0.1em;
     font-weight: bold;
-    transition: all 0.3s ease-in-out;
+    transition: 0.9s ease-out;
+    outline: none;
 }
 
 .button:hover {
     transform: scale(108%);
     background-color: white;
     color: #282a36;
+    box-shadow: inset 30em 0 0 0 white;
 }
