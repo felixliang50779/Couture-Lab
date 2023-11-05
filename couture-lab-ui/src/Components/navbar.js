@@ -11,11 +11,11 @@ export default function NavBar() {
             setColor(false)
         }
     }
-
+    
     window.addEventListener("scroll", changeNavbarColor);
 
     return (
-        <nav className={`${styles.navbar} ${colorChange ? styles.scrollNavbar : ''}`}>
+        <nav id="navbar" className={`${styles.navbar} ${colorChange ? styles.scrollNavbar : ''}`}>
             <a href="/Home">CoutureLab</a>
             <div className={styles.NavbarInformation}>
                 <a href='#stylingDesc'>Styling Tips</a>
