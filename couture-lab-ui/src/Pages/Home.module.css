@@ -3,3 +3,18 @@
     flex-direction: column;
     font-family: "Inter";
 }
+
+.landing-content, .styling-tips, .virtual-closet {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1em;
+    margin: 1%;
+    margin-top: 5%;
+}
+
+.landing-content img {
+    width: auto;
+    height: auto;
+    align-self: center;
+}
