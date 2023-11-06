@@ -33,10 +33,8 @@ export default function Home() {
                         Styling Tips
                     </h1>
                     <h3 className={styles['section-desc']}>
-                        Learn more about cuts, textures and prints that best suit your 
-                        figure from your personalized style guide. We will make shopping
-                        quicker and easier for you by curating a bespoke edit that suits
-                        your style and budget.
+                        From fashion advice to a personal shopper,
+                        your very own AI stylist has you covered
                     </h3>
                     
                 </div>
@@ -50,8 +48,8 @@ export default function Home() {
                 <div className={styles['section-text']}>
                     <h1 className={styles['section-title']}>Your Entire Closet At Your Fingertips</h1>
                     <h3 className={styles['section-desc']}>
-                        AI Powered Stylist Offering Personalized
-                        Recommendations To Help You Look And Feel Your Best
+                        Access anytime, anywhere by uploading pictures of your
+                        wardrobe
                     </h3>
                 </div>
                 <img 
@@ -64,8 +62,8 @@ export default function Home() {
                 <div className={styles['section-text']}>
                     <h1 className={styles['section-title']}>Organize Your Outfits</h1>
                     <h3 className={styles['section-desc']}>
-                        AI Powered Stylist Offering Personalized
-                        Recommendations To Help You Look And Feel Your Best
+                        Keep track of everything you've worn in the past, and plan
+                        ahead to keep yourself organized
                     </h3>
                 </div>
                 <img 
