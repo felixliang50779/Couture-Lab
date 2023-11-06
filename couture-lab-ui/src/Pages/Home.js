@@ -1,5 +1,6 @@
 import NavBar from '../Components/navbar';
 import Button from '../Components/button';
+import Footer from '../Components/footer';
 
 import LandingImage from '../Assets/Images/landing-image.png';
 import StylingImage from '../Assets/Images/styling-image.png';
@@ -18,7 +19,7 @@ export default function Home() {
                         AI Powered Stylist Offering Personalized
                         Recommendations To Help You Look And Feel Your Best
                     </h3>
-                    <Button text="Go To Dashboard"/>
+                    <Button text="Get Started"/>
                 </div>
                 <img 
                     className={styles['landing-img']}
@@ -73,6 +74,7 @@ export default function Home() {
                     alt="landingImg"
                     loading="lazy" />
             </div>
+            <Footer />
         </div>
     )
 }

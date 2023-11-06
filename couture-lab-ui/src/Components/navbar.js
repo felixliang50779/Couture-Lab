@@ -15,14 +15,14 @@ export default function NavBar() {
     window.addEventListener("scroll", changeNavbarColor);
 
     return (
-        <nav className={`${styles.navbar} ${colorChange ? styles.scrollNavbar : ''}`}>
-            <a href="#landingDesc">CoutureLab</a>
+        <nav id="navbar" className={`${styles.navbar} ${colorChange ? styles.scrollNavbar : ''}`}>
+            <a href="/Home">CoutureLab</a>
             <div className={styles.NavbarInformation}>
                 <a href='#stylingDesc'>Styling Tips</a>
                 <a href='#closetDesc'>Virtual Closet</a>
                 <a href='#outfitHistoryDesc'>Outfit History</a>
             </div>
-            <a href='/'>Sign In</a>
+            <a>Sign In</a>
         </nav>
     );
 }
