@@ -36,7 +36,7 @@ export default function Home() {
                         From fashion advice to a personal shopper,
                         your very own AI stylist has you covered
                     </h3>
-                    
+                    <Button text="Get Started"/>
                 </div>
                 <img
                     className={styles['landing-img']}
@@ -51,6 +51,7 @@ export default function Home() {
                         Access anytime, anywhere by uploading pictures of your
                         wardrobe
                     </h3>
+                    <Button text="Get Started"/>
                 </div>
                 <img 
                     className={styles['landing-img']}
@@ -65,6 +66,7 @@ export default function Home() {
                         Keep track of everything you've worn in the past, and plan
                         ahead to keep yourself organized
                     </h3>
+                    <Button text="Get Started"/>
                 </div>
                 <img 
                     className={styles['landing-img']}
