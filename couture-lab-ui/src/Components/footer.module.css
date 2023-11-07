@@ -1,5 +1,6 @@
 .footer {
     display: flex; 
+    font-family: "Inter";
     justify-content: space-between; 
     align-items: center; 
     color: #000000;
