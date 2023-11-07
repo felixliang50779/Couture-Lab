@@ -21,11 +21,13 @@ export default function Home() {
                     </h3>
                     <Button text="Get Started"/>
                 </div>
-                <img 
-                    className={styles['landing-img']}
-                    src={LandingImage}
-                    alt="landingImg"
-                    loading="lazy" />
+                <div className={styles['img-container']}>           
+                    <img 
+                        className={styles['landing-img']}
+                        src={LandingImage}
+                        alt="landingImg"
+                        loading="lazy" />
+                </div>
             </div>
             <div id="stylingDesc" className={styles['styling-tips']}>
                 <div className={styles['section-text']}>
@@ -38,11 +40,13 @@ export default function Home() {
                     </h3>
                     <Button text="Get Started"/>
                 </div>
-                <img
-                    className={styles['landing-img']}
-                    src={StylingImage}
-                    alt='stylingImg'
-                    loading='lazy' />
+                <div className={styles['img-container']}>
+                    <img
+                        className={styles['landing-img']}
+                        src={StylingImage}
+                        alt='stylingImg'
+                        loading='lazy' />
+                </div>
             </div>
             <div id="closetDesc" className={styles['virtual-closet']}>
                 <div className={styles['section-text']}>
@@ -53,11 +57,13 @@ export default function Home() {
                     </h3>
                     <Button text="Get Started"/>
                 </div>
-                <img 
-                    className={styles['landing-img']}
-                    src={ClosetImage}
-                    alt="landingImg"
-                    loading="lazy" />
+                <div className={styles['img-container']}>
+                    <img 
+                        className={styles['landing-img']}
+                        src={ClosetImage}
+                        alt="landingImg"
+                        loading="lazy" />
+                </div>
             </div>
             <div id='outfitHistoryDesc' className={styles['outfit-history']}>
                 <div className={styles['section-text']}>
@@ -68,11 +74,13 @@ export default function Home() {
                     </h3>
                     <Button text="Get Started"/>
                 </div>
-                <img 
-                    className={styles['landing-img']}
-                    src={OutfitHistoryImage}
-                    alt="landingImg"
-                    loading="lazy" />
+                <div className={styles['img-container']}>
+                    <img 
+                        className={styles['landing-img']}
+                        src={OutfitHistoryImage}
+                        alt="landingImg"
+                        loading="lazy" />
+                </div>
             </div>
             <Footer />
         </div>

@@ -22,7 +22,7 @@ export default function NavBar() {
                 <a href='#closetDesc'>Virtual Closet</a>
                 <a href='#outfitHistoryDesc'>Outfit History</a>
             </div>
-            <a>Sign In</a>
+            <a href="/">Sign In</a>
         </nav>
     );
 }
