@@ -1,0 +1,15 @@
+.horizontal-boxes {
+    display: flex;
+    justify-content: space-between;
+    padding: 10em;
+    margin: 5em;
+}
+
+.dashboard-box {
+    border-radius: 10px;
+}
+
+.chatbot-text-input {
+    padding: 2.5em;
+    text-align: center;
+}
