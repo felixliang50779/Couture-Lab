@@ -17,4 +17,5 @@
     background-color: white;
     color: #282a36;
     box-shadow: inset 30em 0 0 0 white;
+    cursor: pointer; 
 }

@@ -6,10 +6,22 @@
 }
 
 .dashboard-box {
-    border-radius: 10px;
+    border-radius: 1em;
+    background-color: orange;
+    padding: 4em;
 }
 
-.chatbot-text-input {
+.chatbot-container {
     padding: 2.5em;
     text-align: center;
+}
+
+.text-input {
+    border-radius: 0.625em;
+    background-color: #fff;
+    border: 0.063em solid #ccc;
+    border-radius: 1em; 
+    font-size: 1em;
+    padding: 0.625em 0.75em;
+    width: 50%;
 }

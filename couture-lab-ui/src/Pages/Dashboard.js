@@ -29,9 +29,9 @@ export default function Dashboard() {
                     </p>
                 </div>
             </div>
-            <div className={styles['chatbot-text-input']}>
+            <div className={styles['chatbot-container']}>
                 <form>
-                    <input type="text" placeholder="Enter your message"/>
+                    <input className={styles['text-input']} type="text" placeholder="Say hello!"/>
                 </form>
             </div>
             <Footer />
