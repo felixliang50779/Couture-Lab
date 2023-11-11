@@ -7,3 +7,8 @@
     font-family: "Inter-Bold";
     src: url('./Assets/Fonts/Inter-Bold.ttf');
 }
+
+@font-face {
+    font-family: "HeleNow-Bold";
+    src: url('./Assets/Fonts/HelveticaNowDisplay-Bold.ttf');
+}

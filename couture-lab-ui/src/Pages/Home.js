@@ -82,6 +82,12 @@ export default function Home() {
                         loading="lazy" />
                 </div>
             </div>
+            <div id='lastPageDesc' className={styles['last-page']}>
+                <div className={styles['section-text']}>
+                    <h1 className={styles['last-page-title']}>What are you waiting for?</h1>
+                    <a className={styles['last-page-link']} href='/Dashboard'>Start Styling</a>
+                </div>
+            </div>
             <Footer />
         </div>
     )

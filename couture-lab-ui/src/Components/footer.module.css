@@ -1,13 +1,30 @@
 .footer {
-    display: flex; 
-    font-family: "Inter";
-    justify-content: space-between; 
-    align-items: center; 
-    color: #000000;
+    font-family: "HeleNow-Bold";
+    color: #FFFFFF;
+    background-color: #000000;
+    width: 100%;
+}
+
+.footer-title {
+    display: flex;
+    padding: 1.5em 1.5em 1em 1.5em;
+    font-size: 2em;
+}
+
+.footer-content {
+    display: flex;
+    margin: 0 5em 0 3.2em;
+    padding: 0 0 1.5em 0;
+    justify-content: space-between;
 }
 
 .footerLinks {
     list-style: none; 
     display: flex; 
     gap: 2em;
+    color: #808080;
+}
+
+.footerLinks:hover {
+    color: #FFFFFF;
 }

@@ -1,27 +1,35 @@
-.horizontal-boxes {
+.dashboard-container {
     display: flex;
+    flex-direction: column;
+    font-family: "HeleNow-Bold";
+}
+
+.component-container {
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    padding: 10em;
-    margin: 5em;
+    margin: 5em 0 5em 0;
+    padding: 5em;
 }
 
-.dashboard-box {
-    border-radius: 1em;
-    background-color: orange;
-    padding: 4em;
-}
-
-.chatbot-container {
-    padding: 2.5em;
+.virtual-closet, .outfit-history, .styling-recommend {
+    display: flex;
+    flex-direction: column;
     text-align: center;
 }
 
-.text-input {
-    border-radius: 0.625em;
-    background-color: #fff;
-    border: 0.063em solid #ccc;
-    border-radius: 1em; 
-    font-size: 1em;
-    padding: 0.625em 0.75em;
-    width: 50%;
+.virtual-closet-img, .clothes-rack-img, .styling-recommend-img {
+    width: 60vh;
+    height: 60vh;
+    border-radius: 1em;
+}
+
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chatbot-input {
+    width: 50%; 
 }
