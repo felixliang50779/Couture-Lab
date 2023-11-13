@@ -12,7 +12,3 @@
     font-family: "HeleNow-Bold";
     src: url('./Assets/Fonts/HelveticaNowDisplay-Bold.ttf');
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

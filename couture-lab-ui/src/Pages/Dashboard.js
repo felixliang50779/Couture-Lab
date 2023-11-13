@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Input } from "@nextui-org/react";
  
 import Navbar from '../Components/navbar';
 
@@ -46,7 +45,7 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className={styles['chatbot-container']}>
-                <Input variant="underlined" className={styles['chatbot-input']}>Test</Input>
+                <input />
             </div>
         </div>
     )
