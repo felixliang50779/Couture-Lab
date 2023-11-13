@@ -1,7 +1,7 @@
 .content-container {
     display: flex;
     flex-direction: column;
-    font-family: "HeleNow-Bold";
+    font-family: "Inter-Bold";
 }
 
 .landing-content, .virtual-closet, .outfit-history, .styling-tips {

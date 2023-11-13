@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-
+import { Input } from "@nextui-org/react";
+ 
 import Navbar from '../Components/navbar';
-import Footer from '../Components/footer';
 
 import StylingRecommendImage from '../Assets/Images/styling-recommend.jpg';
 import VirtualClosetImage from '../Assets/Images/virtual-closet.jpg';
@@ -46,10 +46,14 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className={styles['chatbot-container']}>
-                <h1>Chatbot</h1>
-                <input className={styles['chatbot-input']} type="text"  id="name" name="name" />
+                <Input
+                    rounded
+                    bordered
+                    label="Default"
+                    placeholder="Default"
+                    color="default"
+                />
             </div>
-            <Footer />
         </div>
     )
 }
