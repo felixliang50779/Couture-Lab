@@ -46,13 +46,7 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className={styles['chatbot-container']}>
-                <Input
-                    rounded
-                    bordered
-                    label="Default"
-                    placeholder="Default"
-                    color="default"
-                />
+                <Input variant="underlined" className={styles['chatbot-input']}>Test</Input>
             </div>
         </div>
     )
