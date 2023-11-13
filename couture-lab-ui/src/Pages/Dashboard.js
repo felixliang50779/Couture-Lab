@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Input } from "@chakra-ui/react";
  
 import Navbar from '../Components/navbar';
 
@@ -45,8 +46,14 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className={styles['chatbot-container']}>
-                <input />
+                <Input
+                    width="88vw"
+                    variant="flushed"
+                    borderColor="black"
+                    focusBorderColor="black"
+                    placeholder="Chat with Your Styling Assistant"/>
             </div>
+
         </div>
     )
 }

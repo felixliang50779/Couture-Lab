@@ -7,10 +7,13 @@ import Closet from './Pages/Closet.js';
 import History from './Pages/History.js';
 import Recommendation from './Pages/Recommendation.js';
 
+import { ChakraProvider } from '@chakra-ui/react';
+
 import './App.css';
 
 function App() {
   return (
+    <ChakraProvider>
       <Router>
         <Routes>
           <Route path='/' element={<Navigate replace to='/Home' />} />
@@ -21,6 +24,7 @@ function App() {
           <Route path='/Recommendation' element={<Recommendation />} />
         </Routes>
       </Router>
+    </ChakraProvider>
   );
 }
 
