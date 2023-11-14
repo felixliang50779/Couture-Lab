@@ -4,7 +4,7 @@ import Footer from '../Components/footer';
 
 import LandingImage from '../Assets/Images/landing-image.png';
 import StylingImage from '../Assets/Images/styling-image.png';
-import ClosetImage from '../Assets/Images/closet-image.png';
+import ClosetImage from '../Assets/Images/virtual-closet.jpg';
 import OutfitHistoryImage from '../Assets/Images/outfit-history.png';
 import styles from './Home.module.css';
 
