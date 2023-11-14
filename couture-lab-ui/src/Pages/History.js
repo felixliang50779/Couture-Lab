@@ -11,14 +11,27 @@ export default function History() {
     const [startDate, endDate] = dateRange;
 
     //Dummy data
-    // const clothesData = {
-    //     "2023-11-14": ["Shirt", "Pants", "Shoes"],
-    //     "2023-11-15": ["Shirt", "Shorts", "Sneakers"],
-    // };
+    const clothesData = {
+        "2023-11-14": ["Shirt", "Pants", "Shoes"],
+        "2023-11-15": ["Shirt", "Shorts", "Sneakers"],
+        "2023-11-17": ["Shirt", "Leggings", "Sneakers"],
+        "2023-11-19": ["Shirt", "Jacket", "Jeans", "Sneakers"],
+    };
 
-    const getRangeClothes = () => {
-        const rangeClothes = [];
-    }
+    const getFilteredClothes = () => {
+        const filteredClothes = {};
+        for (const date in clothesData) {
+            if (startDate && endDate) {
+                if (date >= startDate.toISOString().split('T')[0] && 
+                date <= endDate.toISOString().split('T')[0]) {
+                    filteredClothes[date] = clothesData[date];
+                }
+            }
+        }
+        return filteredClothes;
+    };
+
+    const filteredClothes = getFilteredClothes();
 
     return (
         <div className={styles['history-container']}>
@@ -36,8 +49,20 @@ export default function History() {
                 </div>
                 <div className={styles['history-clothes']}>
                     <h1>Clothes</h1>
+                    <div className={styles['history-clothes-container']}>
+                        {Object.keys(filteredClothes).map((date) => (
+                            <div className={styles['history-clothes-list']} key={date}>
+                                <p>{date}</p>
+                                <ul>
+                                    {filteredClothes[date].map((item, index) => (
+                                        <li key={index}>{item}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }
