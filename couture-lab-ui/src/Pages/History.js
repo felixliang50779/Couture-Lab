@@ -11,10 +11,10 @@ export default function History() {
     const [startDate, endDate] = dateRange;
 
     //Dummy data
-    const clothesData = {
-        "2023-11-14": ["Shirt", "Pants", "Shoes"],
-        "2023-11-15": ["Shirt", "Shorts", "Sneakers"],
-    };
+    // const clothesData = {
+    //     "2023-11-14": ["Shirt", "Pants", "Shoes"],
+    //     "2023-11-15": ["Shirt", "Shorts", "Sneakers"],
+    // };
 
     return (
         <div className={styles['history-container']}>

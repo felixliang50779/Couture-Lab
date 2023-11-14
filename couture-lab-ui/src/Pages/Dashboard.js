@@ -3,9 +3,9 @@ import { Input } from "@chakra-ui/react";
  
 import DashboardNavbar from '../Components/dashboardnavbar';
 
-import StylingRecommendImage from '../Assets/Images/styling-recommend.jpg';
+import StylingRecommendImage from '../Assets/Images/styling-image.png';
 import VirtualClosetImage from '../Assets/Images/virtual-closet.jpg';
-import ClothesRackImage from '../Assets/Images/clothes-rack.png';
+import OutfitHistoryImage from '../Assets/Images/outfit-history.png';
 
 import styles from './Dashboard.module.css';
 
@@ -28,8 +28,8 @@ export default function Dashboard() {
                     <Link to="/History">
                         <img 
                             className={styles['clothes-rack-img']}
-                            src={ClothesRackImage}
-                            alt="ClothesImg"
+                            src={OutfitHistoryImage}
+                            alt="OutfitHistoryImg"
                             loading="lazy" />
                     </Link>
                     <h1>Outfit History</h1>
