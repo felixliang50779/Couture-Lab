@@ -22,12 +22,9 @@ export default function Dashboard() {
                 {!assistantActive ?
                     <motion.div 
                         className={styles['component-container']}
-                        key="component-box"
                         initial={{y: "10%", opacity: 0, scale: 0.5}}
-                        exit={{ scale: 0 }}
                         animate={{y: 0, opacity: 1, scale: 1}}
-                        transition={{duration: 0.3, ease: "anticipate"}}
-                        >
+                        transition={{duration: 0.3, ease: "anticipate"}}>
                         <div className={styles['virtual-closet']}>
                             <Link to="/Closet">
                                 <img 
@@ -62,25 +59,24 @@ export default function Dashboard() {
                     <motion.div 
                         className={styles['answer-log']}
                         key="answer-box"
-                        initial={{y: "10%", opacity: 0, scale: 0.5}}
-                        exit={{ scale: 0 }}
+                        initial={{y: "10%", opacity: 0}}
                         animate={{y: 0, opacity: 1, scale: 1}}
-                        transition={{duration: 0.3, ease: "anticipate"}}
+                        transition={{duration: 0.4, ease: "anticipate"}}
                         >
                         Assistant answers go here
                     </motion.div>
                 }
-                <div className={styles['chatbot-container']}>
-                    <Input
-                        width="88vw"
-                        variant="flushed"
-                        borderColor="black"
-                        focusBorderColor="black"
-                        onBlur={() => setAssistantActive(false)}
-                        onFocus={() => setAssistantActive(true)}
-                        placeholder="Chat with Your Styling Assistant"/>
-                </div>
             </AnimatePresence>
+            <div className={styles['chatbot-container']}>
+                <Input
+                    width="88vw"
+                    variant="flushed"
+                    borderColor="black"
+                    focusBorderColor="black"
+                    onBlur={() => setAssistantActive(false)}
+                    onFocus={() => setAssistantActive(true)}
+                    placeholder="Chat with Your Styling Assistant"/>
+            </div>
         </div>
     )
 }
