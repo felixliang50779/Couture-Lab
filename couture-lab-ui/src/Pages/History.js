@@ -16,6 +16,10 @@ export default function History() {
         "2023-11-15": ["Shirt", "Shorts", "Sneakers"],
     };
 
+    const getRangeClothes = () => {
+        const rangeClothes = [];
+    }
+
     return (
         <div className={styles['history-container']}>
             <DashboardNavbar />  
