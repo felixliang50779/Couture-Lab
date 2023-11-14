@@ -3,10 +3,10 @@ import DatePicker from "react-datepicker";
 
 import DashboardNavbar from '../Components/dashboardnavbar';
 
-import styles from './History.module.css';
+import styles from './Calendar.module.css';
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function History() {
+export default function Calendar() {
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
 
@@ -34,24 +34,24 @@ export default function History() {
     const filteredClothes = getFilteredClothes();
 
     return (
-        <div className={styles['history-container']}>
+        <div className={styles['calendar-container']}>
             <DashboardNavbar />  
-            <h1 className={styles['history-header']}>My Wardrobe</h1>
-            <div className={styles['history-items']}>
-                <div className={styles['calendar-items']}>
+            <h1 className={styles['calendar-header']}>My Wardrobe</h1>
+            <div className={styles['calendar-items']}>
+                <div className={styles['calendar-datepicker-items']}>
                     <h1>Current Date Range</h1>
-                    <DatePicker className={styles['calendar']} selectsRange={true}
+                    <DatePicker className={styles['calendar-datepicker']} selectsRange={true}
                     startDate={startDate} endDate={endDate}
                     onChange={(update) => { 
                         setDateRange(update);
                     }}
                     withPortal />
                 </div>
-                <div className={styles['history-clothes']}>
+                <div className={styles['calendar-clothes']}>
                     <h1>Clothes</h1>
-                    <div className={styles['history-clothes-container']}>
+                    <div className={styles['calendar-clothes-container']}>
                         {Object.keys(filteredClothes).map((date) => (
-                            <div className={styles['history-clothes-list']} key={date}>
+                            <div className={styles['calendar-clothes-list']} key={date}>
                                 <p>{date}</p>
                                 <ul>
                                     {filteredClothes[date].map((item, index) => (

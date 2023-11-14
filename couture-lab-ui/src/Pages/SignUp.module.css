@@ -1,0 +1,30 @@
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "HeleNow-Bold";
+}
+
+.signup-input-container {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    margin: 0.5em;
+}
+
+.signup-input {
+    margin: 0.5em;
+}
+
+.signup-button {
+    background-color: #000000;
+    color: #FFFFFF;
+    padding: 0.5em 9em 0.5em 9em;
+    margin: 0.5em;
+    border-radius: 0.4em;
+}
+
+.signup-signin-button {
+    color: #808080;
+}

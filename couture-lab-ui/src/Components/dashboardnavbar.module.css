@@ -8,9 +8,10 @@
     padding: 1.875em 1.875em;
     background-color: #000000;
     color: #FFFFFF;
-    position: fixed;
+    position: absolute;
     top: 0;
     width: 100%;
+    z-index: 2;
 }
 
 .dashboard-navbar a:hover {

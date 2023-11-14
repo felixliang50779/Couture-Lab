@@ -36,7 +36,7 @@ export default function Dashboard() {
                             <h1>Virtual Closet</h1>
                         </div>
                         <div className={styles['outfit-history']}>
-                            <Link to="/History">
+                            <Link to="/Calendar">
                                 <img 
                                     className={styles['clothes-rack-img']}
                                     src={OutfitHistoryImage}
