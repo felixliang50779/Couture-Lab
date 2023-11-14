@@ -1,0 +1,27 @@
+.history-container {
+    font-family: "HeleNow-Bold";
+}
+
+.history-header {
+    display: flex;
+    margin: 1em;
+    padding: 2em 1em 0 1em;
+    font-size: 3em;
+}
+
+.history-items {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 2.5em;
+    margin: 1em;
+}
+
+.calendar {
+    color: #000000;
+    border: 0.1em solid;
+    background-color: #f0f0f0;
+    border-color: black;
+    border-radius: 0.5em;
+}
+

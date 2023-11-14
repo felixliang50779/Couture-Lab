@@ -1,0 +1,18 @@
+.dashboard-navbar {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'HeleNow-Bold';
+    font-size: 1.2em;
+    margin: 0;
+    padding: 1.875em 1.875em;
+    background-color: #000000;
+    color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+a:hover {
+    color: #FFFFFF;
+}

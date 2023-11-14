@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Navbar from '../Components/navbar';
+import DashboardNavbar from '../Components/dashboardnavbar';
 import Footer from '../Components/footer';
 
 import styles from './Closet.module.css';
@@ -14,10 +14,10 @@ export default function Closet() {
     
     return (
         <div className={styles['closet-container']}>
-            <Navbar />
+            <DashboardNavbar />
             <div className={styles['clothes-container']}>
                 <div class="adding-container">
-                    <h1>Add Clothes</h1>
+                    <button className={styles['add-button']}>Add Clothes</button>
                     <div className="upload-img">
                         <input type="file" onChange={handleChange} />
                         <img src={file} alt='file' loading='lazy'/>

@@ -1,7 +1,7 @@
 .content-container {
     display: flex;
     flex-direction: column;
-    font-family: "Inter-Bold";
+    font-family: "HeleNow-Bold";
 }
 
 .landing-content, .virtual-closet, .outfit-history, .styling-tips {
@@ -49,6 +49,7 @@
 
 .last-page-title {
     color: #808080;
+    font-size: 3em;
 }
 
 .img-container {

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
  
-import Navbar from '../Components/navbar';
+import DashboardNavbar from '../Components/dashboardnavbar';
 
 import StylingRecommendImage from '../Assets/Images/styling-recommend.jpg';
 import VirtualClosetImage from '../Assets/Images/virtual-closet.jpg';
@@ -12,7 +12,7 @@ import styles from './Dashboard.module.css';
 export default function Dashboard() {
     return (
         <div className={styles['dashboard-container']}>
-            <Navbar />
+            <DashboardNavbar />
             <div className={styles['component-container']}>
                 <div className={styles['virtual-closet']}>
                     <Link to="/Closet">
@@ -53,7 +53,6 @@ export default function Dashboard() {
                     focusBorderColor="black"
                     placeholder="Chat with Your Styling Assistant"/>
             </div>
-
         </div>
     )
 }
