@@ -36,7 +36,7 @@ export default function Calendar() {
     return (
         <div className={styles['calendar-container']}>
             <DashboardNavbar />  
-            <h1 className={styles['calendar-header']}>My Wardrobe</h1>
+            <h1 className={styles['calendar-header']}>Outfit History</h1>
             <div className={styles['calendar-items']}>
                 <div className={styles['calendar-datepicker-items']}>
                     <h1>Current Date Range</h1>

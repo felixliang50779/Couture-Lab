@@ -1,12 +1,18 @@
 .closet-container {
     display: flex;
     flex-direction: column;
+    font-family: "HeleNow-Bold";
 }
 
 .clothes-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 5em 0 5em 0;
-    padding: 5em;
+    margin: 5em 0 0 0;
+    padding: 5em 5em 2em 5em;
+}
+
+.addclothes-button {
+    background-color: #000000;
+    color: #FFFFFF;
 }

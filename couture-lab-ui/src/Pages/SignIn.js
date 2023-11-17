@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
+import toast, { Toaster } from "react-hot-toast";
 
 import styles from './SignIn.module.css';
 
 export default function SignIn() {
-    const [password] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     
     const handleSignIn = () => {
-        console.log(password)
-        if (password.length < 6 || password.length > 20) {
-            console.log("Password should be 6 to 20 characters long.");
+        if (username.length < 3 || password.length > 10) {
+            toast.dismiss();
+            toast.error("Username should be 3 to 10 characters long.");
             return;
-          }
+        }
+        if (password.length < 6 || password.length > 20) {
+            toast.dismiss();
+            toast.error("Password should be 6 to 20 characters long.");
+            return;
+        }
     }
 
     return (
@@ -20,14 +27,17 @@ export default function SignIn() {
             <h1 className={styles['signin-logo']}>CoutureLab</h1>
             <h1>Welcome back!</h1>
             <div className={styles['signin-input-container']}>
-                <Input className={styles['signin-input']} placeholder="Username" />
-                <Input className={styles['signin-input']} placeholder="Password" />
+                <Input className={styles['signin-input']} placeholder="Username" 
+                onChange={(e) => setUsername(e.target.value)} />
+                <Input className={styles['signin-input']} placeholder="Password" 
+                onChange={(e) => setPassword(e.target.value)} />
             </div>
             <button className={styles['signin-button']} onClick={handleSignIn}>Sign In</button>
             <p className={styles['signin-signup-text']}>
                 Don't have an account?  
                 <Link className={styles['signin-signup-button']} to="/SignUp"> Sign Up</Link>
             </p>
+            <Toaster />
         </div>
     )
 }
