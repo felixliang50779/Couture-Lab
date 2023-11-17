@@ -1,48 +1,72 @@
-import { useKeenSlider } from 'keen-slider/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
-import styles from './imgcarousel.module.css';
-import 'keen-slider/keen-slider.min.css';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+import './imgcarousel.css';
+
+import test_slide_image from '../Assets/Images/img_1.jpg';
 
 export default function ImgCarousel() {
-    const carousel = (slider) => {
-        const z = 300
-        function rotate() {
-            if (slider.track.details) {
-                const deg = 360 * slider.track.details.progress
-                slider.container.style.transform = `translateZ(-${z}px) rotateY(${-deg}deg)`
-            }
-        }
-        slider.on("created", () => {
-          const deg = 360 / slider.slides.length
-          slider.slides.forEach((element, idx) => {
-            element.style.transform = `rotateY(${deg * idx}deg) translateZ(${z}px)`
-          })
-          rotate()
-        })
-        slider.on("detailsChanged", rotate)
-    }
-
-    const [sliderRef] = useKeenSlider(
-        {
-          loop: true,
-          selector: ".carousel__cell",
-          renderMode: "custom",
-          mode: "free-snap",
-        },
-        [carousel]
-    )
-
     return (
-        <div className={styles["wrapper"]}>
-            <div className={styles["scene"]}>
-                <div className={`${styles["carouselkeen-slider"]} ${styles["custom-carousel-style"]}`} ref={sliderRef}>
-                    <div className={`carousel__cell ${styles["number-slide1"]}`}>1</div>
-                    <div className={`carousel__cell ${styles["number-slide2"]}`}>2</div>
-                    <div className={`carousel__cell ${styles["number-slide3"]}`}>3</div>
-                    <div className={`carousel__cell ${styles["number-slide4"]}`}>4</div>
-                    <div className={`carousel__cell ${styles["number-slide5"]}`}>5</div>
+        <div className="container">
+            <Swiper
+                effect={'coverflow'}
+                grabCursor={true}
+                centeredSlides={true}
+                loop={true}
+                slidesPerView={'auto'}
+                coverflowEffect={{
+                rotate: 0,
+                stretch: 0,
+                depth: 100,
+                modifier: 2.5,
+                }}
+                pagination={{ el: '.swiper-pagination', clickable: true }}
+                navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                clickable: true,
+                }}
+                modules={[EffectCoverflow, Pagination, Navigation]}
+                className="swiper_container"
+            >
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+                <SwiperSlide>
+                    <img src={test_slide_image} alt="slideImg" />
+                </SwiperSlide>
+
+                <div className="slider-controller">
+                    <div className="swiper-button-prev slider-arrow">
+                        <ion-icon name="arrow-back-outline"></ion-icon>
+                    </div>
+                    <div className="swiper-button-next slider-arrow">
+                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </div>
+                    <div className="swiper-pagination"></div>
                 </div>
-            </div>
+            </Swiper>
         </div>
     )
 
