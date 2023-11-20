@@ -6,6 +6,17 @@
     font-family: "HeleNow-Bold";
 }
 
+.signup-logo {
+    margin-right: auto;
+    padding: 1em;
+    font-size: 2em;
+}
+
+.signup-header {
+    font-size: 3em;
+    color: #C0C0C0;
+}
+
 .signup-input-container {
     display: flex;
     flex-direction: column;
@@ -15,12 +26,18 @@
 
 .signup-input {
     margin: 0.5em;
+    border-color: #000000;
+}
+
+.signup-input:focus::placeholder {
+    color: transparent;
 }
 
 .signup-button {
     background-color: #000000;
     color: #FFFFFF;
     padding: 0.5em 9em 0.5em 9em;
+    width: 27vw;
     margin: 0.5em;
     border-radius: 0.4em;
 }

@@ -32,10 +32,16 @@ export default function Closet() {
                         <ImgCarousel/>
                     </TabPanel>
                     <TabPanel>
-                        <p>two!</p>
+                        <ImgCarousel/>
                     </TabPanel>
                     <TabPanel>
-                        <p>three!</p>
+                        <ImgCarousel/>
+                    </TabPanel>
+                    <TabPanel>
+                        <ImgCarousel/>
+                    </TabPanel>
+                    <TabPanel>
+                        <ImgCarousel/>
                     </TabPanel>
                 </TabPanels>
             </Tabs>

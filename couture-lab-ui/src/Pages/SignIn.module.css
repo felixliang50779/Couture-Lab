@@ -6,6 +6,17 @@
     font-family: "HeleNow-Bold";
 }
 
+.signin-logo {
+    margin-right: auto;
+    padding: 1em;
+    font-size: 2em;
+}
+
+.signin-header {
+    font-size: 3em;
+    color: #C0C0C0;
+}
+
 .signin-input-container {
     display: flex;
     flex-direction: column;
@@ -15,6 +26,12 @@
 
 .signin-input {
     margin: 0.5em;
+    border-color: #000000;
+    width: 24vw;
+}
+
+.signin-input:focus::placeholder {
+    color: transparent;
 }
 
 .signin-button {

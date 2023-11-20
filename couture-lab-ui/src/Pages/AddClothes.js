@@ -1,52 +1,47 @@
-import { Step, StepDescription, StepIcon, StepIndicator, StepNumber, StepSeparator, StepStatus, 
-    StepTitle, Stepper, useSteps, Box } from '@chakra-ui/react'
+import { useState } from "react";
 
 import UploadImage from '../Assets/Images/upload-img.png';
+
+import DashboardNavbar from '../Components/dashboardnavbar';
+import Footer from '../Components/footer';
 
 import styles from './AddClothes.module.css';
 
 export default function AddClothes() { 
-    const steps = [
-        { title: 'First', description: 'Contact Info' },
-        { title: 'Second', description: 'Date & Time' },
-        { title: 'Third', description: 'Select Rooms' },
-    ]
+    const [selectedImage, setSelectedImage] = useState(null);
 
-    const { activeStep } = useSteps({
-        index: 1,
-        count: steps.length,
-    })
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
 
+        setSelectedImage(file);
+    };
     return (
         <div className={styles['addclothes-container']}>
+            <DashboardNavbar/>
             <div className={styles['addclothes-inner-container']}>
                 <h1>Add Clothes</h1>
-                <Stepper index={activeStep}>
-                {steps.map((step, index) => (
-                    <Step key={index}>
-                    <StepIndicator>
-                        <StepStatus
-                        complete={<StepIcon />}
-                        incomplete={<StepNumber />}
-                        active={<StepNumber />}
-                        />
-                    </StepIndicator>
-
-                    <Box flexShrink='0'>
-                        <StepTitle>{step.title}</StepTitle>
-                        <StepDescription>{step.description}</StepDescription>
-                    </Box>
-
-                    <StepSeparator />
-                    </Step>
-                ))}
-                </Stepper>
-                <img 
-                    className={styles['upload-img']}
+                <label htmlFor="imageUpload">
+                    <img
                     src={UploadImage}
-                    alt="UploadImg"
-                    loading="lazy" />
+                    alt="Upload Icon"
+                    className={styles['img-upload-container']}
+                    />
+                    Upload Image
+                </label>
+                <input
+                    type="file"
+                    id="imageUpload"
+                    className={styles['img-upload']}
+                    onChange={handleImageChange}
+                />
+                {selectedImage && (
+                    <div>
+                    <p>Selected Image:</p>
+                    <img src={URL.createObjectURL(selectedImage)} alt="Selected" />
+                    </div>
+                )}
             </div>
+            <Footer/>
         </div>
     )
 }

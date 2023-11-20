@@ -24,13 +24,21 @@ export default function SignIn() {
 
     return (
         <div className={styles['signin-container']}>
-            <h1 className={styles['signin-logo']}>CoutureLab</h1>
-            <h1>Welcome back!</h1>
+            <Link className={styles['signin-logo']}>CoutureLab</Link>
+            <h1 className={styles['signin-header']}>Welcome back!</h1>
             <div className={styles['signin-input-container']}>
-                <Input className={styles['signin-input']} placeholder="Username" 
-                onChange={(e) => setUsername(e.target.value)} />
-                <Input className={styles['signin-input']} placeholder="Password" 
-                onChange={(e) => setPassword(e.target.value)} />
+                <Input
+                    className={styles['signin-input']}
+                    variant="flushed"
+                    focusBorderColor="black"
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"/>
+                <Input
+                    className={styles['signin-input']}
+                    variant="flushed"
+                    focusBorderColor="black"
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"/>
             </div>
             <button className={styles['signin-button']} onClick={handleSignIn}>Sign In</button>
             <p className={styles['signin-signup-text']}>

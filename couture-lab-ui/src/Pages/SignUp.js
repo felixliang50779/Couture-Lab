@@ -24,15 +24,23 @@ export default function SignUp() {
 
     return (
         <div className={styles['signup-container']}>
-            <h1 className={styles['signup-logo']}>CoutureLab</h1>
-            <h1>Let's Start</h1>
+            <Link className={styles['signup-logo']} to="/Home">CoutureLab</Link>
+            <h1 className={styles['signup-header']}>Let's Start</h1>
             <div className={styles['signup-input-container']}>
-                <Input className={styles['signup-input']} placeholder="Username" 
-                onChange={(e) => setUsername(e.target.value)} />
-                <Input className={styles['signup-input']} placeholder="Password" 
-                onChange={(e) => setPassword(e.target.value)} />
+                <Input
+                    className={styles['signup-input']}
+                    variant="flushed"
+                    focusBorderColor="black"
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"/>
+                <Input
+                    className={styles['signup-input']}
+                    variant="flushed"
+                    focusBorderColor="black"
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"/>
             </div>
-            <button className={styles['signup-button']} onClick={handleSignUp}>Create An Account</button>
+            <button className={styles['signup-button']} onClick={handleSignUp}>Create Account</button>
             <p className={styles['signup-signin-text']}>
                 Already have an account?  
                 <Link className={styles['signup-signin-button']} to="/SignIn"> Sign In</Link>
