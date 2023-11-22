@@ -69,6 +69,7 @@ export default function Dashboard() {
             </AnimatePresence>
             <div className={styles['chatbot-container']}>
                 <Input
+                    className={styles['chatbot-input']}
                     width="88vw"
                     variant="flushed"
                     borderColor="black"

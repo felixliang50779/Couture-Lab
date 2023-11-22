@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Input } from "@chakra-ui/react";
-import toast, { Toaster } from "react-hot-toast";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Input } from '@chakra-ui/react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import styles from './SignIn.module.css';
 
@@ -24,7 +24,7 @@ export default function SignIn() {
 
     return (
         <div className={styles['signin-container']}>
-            <Link className={styles['signin-logo']}>CoutureLab</Link>
+            <Link className={styles['signin-logo']} to="/Home">CoutureLab</Link>
             <h1 className={styles['signin-header']}>Welcome back!</h1>
             <div className={styles['signin-input-container']}>
                 <Input

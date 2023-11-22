@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 import UploadImage from '../Assets/Images/upload-img.png';
 
@@ -25,6 +25,7 @@ export default function AddClothes() {
                     src={UploadImage}
                     alt="Upload Icon"
                     className={styles['img-upload-container']}
+                    loading="lazy"
                     />
                     Upload Image
                 </label>

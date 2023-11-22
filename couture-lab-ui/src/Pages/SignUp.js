@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Input } from "@chakra-ui/react";
-import toast, { Toaster } from "react-hot-toast";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Input } from '@chakra-ui/react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import styles from './SignUp.module.css';
 

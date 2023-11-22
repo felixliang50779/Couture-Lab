@@ -4,14 +4,15 @@
     justify-content: space-between;
     font-family: 'HeleNow-Bold';
     font-size: 1.2em;
-    color:#282a36;
+    color: #282a36;
     margin: 0;
-    padding: 1.875em 1.875em;
+    padding: 1em;
     background-color: transparent;
     position: fixed;
     top: 0;
     width: 100%;
     transition: 0.4s;
+    z-index: 1;
 }
 
 .scrollNavbar {

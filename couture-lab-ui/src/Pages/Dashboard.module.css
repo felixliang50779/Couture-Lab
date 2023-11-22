@@ -58,6 +58,10 @@
     margin-left: 2em;
 }
 
+.chatbot-input:focus::placeholder {
+    color: transparent;
+}
+
 h1 {
     margin-top: 0.3em;
     margin-bottom: 0;

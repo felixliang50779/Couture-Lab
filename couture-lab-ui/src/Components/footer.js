@@ -2,7 +2,7 @@ import styles from './footer.module.css';
 
 export default function Footer() {
     return (
-        <footer className={styles.footer}>
+        <footer className={styles['footer-container']}>
             <div id="footerLogo" className={styles['footer-title']}>CoutureLab</div>
             <div id="footerContent" className={styles['footer-content']}>
                 <p>&copy; {new Date().getFullYear()} CoutureLab</p>

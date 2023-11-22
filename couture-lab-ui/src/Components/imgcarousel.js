@@ -36,25 +36,25 @@ export default function ImgCarousel() {
                 className="swiper_container"
             >
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={test_slide_image} alt="slideImg" />
+                    <img src={test_slide_image} alt="slideImg" loading="lazy"/>
                 </SwiperSlide>
 
                 <div className="slider-controller">
