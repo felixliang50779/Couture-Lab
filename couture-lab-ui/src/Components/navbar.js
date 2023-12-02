@@ -17,7 +17,7 @@ export default function NavBar(backgroundColor) {
 
     return (
         <nav id="navbar" className={`${styles.navbar} ${overlapChange ? styles.scrollNavbar : ''}`}>
-            <a href="/Home">CoutureLab</a>
+            <a href="/Home" className={styles.logo}>CoutureLab</a>
             <div className={styles.NavbarInformation}>
                 <a href='#stylingDesc'>Styling Tips</a>
                 <a href='#closetDesc'>Virtual Closet</a>

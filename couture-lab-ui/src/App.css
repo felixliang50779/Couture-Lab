@@ -12,3 +12,8 @@
     font-family: "HeleNow-Bold";
     src: url('./Assets/Fonts/HelveticaNowDisplay-Bold.ttf');
 }
+
+@font-face {
+    font-family: "FuturaMaxi";
+    src: url('./Assets/Fonts/FuturaMaxi-Regular.otf');
+}
