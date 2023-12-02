@@ -12,6 +12,6 @@ html, body {
     padding: 0;
     max-width: 100vw;
     max-height: fit-content;
-    background-color: #FFFFFF;
+    background-color: #F5F4EB !important;
     scroll-behavior: smooth !important;
 }

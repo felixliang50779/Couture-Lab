@@ -29,9 +29,9 @@ export default function Home() {
     return (
         <div className={styles['content-container']}>
             <NavBar />
-            <div id="landingDesc" className={styles['landing-content']}>
+            <div className={styles['landing-content']}>
                 <AnimatedTextSection 
-                    title="Discover Your Personal Style"
+                    title="Revolutionizing Fashion"
                     desc="AI Powered Stylist Offering Personalized
                     Recommendations To Help You Look And Feel Your Best"
                 />

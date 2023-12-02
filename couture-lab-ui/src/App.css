@@ -17,3 +17,8 @@
     font-family: "FuturaMaxi";
     src: url('./Assets/Fonts/FuturaMaxi-Regular.otf');
 }
+
+@font-face {
+    font-family: "MarkPro";
+    src: url('./Assets/Fonts/Mark-Pro.ttf');
+}
