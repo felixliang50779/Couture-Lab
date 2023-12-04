@@ -9,6 +9,7 @@ import Calendar from './Pages/Calendar.js';
 import Recommendation from './Pages/Recommendation.js';
 import SignIn from './Pages/SignIn.js';
 import SignUp from './Pages/SignUp.js';
+import About from './Pages/About.js';
 
 import { ChakraProvider } from '@chakra-ui/react';
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/AddClothes' element={<AddClothes />} />
           <Route path='/Calendar' element={<Calendar />} />
           <Route path='/Recommendation' element={<Recommendation />} />
+          <Route path='/About' element={<About />} />
         </Routes>
       </Router>
     </ChakraProvider>
