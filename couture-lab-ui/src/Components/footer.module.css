@@ -1,5 +1,5 @@
 .footer-container {
-    font-family: "HeleNow-Bold";
+    font-family: "FuturaMaxi";
     color: #FFFFFF;
     background-color: #000000;
     width: 100%;
@@ -23,6 +23,7 @@
     display: flex; 
     gap: 2em;
     color: #808080;
+    font-family: "MarkPro";
 }
 
 .footerLinks:hover {

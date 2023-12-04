@@ -29,9 +29,9 @@ export default function Home() {
     return (
         <div className={styles['content-container']}>
             <NavBar />
-            <div id="landingDesc" className={styles['landing-content']}>
+            <section className={styles['landing-content']}>
                 <AnimatedTextSection 
-                    title="Discover Your Personal Style"
+                    title="Revolutionizing Fashion"
                     desc="AI Powered Stylist Offering Personalized
                     Recommendations To Help You Look And Feel Your Best"
                 />
@@ -43,8 +43,8 @@ export default function Home() {
                         loading="lazy" 
                     />
                 </div>
-            </div>
-            <div id="stylingDesc" className={styles['styling-tips']}>
+            </section>
+            <section id="stylingDesc" className={styles['styling-tips']}>
                 <AnimatedTextSection 
                     title="Styling Tips"
                     desc="From fashion advice to a personal shopper,
@@ -58,8 +58,8 @@ export default function Home() {
                         loading='lazy' 
                     />
                 </div>
-            </div>
-            <div id="closetDesc" className={styles['virtual-closet']}>
+            </section>
+            <section id="closetDesc" className={styles['virtual-closet']}>
                 <AnimatedTextSection 
                     title="Your Entire Closet At Your Fingertips"
                     desc="Access anytime, anywhere by uploading pictures of your
@@ -73,8 +73,8 @@ export default function Home() {
                         loading="lazy" 
                     />
                 </div>
-            </div>
-            <div id='outfitHistoryDesc' className={styles['outfit-history']}>
+            </section>
+            <section id='outfitHistoryDesc' className={styles['outfit-history']}>
                 <AnimatedTextSection 
                     title="Organize Your Outfits"
                     desc="Keep track of everything 
@@ -88,7 +88,7 @@ export default function Home() {
                         loading="lazy" 
                     />
                 </div>
-            </div>
+            </section>
             <motion.div
                 initial={{ opacity: 0, y: -30 }}
                 whileInView={{ opacity: 1, y: 0 }}
