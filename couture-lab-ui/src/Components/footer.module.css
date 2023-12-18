@@ -23,6 +23,7 @@
     display: flex; 
     gap: 2em;
     color: #808080;
+    font-family: "MarkPro";
 }
 
 .footerLinks:hover {

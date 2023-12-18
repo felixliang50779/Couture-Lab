@@ -39,13 +39,49 @@ a:hover {
     color: #000000;
 }
 
-.NavbarInformation a:hover {
+.navbarInformation a:hover {
     cursor: pointer;
     --underline-width: 100%;
 }
 
-.NavbarInformation {
+.navbarInformation {
     display: flex;
     width: 50%;
     justify-content: space-between;
+}
+
+.navbar-menu {
+    display: none;
+    background-color: #F5F4EB;
+}
+
+.navbar-button {
+    width: 1.5em;
+}
+
+.dropdown-list {
+    text-align: right;
+}
+
+.dropdown-list a:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 60em) {
+    .navbarInformation {
+        display: none;
+    }
+
+    .navbar-signin {
+        display: none;
+    }
+
+    .navbar-menu {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar-button {
+        margin-left: 5em;
+    }
 }
