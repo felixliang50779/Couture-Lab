@@ -15,7 +15,7 @@ export default function Contact() {
                         <a href="mailto:hello@gmail.com">lebronjames@couturelab.com</a>
                     </span>
                 </div>
-                <h1>Let's talk</h1>
+                <h1 className={styles["contact-letstalk"]}>Let's talk</h1>
             </div>
             <Footer />
         </div>

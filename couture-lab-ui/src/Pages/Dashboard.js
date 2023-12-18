@@ -46,7 +46,7 @@ export default function Dashboard() {
                             <h1>Outfit History</h1>
                         </div>
                         <div className={styles['styling-recommend']}>
-                            <Link to="/Recommendation">
+                            <Link to="/Recommend">
                                 <img 
                                     className={styles['styling-recommend-img']}
                                     src={StylingRecommendImage}

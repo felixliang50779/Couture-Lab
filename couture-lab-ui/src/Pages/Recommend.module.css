@@ -1,0 +1,13 @@
+.selecteditem-img {
+    width: 30em;
+}
+
+.recommend-main {
+    display: flex;
+    padding: 10em;
+}
+
+.recommend-items {
+    display: flex;
+    flex-direction: row;    
+}

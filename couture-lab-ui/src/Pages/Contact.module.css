@@ -3,14 +3,19 @@
 }
 
 .contact-content {
-    padding: 8em 0 5em 0;
+    padding: 2em 0 0 0;
 }
 
 .contact-header {
     text-align: center;
     font-size: 9em;
+    padding: 0.5em;
+    background-color: #FFFFFF;
 }
 
+.contact-footer {
+    background-color: #FFFFFF;
+}
 .contact-number {
     padding-bottom: 0.3em;
 }
@@ -21,6 +26,11 @@
     text-align: right;
     padding: 3em;
     font-size: 1.3em;
+}
+
+.contact-letstalk {
+    padding: 1em 1.5em 1.5em 1.5em;
+    font-size: 8em;
 }
 
 .contact-email:hover {
