@@ -34,60 +34,53 @@ export default function Home() {
                     title="Revolutionizing Fashion"
                     desc="AI Powered Stylist Offering Personalized
                     Recommendations To Help You Look And Feel Your Best"
+                />          
+                <img 
+                    className={styles['landing-img']}
+                    src={LandingImage}
+                    alt="landingImg"
+                    loading="lazy"
                 />
-                <div className={styles['img-container']}>           
-                    <img 
-                        className={styles['landing-img']}
-                        src={LandingImage}
-                        alt="landingImg"
-                        loading="lazy" 
-                    />
-                </div>
             </div>
             <div id="stylingDesc" className={styles['styling-tips']}>
+                <img
+                    className={styles['styling-img']}
+                    src={StylingImage}
+                    alt='stylingImg'
+                    loading='lazy' 
+                />
                 <AnimatedTextSection 
                     title="Styling Tips"
                     desc="From fashion advice to a personal shopper,
                     your very own AI stylist has you covered"
                 />
-                <div className={styles['img-container']}>
-                    <img
-                        className={styles['landing-img']}
-                        src={StylingImage}
-                        alt='stylingImg'
-                        loading='lazy' 
-                    />
-                </div>
             </div>
             <div id="closetDesc" className={styles['virtual-closet']}>
+                <img 
+                    className={styles['closet-img']}
+                    src={ClosetImage}
+                    alt="landingImg"
+                    loading="lazy" 
+                />
                 <AnimatedTextSection 
                     title="Your Entire Closet At Your Fingertips"
                     desc="Access anytime, anywhere by uploading pictures of your
                     wardrobe"
                 />
-                <div className={styles['img-container']}>
-                    <img 
-                        className={styles['landing-img']}
-                        src={ClosetImage}
-                        alt="landingImg"
-                        loading="lazy" 
-                    />
-                </div>
+
             </div>
             <div id='outfitHistoryDesc' className={styles['outfit-history']}>
+                <img 
+                    className={styles['history-img']}
+                    src={OutfitHistoryImage}
+                    alt="landingImg"
+                    loading="lazy" 
+                />
                 <AnimatedTextSection 
                     title="Organize Your Outfits"
                     desc="Keep track of everything 
                     you've worn in the past, and plan ahead to keep yourself organized"
                 />
-                <div className={styles['img-container']}>
-                    <img 
-                        className={styles['landing-img']}
-                        src={OutfitHistoryImage}
-                        alt="landingImg"
-                        loading="lazy" 
-                    />
-                </div>
             </div>
             <motion.div
                 initial={{ opacity: 0, y: -30 }}

@@ -1,19 +1,4 @@
 @font-face {
-    font-family: "Inter";
-    src: url('./Assets/Fonts/Inter-Regular.ttf');
-}
-
-@font-face {
-    font-family: "Inter-Bold";
-    src: url('./Assets/Fonts/Inter-Bold.ttf');
-}
-
-@font-face {
-    font-family: "HeleNow-Bold";
-    src: url('./Assets/Fonts/HelveticaNowDisplay-Bold.ttf');
-}
-
-@font-face {
     font-family: "FuturaMaxi";
     src: url('./Assets/Fonts/FuturaMaxi-Regular.otf');
 }
