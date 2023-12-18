@@ -67,13 +67,6 @@ export default function AddClothes() {
             name="image"
             onChange={handleImageChange}
           />
-          <label htmlFor="file-upload">Choose a file:</label>
-          <input
-            type="text"
-            placeholder="Enter title"
-            value={title}
-            onChange={handleTitleChange}
-          />
           <button type="submit">Submit</button>
         </form>
 
