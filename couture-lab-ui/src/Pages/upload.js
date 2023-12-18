@@ -3,7 +3,7 @@
 function uploadImage() {
     var formData = new FormData(document.getElementById('imageForm'));
 
-    fetch('/store-image/', {
+    fetch('http://127.0.0.1:8000/store-image/', {
         method: 'POST',
         body: formData,
     })
