@@ -5,3 +5,6 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageModel
         fields = ['id', 'title', 'image']
+
+class AISerializer(serializers.Serializer):
+    text = serializers.CharField()
