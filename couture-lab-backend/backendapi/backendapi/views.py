@@ -5,6 +5,9 @@ from django.shortcuts import get_object_or_404
 from backendapi.serializer import ImageSerializer
 from backendapi.models import ImageModel
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.http import HttpResponse
+from django.core.files.storage import default_storage
+from google.cloud import storage
 
 # views here
 
@@ -13,18 +16,25 @@ class test(APIView):
         return Response({"Test" : "Response"})
     
 class GetImage(APIView):
-    def get_item_by_pk(self, pk):
-            try:
-                return ImageModel.objects.get(pk=pk)
-            except ImageModel.DoesNotExist:
-                return None
+    def get(self, request, image_name):
+        # Specify the full path to the image in GCS
+        gcs_path = f'gs://couturelab-media/images/{image_name}'  # Adjust the path as needed
 
-    def get(self, request, pk):
-        image_instance = self.get_item_by_pk(pk)
-        if image_instance is not None:
-            serializer = ImageSerializer(image_instance)
-            return Response(serializer.data['image'])
-        return Response({'Error': 'Image does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        # Initialize a GCS client
+        client = storage.Client()
+
+        # Get a reference to the GCS bucket
+        bucket_name = 'couturelab-media'  # Replace with your actual bucket name
+        bucket = client.bucket(bucket_name)
+
+        # Get a reference to the GCS object
+        blob = bucket.blob(image_name)
+
+        # Download the content of the GCS object
+        image_content = blob.download_as_text()
+
+        # Return the image content as the HTTP response
+        return HttpResponse(image_content, content_type='image/jpeg')
 
 
 class StoreImage(APIView):
