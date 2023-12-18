@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 GS_BUCKET_NAME = 'couturelab-media'
 GS_PROJECT_ID = 'couture-lab-backend'
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    'C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
+    'C:\\Users\\flian\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
 )
 
 
@@ -43,6 +43,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +55,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,6 +67,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backendapi.urls'
+CORS_ALLOW_ALL = True
 
 TEMPLATES = [
     {

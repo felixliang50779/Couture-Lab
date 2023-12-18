@@ -31,8 +31,8 @@ export default function AddClothes() {
       });
 
       // Handle the response from the backend
-      const data = await response.json();
-      console.log(data);
+      await response.json();
+      console.log("Successfully sent data to the backend!");
     } catch (error) {
       console.error('Error sending data to the backend:', error);
     }
