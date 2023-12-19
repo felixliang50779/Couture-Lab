@@ -16,14 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+<<<<<<< HEAD
 from .ImageViews import test, StoreImage, GetImage
+=======
+from .ImageViews import StoreImage, GetImage
+>>>>>>> 43cf22df971a7abca00d993a90c7436a2e18a925
 from django.conf import settings
 from django.conf.urls.static import static
 from .AIView import LangServeHandle
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', test.as_view()),
     path('store-image/', StoreImage.as_view()),
     path('get-image/<str:image_name>/', GetImage.as_view()),
     path('langserve/', LangServeHandle.as_view())

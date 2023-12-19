@@ -8,33 +8,42 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.http import HttpResponse
 from django.core.files.storage import default_storage
 from google.cloud import storage
+from google.auth.transport.requests import Request
+from google.oauth2 import service_account
+from datetime import timedelta
+import base64
 
 # views here
 
-class test(APIView):
-    def get(self, request):
-        return Response({"Test" : "Response"})
-    
 class GetImage(APIView):
     def get(self, request, image_name):
-        # Specify the full path to the image in GCS
-        gcs_path = f'gs://couturelab-media/images/{image_name}'  # Adjust the path as needed
+        # Path to your service account key file
+        keyfile_path = 'C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
 
-        # Initialize a GCS client
-        client = storage.Client()
+        # Specify the full path to the image in GCS
+        bucket_name = 'couturelab-media'
+        object_name = f'images/{image_name}'
+
+        # Initialize a GCS client with a service account
+        credentials = service_account.Credentials.from_service_account_file(
+            keyfile_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+        )
+        client = storage.Client(credentials=credentials)
 
         # Get a reference to the GCS bucket
-        bucket_name = 'couturelab-media'  # Replace with your actual bucket name
         bucket = client.bucket(bucket_name)
 
         # Get a reference to the GCS object
-        blob = bucket.blob(image_name)
+        blob = bucket.blob(object_name)
 
-        # Download the content of the GCS object
-        image_content = blob.download_as_text()
+        # Download the binary content of the GCS object
+        image_content = blob.download_as_bytes()
+
+        # Convert the binary content to base64 if needed
+        base64_content = base64.b64encode(image_content).decode('utf-8')
 
         # Return the image content as the HTTP response
-        return HttpResponse(image_content, content_type='image/jpeg')
+        return Response(base64_content)
 
 
 class StoreImage(APIView):
