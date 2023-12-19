@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 GS_BUCKET_NAME = 'couturelab-media'
 GS_PROJECT_ID = 'couture-lab-backend'
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    'C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
+    'C:\\Users\\flian\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
 )
 
 
@@ -67,7 +67,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backendapi.urls'
-CORS_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = ['*']
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {

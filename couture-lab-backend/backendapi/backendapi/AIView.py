@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import AISerializer
 
+import json
+
 # code here
 
 # AI keys so it works
@@ -31,6 +33,7 @@ class LangServeHandle(APIView):
 
     def post(self, request):
         try:
+
             serializer = AISerializer(data = request.data)
             serializer.is_valid(raise_exception=True)
             text = serializer.validated_data['text']
@@ -49,5 +52,8 @@ class LangServeHandle(APIView):
             chain = chat_prompt | chat_model | OutputParser()
             result = chain.invoke({"text" : text})
             return Response(result, status=status.HTTP_200_OK)
+
         except Exception as e:
+            print(list(request.data.items()))
+
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

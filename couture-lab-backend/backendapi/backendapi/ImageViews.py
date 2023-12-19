@@ -45,10 +45,8 @@ class StoreImage(APIView):
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            resp = Response(serializer.data, status=status.HTTP_201_CREATED)
-            resp['Access-Control-Allow-Origin'] = '*'
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            return resp
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class DeleteImage(APIView):

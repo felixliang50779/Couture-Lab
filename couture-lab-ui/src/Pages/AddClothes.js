@@ -6,22 +6,16 @@ import styles from './AddClothes.module.css';
 
 export default function AddClothes() {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [title, setTitle] = useState('');
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
   };
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('title', title);
     formData.append('image', selectedImage);
 
     try {

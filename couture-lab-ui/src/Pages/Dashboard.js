@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
+import { TypeAnimation } from "react-type-animation";
 
 import { motion, AnimatePresence } from "framer-motion"; 
- 
+
 import DashboardNavbar from '../Components/dashboardnavbar';
 
 import StylingRecommendImage from '../Assets/Images/styling-image.png';
@@ -14,8 +15,34 @@ import styles from './Dashboard.module.css';
 
 export default function Dashboard() {
     const [assistantActive, setAssistantActive] = useState(false);
+    const [chatInput, setChatInput] = useState("");
+    const [chatLog, setChatLog] = useState([]);
+
+    const handleQuery = async (event) => {
+        event.preventDefault();
+
+        const userInput = event.target[0].value;
+
+        setChatInput('');
+
+        const response = await fetch('http://127.0.0.1:8000/langserve/',
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({"text": userInput})
+        });
+
+        let responseText = await response.text();
+
+        responseText = responseText.replaceAll("\"", '');
+        
+        setChatLog(prevState => [...prevState, [userInput, responseText]]);
+    }
 
     return (
+
         <div className={styles['dashboard-container']}>
             <DashboardNavbar />
             <AnimatePresence>
@@ -63,21 +90,41 @@ export default function Dashboard() {
                         animate={{y: 0, opacity: 1, scale: 1}}
                         transition={{duration: 0.4, ease: "anticipate"}}
                         >
-                        Assistant answers go here
+                        {chatLog.map((query, index) => {
+                            return (
+                                <div key={index}>
+                                    <p>You: {query[0]}</p>
+                                    <br />
+                                    <TypeAnimation 
+                                        sequence={[
+                                            `${query[1]}`
+                                        ]}
+                                        cursor={false}
+                                        speed={80}
+                                        wrapper="p"
+                                        style={{ fontSize: '1.1em', display: 'inline-block' }} />
+                                    <br />
+                                </div>
+                            )
+                        })}
                     </motion.div>
                 }
             </AnimatePresence>
-            <div className={styles['chatbot-container']}>
-                <Input
-                    className={styles['chatbot-input']}
-                    width="88vw"
-                    variant="flushed"
-                    borderColor="black"
-                    focusBorderColor="black"
-                    onBlur={() => setAssistantActive(false)}
-                    onFocus={() => setAssistantActive(true)}
-                    placeholder="Chat with Your Styling Assistant"/>
-            </div>
+            <form 
+                className={styles['chatbot-container']}
+                onSubmit={handleQuery}>
+                    <Input
+                        className={styles['chatbot-input']}
+                        width="88vw"
+                        value={chatInput}
+                        variant="flushed"
+                        borderColor="black"
+                        focusBorderColor="black"
+                        onBlur={() => setAssistantActive(false)}
+                        onFocus={() => setAssistantActive(true)}
+                        onChange={e => setChatInput(e.target.value)}
+                        placeholder="Chat with Your Styling Assistant"/>
+            </form>
         </div>
     )
 }
