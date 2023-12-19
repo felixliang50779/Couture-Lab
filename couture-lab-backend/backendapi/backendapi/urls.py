@@ -16,14 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import test, StoreImage, GetImage
+from .ImageViews import StoreImage, GetImage
 from django.conf import settings
 from django.conf.urls.static import static
 from .AIView import LangServeHandle
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', test.as_view()),
     path('store-image/', StoreImage.as_view()),
     path('get-image/<str:image_name>/', GetImage.as_view()),
     path('langserve/', LangServeHandle.as_view())

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from google.oauth2 import service_account
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,11 @@ SECRET_KEY = 'django-insecure-&t16kb(%2ax4lt)au^mzd=lj$_ju0lenqi_g=alp7##=kiv)*-
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+# Use os.path to construct an absolute path
+keyfile_path = os.path.abspath('C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = keyfile_path
 
 # Google storage info
 GS_BUCKET_NAME = 'couturelab-media'
