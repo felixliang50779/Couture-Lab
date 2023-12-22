@@ -2,10 +2,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
 import { TypeAnimation } from "react-type-animation";
-
+import { AnimationWrapper } from "animation-wrapper";
 import { motion, AnimatePresence } from "framer-motion"; 
 
+import ScrollToBottom from "react-scroll-to-bottom";
+import Loader from "react-dots-loader";
+
 import DashboardNavbar from '../Components/dashboardnavbar';
+
+import 'react-dots-loader/index.css'
 
 import StylingRecommendImage from '../Assets/Images/styling-image.png';
 import VirtualClosetImage from '../Assets/Images/virtual-closet.jpg';
@@ -23,22 +28,25 @@ export default function Dashboard() {
 
         const userInput = event.target[0].value;
 
-        setChatInput('');
+        setChatLog(prevState => [...prevState, [userInput]]);
 
-        const response = await fetch('http://127.0.0.1:8000/langserve/',
+        fetch('http://127.0.0.1:8000/langserve/',
         {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
             body: JSON.stringify({"text": userInput})
+        }).then(response => {
+            response.text().then(responseText => {
+                responseText = responseText.replaceAll("\"", '');
+                const logCopy = chatLog.slice();
+                logCopy.push([userInput, responseText]);
+                setChatLog(logCopy);
+            });
         });
 
-        let responseText = await response.text();
-
-        responseText = responseText.replaceAll("\"", '');
-        
-        setChatLog(prevState => [...prevState, [userInput, responseText]]);
+        setChatInput('');
     }
 
     return (
@@ -52,70 +60,73 @@ export default function Dashboard() {
                         initial={{y: "10%", opacity: 0, scale: 0.5}}
                         animate={{y: 0, opacity: 1, scale: 1}}
                         transition={{duration: 0.3, ease: "anticipate"}}>
-                        <div className={styles['virtual-closet']}>
-                            <Link to="/Closet">
-                                <img 
-                                    className={styles['virtual-closet-img']}
-                                    src={VirtualClosetImage}
-                                    alt="VirtualClosetImg"
-                                    loading="lazy" />
-                            </Link>
-                            <h1>Virtual Closet</h1>
-                        </div>
-                        <div className={styles['outfit-history']}>
-                            <Link to="/Calendar">
-                                <img 
-                                    className={styles['clothes-rack-img']}
-                                    src={OutfitHistoryImage}
-                                    alt="OutfitHistoryImg"
-                                    loading="lazy" />
-                            </Link>
-                            <h1>Outfit History</h1>
-                        </div>
-                        <div className={styles['styling-recommend']}>
-                            <Link to="/Recommend">
-                                <img 
-                                    className={styles['styling-recommend-img']}
-                                    src={StylingRecommendImage}
-                                    alt="StylingRecommendImg"
-                                    loading="lazy" />
-                            </Link>
-                            <h1>Styling Recommendations</h1>
-                        </div>
+                            <div className={styles['virtual-closet']}>
+                                <Link to="/Closet">
+                                    <img 
+                                        className={styles['virtual-closet-img']}
+                                        src={VirtualClosetImage}
+                                        alt="VirtualClosetImg"
+                                        loading="lazy" />
+                                </Link>
+                                <h1>Virtual Closet</h1>
+                            </div>
+                            <div className={styles['outfit-history']}>
+                                <Link to="/Calendar">
+                                    <img 
+                                        className={styles['clothes-rack-img']}
+                                        src={OutfitHistoryImage}
+                                        alt="OutfitHistoryImg"
+                                        loading="lazy" />
+                                </Link>
+                                <h1>Outfit History</h1>
+                            </div>
+                            <div className={styles['styling-recommend']}>
+                                <Link to="/Recommend">
+                                    <img 
+                                        className={styles['styling-recommend-img']}
+                                        src={StylingRecommendImage}
+                                        alt="StylingRecommendImg"
+                                        loading="lazy" />
+                                </Link>
+                                <h1>Styling Recommendations</h1>
+                            </div>
                     </motion.div> :
-                    <motion.div 
-                        className={styles['answer-log']}
-                        key="answer-box"
-                        initial={{y: "10%", opacity: 0}}
-                        animate={{y: 0, opacity: 1, scale: 1}}
-                        transition={{duration: 0.4, ease: "anticipate"}}
-                        >
-                        {chatLog.map((query, index) => {
-                            return (
-                                <div key={index}>
-                                    <p className={styles['chatbot-query']}>You: {query[0]}</p>
-                                    <br />
-                                    {query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
+                    <AnimationWrapper
+                        show={assistantActive}
+                        options={{ duration: 100 }}
+                        from={{ opacity: 0, transform: "translateY(100px)" }}
+                        to={{ opacity: 1, transform: "translateY(0)" }}>
+                            <ScrollToBottom className={styles['answer-log']} >
+                                {chatLog.map((query, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <p className={styles['chatbot-query']}>You: {query[0]}</p>
+                                            <br />
+                                            {typeof(query[1]) === "string" ? query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
 
-                                        return <TypeAnimation 
-                                                    key={key}
-                                                    sequence={[i]}
-                                                    cursor={false}
-                                                    speed={90}
-                                                    wrapper="p"
-                                                    style={{
-                                                        fontSize: '1.1em',
-                                                        fontWeight: 'bold',
-                                                        display: 'flex'
-                                                    }} />
-                                    })}
-                                    <br />
-                                    <br />
-                                    <br />
-                                </div>
-                            )
-                        })}
-                    </motion.div>
+                                                return <TypeAnimation 
+                                                            key={key}
+                                                            sequence={[i]}
+                                                            cursor={false}
+                                                            speed={90}
+                                                            wrapper="p"
+                                                            // preRenderFirstString={true}
+                                                            style={{
+                                                                fontSize: '1.1em',
+                                                                fontWeight: 'bold',
+                                                                display: 'flex'
+                                                            }} />
+                                            }) : <Loader
+                                                    size={8}
+                                                    color="black"
+                                                    style={{ marginLeft: "0.1em" }} />}
+                                            <br />
+                                            <br />
+                                        </div>
+                                    )
+                                })}
+                            </ScrollToBottom>
+                    </AnimationWrapper>
                 }
             </AnimatePresence>
             <form 

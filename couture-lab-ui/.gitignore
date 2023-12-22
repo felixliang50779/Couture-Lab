@@ -8,6 +8,7 @@
 # testing
 /coverage
 /settings.py
+/db.sqlite3
 
 # production
 /build
