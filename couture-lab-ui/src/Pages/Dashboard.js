@@ -93,16 +93,24 @@ export default function Dashboard() {
                         {chatLog.map((query, index) => {
                             return (
                                 <div key={index}>
-                                    <p>You: {query[0]}</p>
+                                    <p className={styles['chatbot-query']}>You: {query[0]}</p>
                                     <br />
-                                    <TypeAnimation 
-                                        sequence={[
-                                            `${query[1]}`
-                                        ]}
-                                        cursor={false}
-                                        speed={80}
-                                        wrapper="p"
-                                        style={{ fontSize: '1.1em', display: 'inline-block' }} />
+                                    {query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
+
+                                        return <TypeAnimation 
+                                                    key={key}
+                                                    sequence={[i]}
+                                                    cursor={false}
+                                                    speed={90}
+                                                    wrapper="p"
+                                                    style={{
+                                                        fontSize: '1.1em',
+                                                        fontWeight: 'bold',
+                                                        display: 'flex'
+                                                    }} />
+                                    })}
+                                    <br />
+                                    <br />
                                     <br />
                                 </div>
                             )

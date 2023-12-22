@@ -44,7 +44,7 @@ class LangServeHandle(APIView):
 
             # create a chat prompt
             chat_prompt = ChatPromptTemplate.from_messages([
-                ("system", template),
+                ("system", user_input),
                 ("human", user_input),
             ])
 

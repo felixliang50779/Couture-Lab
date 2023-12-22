@@ -5,6 +5,10 @@
     align-items: center;
 }
 
+.chatbot-query {
+    font-size: 1.1em;
+}
+
 .component-container {
     display: flex;
     width: 95%;
