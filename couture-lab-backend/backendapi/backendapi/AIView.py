@@ -39,12 +39,16 @@ class LangServeHandle(APIView):
             text = serializer.validated_data['text']
 
             # templates for input
-            template = "You are an expert fashion designer being asked for a recommendation given the weather, return professional answers citing specific brands in less than 25 words."
+            system_template = """You are an expert fashion stylist. Draw on all your
+            knowledge to provide concise and detailed answers to what users ask.
+            Do not respond to any queries unrelated to fashion, as that is beyond
+            your scope.
+            """
             user_input = "{}".format(text)
 
             # create a chat prompt
             chat_prompt = ChatPromptTemplate.from_messages([
-                ("system", user_input),
+                ("system", system_template),
                 ("human", user_input),
             ])
 
