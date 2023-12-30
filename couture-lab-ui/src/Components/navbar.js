@@ -40,11 +40,6 @@ export default function NavBar() {
     return (
         <nav id="navbar" className={`${styles["navbar"]} ${overlapChange ? styles["scrollNavbar"] : ''}`}>
             <a href="/Home" className={styles.logo}>CoutureLab</a>
-            <div className={styles["navbarInformation"]}>
-                <a href='#stylingDesc'>Styling Tips</a>
-                <a href='#closetDesc'>Virtual Closet</a>
-                <a href='#outfitHistoryDesc'>Outfit History</a>
-            </div>
             <div className={styles["navbar-right"]}>
                 <a href="/SignIn" className={styles["navbar-signin"]}>Sign In</a>
                 <div

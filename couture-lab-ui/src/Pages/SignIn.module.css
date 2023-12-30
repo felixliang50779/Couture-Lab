@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: "HeleNow-Bold";
+    font-family: "FuturaMaxi";
 }
 
 .signin-logo {
@@ -17,31 +17,6 @@
     color: #C0C0C0;
 }
 
-.signin-input-container {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    margin: 0.5em;
-}
-
-.signin-input {
-    margin: 0.5em;
-    border-color: #000000;
-    width: 24vw;
-}
-
-.signin-input:focus::placeholder {
-    color: transparent;
-}
-
-.signin-button {
-    background-color: #000000;
-    color: #FFFFFF;
-    padding: 0.5em 9em 0.5em 9em;
-    margin: 0.5em;
-    border-radius: 0.4em;
-}
-
-.signin-signup-button {
-    color: #808080;
+.signin-button:hover {
+    opacity: 0.7;
 }

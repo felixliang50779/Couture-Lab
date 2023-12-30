@@ -11,6 +11,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import AISerializer
 from dotenv import load_dotenv
+from langchain.document_loaders import DirectoryLoader
+from langchain.indexes import VectorstoreIndexCreator
+from langchain.document_loaders import TextLoader
 
 import openai
 import json
@@ -93,22 +96,31 @@ class LangServeHandle(APIView):
             You are an expert fashion stylist. Draw on all your
             knowledge to provide concise and detailed answers to what users ask.
 
-            Cite examples of specific clothing items from particular brands - parse this python
-            list to retrieve and present information about particular recommendations: {}
+            Cite examples of specific clothing items from particular brands, using knowledge of the
+            weather and current fashion trends to better influence your recommendations.
+
+            If request is fashion based, but you have no additional knowledge on the subject, use
+            a default ChatGPT response.
+
+            Information labled "Additional Info:" may be used to inform your response, but is
+            not necessary.
+
+            If recommending specific brands, link the item from the ShopAPI after the recommendation.
 
             Do not respond to anything unrelated to fashion, as that is beyond your scope.
-            """.format(recommendation_response)
 
-            # create a chat prompt
-            chat_prompt = ChatPromptTemplate.from_messages([
-                ("system", system_template),
-                ("human", text)
-            ])
+            User Input to respond to: {}
+            Recommended items from ShopAPI: {}
+            """.format(text, recommendation_response)
+            
+            # load in data files for embedding
+            loader = DirectoryLoader(path="C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi", glob="*.txt", loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8"))
 
-            # make a chain... pretty sure it combines the outputs in a easy way
-            chain = chat_prompt | chat_model | OutputParser()
-
-            result = chain.invoke({"text" : text})
+            # embedd from loader
+            index = VectorstoreIndexCreator().from_loaders([loader])
+            
+            # return query
+            result = index.query(system_template, llm=ChatOpenAI())
             return Response(result, status=status.HTTP_200_OK)
 
         except Exception as e:
