@@ -38,7 +38,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = keyfile_path
 GS_BUCKET_NAME = 'couturelab-media'
 GS_PROJECT_ID = 'couture-lab-backend'
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    'C:\\Users\\flian\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
+    'C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
 )
 
 
