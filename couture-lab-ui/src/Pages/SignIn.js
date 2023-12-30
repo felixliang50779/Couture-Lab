@@ -1,51 +1,75 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from '@chakra-ui/react';
-import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 
 import styles from './SignIn.module.css';
 
+const sendToken = (token) => {
+    fetch('http://localhost:8000/dj-rest-auth/google/',
+        {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({ access_token: token })
+        }).then(response => {
+            if (response.ok) {
+                console.log('POST request successful');
+                return response.json(); // returns Promise
+            } else {
+                console.log('POST request failed');
+            }
+        }).then(data => {
+            console.log(data); 
+            // redirects:
+            //window.location.href = '/Dashboard';
+        }).catch(error => {
+            console.error('Fetch error:', error);
+        });
+};
+
+const onSuccess = (response) => {
+    console.log("Success");
+    sendToken(response.credential);
+};
+
+const onFailure = () => {
+    console.log("Authentication failed");
+}
+
 export default function SignIn() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const google = window.google;
     
-    const handleSignIn = () => {
-        if (username.length < 3 || password.length > 10) {
-            toast.dismiss();
-            toast.error("Username should be 3 to 10 characters long.");
-            return;
+    useEffect(() => {
+        function handleCallbackResponse(response) {
+            // encoded jwt token
+            console.log(response.credential);
+            if (response) {
+                onSuccess(response);
+            }
+            else {
+                onFailure();
+            }
         }
-        if (password.length < 6 || password.length > 20) {
-            toast.dismiss();
-            toast.error("Password should be 6 to 20 characters long.");
-            return;
-        }
-    }
+
+        google.accounts.id.initialize({
+            client_id: "515162456588-rk2olvkgrbo6r48t4jr6cng3sgs5uahu.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+        });
+        // middle google login button
+        google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: 'outline', size: 'large' }
+        );
+        // side google login button
+        google.accounts.id.prompt();
+    }, [google.accounts.id]);
 
     return (
         <div className={styles['signin-container']}>
             <Link className={styles['signin-logo']} to="/Home">CoutureLab</Link>
             <h1 className={styles['signin-header']}>Welcome back!</h1>
-            <div className={styles['signin-input-container']}>
-                <Input
-                    className={styles['signin-input']}
-                    variant="flushed"
-                    focusBorderColor="black"
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"/>
-                <Input
-                    className={styles['signin-input']}
-                    variant="flushed"
-                    focusBorderColor="black"
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"/>
-            </div>
-            <button className={styles['signin-button']} onClick={handleSignIn}>Sign In</button>
-            <p className={styles['signin-signup-text']}>
-                Don't have an account?  
-                <Link className={styles['signin-signup-button']} to="/SignUp"> Sign Up</Link>
-            </p>
-            <Toaster />
+            <div id="signInDiv"></div>
         </div>
     )
 }

@@ -5,31 +5,113 @@
     transition: 0.5s;
 }
 
-.landing-content, .virtual-closet, .outfit-history, .styling-tips {
-    display: flex;
-    gap: 4em;
-    align-items: center;
-    justify-content: center;
+.banner-header {
+    color: #FFFFFF;
+    font-size: 9em;
+    position: absolute;
+    top: 1%;
+    left: 10%;
 }
 
-.landing-content, .virtual-closet, .outfit-history, .styling-tips, .last-page {
-    padding-top: 10%;
-    padding-bottom: 10%;
+.banner-text {
+    color: #FFFFFF;
+    font-size: 3em;
+    position: absolute;
+    top: 6%;
+    left: 11%;
 }
 
-.landing-content {
-    padding-top: 4%;
-    padding-right: 4%;
+.getstarted-container {
+    text-align: center;
+    padding: 8em 0 8em 0;
+}
+
+.getstarted-header {
+    font-size: 5em;
+}
+
+.divider {
+    border: 0.05em solid #000000;
+    width: 80%;
+    margin: auto;
+}
+
+.whatweare-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding: 4em 4em 4em 4em;
+}
+
+.whatweare-header {
+    margin-top: 1.2em;
+    font-size: 2em;
+}
+
+.whatweare-text {
+    font-size: 4.5em;
+}
+
+.greendress-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5em 0.5em 8em 0.5em;
+}
+
+.green-dress {
+    width: 45em;
+    padding: 3em;
+}
+
+.greendress-text {
+    font-size: 4.5em;
+    margin-top: 2.5em;
+}
+
+.wardrobe-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5em;
+}
+
+.wardrobe-text {
+    padding: 3em 2em 2em 2em;
+}
+
+.wardrobe-header {
+    font-size: 4em;
+}
+
+.wardrobe-desc {
+    font-size: 3em;
+}
+
+.wardrobe-img {
+    width: 40em;
+}
+
+.outfit-container {
+    padding: 0 2em 15em 2em;
+    text-align: center;
+}
+
+.outfit-header {
+    font-size: 5em;
+}
+
+.outfit-text {
+    font-size: 2.75em;
 }
 
 .last-page {
     display: flex;
     justify-content: center;
     text-align: center;
+    padding: 13em 0 5em 0;
 }
 
 .last-page-link {
-    font-size: 9.75em;
+    font-size: 10em;
+    font-weight: bold;
 }
 
 .last-page-link:hover {
@@ -37,42 +119,7 @@
     text-decoration: underline; 
 }
 
-.section-title {
-    font-size: 4em;
-    max-width: 13em;
-}
-
-.section-desc {
-    font-size: 1.5em;
-    margin-bottom: 1em;
-    max-width: 30em;
-}
-
-.section-text {
-    font-family: "MarkPro";
-}
-
 .last-page-title {
     color: #808080;
     font-size: 3em;
-}
-
-.landing-img {
-    width: 12vw;
-    margin: 5em -2em 0 5em;
-}
-
-.styling-img {
-    width: 20vw;
-    margin: 4em -3em 4em 1em;
-}
-
-.closet-img {
-    width: 20vw;
-    margin: 4em 1em 4em 1em;
-}
-
-.history-img {
-    width: 20vw;
-    margin: 4em 1em 4em 1em;
 }

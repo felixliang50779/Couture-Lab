@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: "HeleNow-Bold";
+    font-family: "FuturaMaxi";
 }
 
 .signup-logo {
@@ -15,33 +15,4 @@
 .signup-header {
     font-size: 3em;
     color: #C0C0C0;
-}
-
-.signup-input-container {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    margin: 0.5em;
-}
-
-.signup-input {
-    margin: 0.5em;
-    border-color: #000000;
-}
-
-.signup-input:focus::placeholder {
-    color: transparent;
-}
-
-.signup-button {
-    background-color: #000000;
-    color: #FFFFFF;
-    padding: 0.5em 9em 0.5em 9em;
-    width: 27vw;
-    margin: 0.5em;
-    border-radius: 0.4em;
-}
-
-.signup-signin-button {
-    color: #808080;
 }
