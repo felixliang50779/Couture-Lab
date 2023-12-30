@@ -20,13 +20,10 @@ from .ImageViews import StoreImage, GetImage
 from django.conf import settings
 from django.conf.urls.static import static
 from .AIView import LangServeHandle
-from .LoginView import GoogleLogin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('store-image/', StoreImage.as_view()),
     path('get-image/<str:image_name>/', GetImage.as_view()),
-    path('langserve/', LangServeHandle.as_view()),
-    path('accounts/', include('allauth.urls')),
-    path('account/', include('django.contrib.auth.urls')),
+    path('langserve/', LangServeHandle.as_view())
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

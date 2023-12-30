@@ -114,7 +114,7 @@ class LangServeHandle(APIView):
             """.format(text, recommendation_response)
             
             # load in data files for embedding
-            loader = DirectoryLoader(path="C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi", glob="*.txt", loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8"))
+            loader = DirectoryLoader(path="C:\\Users\\flian\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi", glob="*.txt", loader_cls=lambda file_path: TextLoader(file_path, encoding="utf-8"))
 
             # embedd from loader
             index = VectorstoreIndexCreator().from_loaders([loader])
