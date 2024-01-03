@@ -18,7 +18,7 @@ import base64
 class GetImage(APIView):
     def get(self, request, image_name):
         # Path to your service account key file
-        keyfile_path = 'C:\\Users\\tucke\\Couture-Lab\\couture-lab-backend\\backendapi\\backendapi\\couture-lab-backend-55abe63283f2.json'
+        keyfile_path = 'couture-lab-backend\backendapi\backendapi\couture-lab-backend-55abe63283f2.json'
 
         # Specify the full path to the image in GCS
         bucket_name = 'couturelab-media'
