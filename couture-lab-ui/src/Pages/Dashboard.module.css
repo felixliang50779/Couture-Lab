@@ -3,6 +3,8 @@
     flex-direction: column;
     font-family: "MarkPro";
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .chatbot-query {
@@ -13,9 +15,7 @@
     display: flex;
     width: 95%;
     justify-content: space-between;
-    margin: 5em 0 4.5em 1em;
-    padding: 5em;
-    padding-top: 4.5em;
+    margin: 4em 1em 4.5em 1em;
     padding-bottom: 0;
     margin-bottom: 3.5em;
 }
@@ -44,8 +44,14 @@
 
 .log-wrapper {
     display: flex;
-    flex-direction: column-reverse;
-    overflow: auto;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 3em;
+    padding: 0;
+}
+
+.spacer {
+    margin-top: 3em;
 }
 
 .answer-log {
@@ -57,9 +63,8 @@
     border-width: 0.2em;
     width: 89vw;
     height: 67.5vh;
-    margin-top: 8em;
     margin-bottom: 0.5em;
-    margin-left: 2em;
+    margin-right: 0;
     padding: 0.5em;
     overflow: auto;
 }
@@ -67,7 +72,6 @@
 .chatbot-container {
     display: flex;
     justify-content: center;
-    margin-left: 2em;
 }
 
 .chatbot-input:focus::placeholder {

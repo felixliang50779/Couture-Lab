@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDetectClickOutside } from "react-detect-click-outside"; 
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
 import { TypeAnimation } from "react-type-animation";
@@ -22,6 +23,8 @@ export default function Dashboard() {
     const [assistantActive, setAssistantActive] = useState(false);
     const [chatInput, setChatInput] = useState("");
     const [chatLog, setChatLog] = useState([]);
+
+    const ref = useDetectClickOutside({ onTriggered: () => setAssistantActive(false) });
 
     const handleQuery = async (event) => {
         event.preventDefault();
@@ -53,97 +56,101 @@ export default function Dashboard() {
 
         <div className={styles['dashboard-container']}>
             <DashboardNavbar />
-            <AnimatePresence>
-                {!assistantActive ?
-                    <motion.div 
-                        className={styles['component-container']}
-                        initial={{y: "10%", opacity: 0, scale: 0.5}}
-                        animate={{y: 0, opacity: 1, scale: 1}}
-                        transition={{duration: 0.3, ease: "anticipate"}}>
-                            <div className={styles['virtual-closet']}>
-                                <Link to="/Closet">
-                                    <img 
-                                        className={styles['virtual-closet-img']}
-                                        src={VirtualClosetImage}
-                                        alt="VirtualClosetImg"
-                                        loading="lazy" />
-                                </Link>
-                                <h1>Virtual Closet</h1>
-                            </div>
-                            <div className={styles['outfit-history']}>
-                                <Link to="/Calendar">
-                                    <img 
-                                        className={styles['clothes-rack-img']}
-                                        src={OutfitHistoryImage}
-                                        alt="OutfitHistoryImg"
-                                        loading="lazy" />
-                                </Link>
-                                <h1>Outfit History</h1>
-                            </div>
-                            <div className={styles['styling-recommend']}>
-                                <Link to="/Recommend">
-                                    <img 
-                                        className={styles['styling-recommend-img']}
-                                        src={StylingRecommendImage}
-                                        alt="StylingRecommendImg"
-                                        loading="lazy" />
-                                </Link>
-                                <h1>Styling Recommendations</h1>
-                            </div>
-                    </motion.div> :
-                    <AnimationWrapper
-                        show={assistantActive}
-                        options={{ duration: 100 }}
-                        from={{ opacity: 0, transform: "translateY(100px)" }}
-                        to={{ opacity: 1, transform: "translateY(0)" }}>
-                            <ScrollToBottom className={styles['answer-log']} >
-                                {chatLog.map((query, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <p className={styles['chatbot-query']}>You: {query[0]}</p>
-                                            <br />
-                                            {typeof(query[1]) === "string" ? query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
+            <div className={`${styles['log-wrapper']} ${assistantActive && styles.spacer}`} ref={ref}>
+                <AnimatePresence>
+                    {!assistantActive ?
+                        <motion.div 
+                            className={styles['component-container']}
+                            initial={{y: "10%", opacity: 0, scale: 0.5}}
+                            animate={{y: 0, opacity: 1, scale: 1}}
+                            transition={{duration: 0.3, ease: "anticipate"}}>
+                                <div className={styles['virtual-closet']}>
+                                    <Link to="/Closet">
+                                        <img 
+                                            className={styles['virtual-closet-img']}
+                                            src={VirtualClosetImage}
+                                            alt="VirtualClosetImg"
+                                            loading="lazy" />
+                                    </Link>
+                                    <h1>Virtual Closet</h1>
+                                </div>
+                                <div className={styles['outfit-history']}>
+                                    <Link to="/Calendar">
+                                        <img 
+                                            className={styles['clothes-rack-img']}
+                                            src={OutfitHistoryImage}
+                                            alt="OutfitHistoryImg"
+                                            loading="lazy" />
+                                    </Link>
+                                    <h1>Outfit History</h1>
+                                </div>
+                                <div className={styles['styling-recommend']}>
+                                    <Link to="/Recommend">
+                                        <img 
+                                            className={styles['styling-recommend-img']}
+                                            src={StylingRecommendImage}
+                                            alt="StylingRecommendImg"
+                                            loading="lazy" />
+                                    </Link>
+                                    <h1>Styling Recommendations</h1>
+                                </div>
+                        </motion.div> :
+                        <AnimationWrapper
+                            show={assistantActive}
+                            options={{ duration: 100 }}
+                            from={{ opacity: 0, transform: "translateY(100px)" }}
+                            to={{ opacity: 1, transform: "translateY(0)" }}>
+                                <ScrollToBottom 
+                                    className={styles['answer-log']}
+                                    tabIndex="0"
+                                    ref={ref}>
+                                    {chatLog.map((query, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <p className={styles['chatbot-query']}>You: {query[0]}</p>
+                                                <br />
+                                                {typeof(query[1]) === "string" ? query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
 
-                                                return <TypeAnimation 
-                                                            key={key}
-                                                            sequence={[i]}
-                                                            cursor={false}
-                                                            speed={90}
-                                                            wrapper="p"
-                                                            // preRenderFirstString={true}
-                                                            style={{
-                                                                fontSize: '1.1em',
-                                                                fontWeight: 'bold',
-                                                                display: 'flex'
-                                                            }} />
-                                            }) : <Loader
-                                                    size={8}
-                                                    color="black"
-                                                    style={{ marginLeft: "0.1em" }} />}
-                                            <br />
-                                            <br />
-                                        </div>
-                                    )
-                                })}
-                            </ScrollToBottom>
-                    </AnimationWrapper>
-                }
-            </AnimatePresence>
-            <form 
-                className={styles['chatbot-container']}
-                onSubmit={handleQuery}>
-                    <Input
-                        className={styles['chatbot-input']}
-                        width="88vw"
-                        value={chatInput}
-                        variant="flushed"
-                        borderColor="black"
-                        focusBorderColor="black"
-                        onBlur={() => setAssistantActive(false)}
-                        onFocus={() => setAssistantActive(true)}
-                        onChange={e => setChatInput(e.target.value)}
-                        placeholder="Chat with Your Styling Assistant"/>
-            </form>
+                                                    return <TypeAnimation 
+                                                                key={key}
+                                                                sequence={[i]}
+                                                                cursor={false}
+                                                                speed={90}
+                                                                wrapper="p"
+                                                                // preRenderFirstString={true}
+                                                                style={{
+                                                                    fontSize: '1.1em',
+                                                                    fontWeight: 'bold',
+                                                                    display: 'flex'
+                                                                }} />
+                                                }) : <Loader
+                                                        size={8}
+                                                        color="black"
+                                                        style={{ marginLeft: "0.1em" }} />}
+                                                <br />
+                                                <br />
+                                            </div>
+                                        )
+                                    })}
+                                </ScrollToBottom>
+                        </AnimationWrapper>
+                    }
+                </AnimatePresence>
+                <form
+                    className={styles['chatbot-container']}
+                    onSubmit={handleQuery}>
+                        <Input
+                            className={styles['chatbot-input']}
+                            width="88vw"
+                            value={chatInput}
+                            variant="flushed"
+                            borderColor="black"
+                            focusBorderColor="black"
+                            onFocus={() => setAssistantActive(true)}
+                            onChange={e => setChatInput(e.target.value)}
+                            placeholder="Chat with Your Styling Assistant"/>
+                </form>
+            </div>
         </div>
     )
 }
