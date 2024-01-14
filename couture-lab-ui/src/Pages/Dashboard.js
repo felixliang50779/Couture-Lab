@@ -29,6 +29,11 @@ export default function Dashboard() {
     const handleQuery = async (event) => {
         event.preventDefault();
 
+        // Catching empty inputs
+        if (!event.target[0].value) {
+            return;
+        }
+
         const userInput = event.target[0].value;
 
         setQueryLog(prevState => [...prevState, userInput]);

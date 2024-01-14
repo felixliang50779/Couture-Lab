@@ -1,26 +1,15 @@
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from langchain.chains.openai_functions.openapi import get_openapi_chain
-from langchain.llms import OpenAI
-from langchain.chains import APIChain
-from langchain.chains.api import open_meteo_docs
 from langchain.schema import BaseOutputParser
-from langserve import add_routes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import AISerializer
 from dotenv import load_dotenv
-from langchain.document_loaders import DirectoryLoader
-from langchain.indexes import VectorstoreIndexCreator
-from langchain.document_loaders import TextLoader
 from openai import OpenAI
 from django.http import StreamingHttpResponse
 
 import json
 import requests
 import os
-import time
 
 # # Fetch location info
 # url = "https://ip-geo-location.p.rapidapi.com/ip/check"
