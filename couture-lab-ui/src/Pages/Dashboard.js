@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside"; 
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
-import { TypeAnimation } from "react-type-animation";
 import { AnimationWrapper } from "animation-wrapper";
 import { motion, AnimatePresence } from "framer-motion"; 
 
@@ -22,7 +21,8 @@ import styles from './Dashboard.module.css';
 export default function Dashboard() {
     const [assistantActive, setAssistantActive] = useState(false);
     const [chatInput, setChatInput] = useState("");
-    const [chatLog, setChatLog] = useState([]);
+    const [queryLog, setQueryLog] = useState([]);
+    const [responseLog, setResponseLog] = useState([]);
 
     const ref = useDetectClickOutside({ onTriggered: () => setAssistantActive(false) });
 
@@ -31,25 +31,42 @@ export default function Dashboard() {
 
         const userInput = event.target[0].value;
 
-        setChatLog(prevState => [...prevState, [userInput]]);
+        setQueryLog(prevState => [...prevState, userInput]);
 
-        fetch('http://127.0.0.1:8000/langserve/',
+        setChatInput('');
+
+        const response = await fetch('http://127.0.0.1:8000/langserve/',
         {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
             body: JSON.stringify({"text": userInput})
-        }).then(response => {
-            response.text().then(responseText => {
-                responseText = responseText.replaceAll("\"", '');
-                const logCopy = chatLog.slice();
-                logCopy.push([userInput, responseText]);
-                setChatLog(logCopy);
-            });
         });
 
-        setChatInput('');
+        // Here we start prepping for the streaming response
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        const loopRunner = true;
+
+        let stylistResponse = "";
+
+        responseLog.push("");
+
+        while (loopRunner) {
+            // Here we start reading the stream, until its done.
+            const { value, done } = await reader.read();
+            if (done) {
+                break;
+            }
+            const decodedChunk = decoder.decode(value, { stream: true });
+
+            const logCopy = responseLog.slice();
+            stylistResponse += decodedChunk;
+            
+            logCopy[logCopy.length - 1] = stylistResponse;
+            setResponseLog(logCopy);
+        }
     }
 
     return (
@@ -104,26 +121,15 @@ export default function Dashboard() {
                                     className={styles['answer-log']}
                                     tabIndex="0"
                                     ref={ref}>
-                                    {chatLog.map((query, index) => {
+                                    {queryLog.map((query, index) => {
                                         return (
                                             <div key={index}>
-                                                <p className={styles['chatbot-query']}>You: {query[0]}</p>
+                                                <p className={styles['chatbot-query']}>You: {query}</p>
                                                 <br />
-                                                {typeof(query[1]) === "string" ? query[1].replaceAll('\\n', '\n').replaceAll("\\", '').split('\n').map((i, key) => {
-
-                                                    return <TypeAnimation 
-                                                                key={key}
-                                                                sequence={[i]}
-                                                                cursor={false}
-                                                                speed={90}
-                                                                wrapper="p"
-                                                                // preRenderFirstString={true}
-                                                                style={{
-                                                                    fontSize: '1.1em',
-                                                                    fontWeight: 'bold',
-                                                                    display: 'flex'
-                                                                }} />
-                                                }) : <Loader
+                                                {typeof(responseLog[index]) === "string" ?
+                                                    <p
+                                                        className={styles.response}>{responseLog[index]}</p> : 
+                                                    <Loader 
                                                         size={8}
                                                         color="black"
                                                         style={{ marginLeft: "0.1em" }} />}

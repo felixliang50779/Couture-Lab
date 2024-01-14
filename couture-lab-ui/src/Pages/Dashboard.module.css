@@ -69,6 +69,12 @@
     overflow: auto;
 }
 
+.response {
+    display: flex;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
 .chatbot-container {
     display: flex;
     justify-content: center;
