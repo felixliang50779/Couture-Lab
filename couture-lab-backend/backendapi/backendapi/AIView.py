@@ -89,7 +89,7 @@ def send_stylist_response(user_query):
     '''
 
     response_generator = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=[
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_query}
