@@ -56,7 +56,7 @@ export default function Dashboard() {
         const decoder = new TextDecoder();
         const loopRunner = true;
         const imgLabel = /!\[.*?\]/g;
-        const imgLink = /(https?:\/\/.*\.(?:png|jpg))/g;
+        const imgLink = /(\(https?:\/\/.*\.(?:png|jpg))\)/g;
 
         let stylistResponse = "";
         
@@ -79,7 +79,8 @@ export default function Dashboard() {
 
             if (imgUrls) {
                 for (const url of imgUrls) {
-                    stylistResponse = stylistResponse.replace(`(${url})`, `<img src="${url}" alt="itemImg"/>`);
+                    const formattedUrl = url.slice(1, -1);
+                    stylistResponse = stylistResponse.replace(`${url}`, `<img src="${formattedUrl}" alt="itemImg"/>`);
                 }
             }
             
