@@ -11,73 +11,130 @@ import json
 import requests
 import os
 
-# # Fetch location info
-# url = "https://ip-geo-location.p.rapidapi.com/ip/check"
+# Fetch location info
+def get_weather_data():
+    # url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
-# querystring = {"format":"json"}
+    # querystring = {"format":"json"}
 
-# headers = {
-# 	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-# 	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
-# }
+    # headers = {
+    # 	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+    # 	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
+    # }
 
-# response = requests.get(url, headers=headers, params=querystring)
+    # response = requests.get(url, headers=headers, params=querystring)
 
-# geolocation_dict = response.json()
+    # geolocation_dict = response.json()
 
-# city, country = geolocation_dict['city']['name'], geolocation_dict['country']['name']
+    # city, country = geolocation_dict['city']['name'], geolocation_dict['country']['name']
+    pass
 
-# Code below that's commented out causes the token limit to exceed gpt-3.5's threshold
+def get_amazon_data(
+    clothing_items, 
+    country=None,
+    sort_by=None,
+    max_price=None,
+    brand=None
+    ):
+        url = "https://real-time-amazon-data.p.rapidapi.com/search"
 
-# llm = OpenAI(temperature=0)
-# weather_response = APIChain.from_llm_and_api_docs(
-#     llm,
-#     open_meteo_docs.OPEN_METEO_DOCS,
-#     verbose=True,
-#     limit_to_domains=["https://api.open-meteo.com/"],
-# )
+        querystring = {"query": clothing_items,"page":"1","country":"US","category_id":"aps"}
 
-# weather_response = weather_response.run(
-#     f"What is the weather like in {city}, {country}?")
+        headers = {
+            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+            "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            result = response.json()
+
+            return json.dumps(result['data'])
+        
+        return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
 
 def send_stylist_response(user_query):
-    response = client.chat.completions.create(
+    function_descriptions = [
+        {
+            "name": "get_amazon_data",
+            "description": "Get specific clothing item recommendations",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "clothing_items": {
+                        "type": "string",
+                        "description": "The name of one or more clothing items, e.g. t-shirt, t-shirt and jeans"
+                    }
+                },
+                "required": ["clothing_items"]
+            }
+        }
+    ]
+
+    system_message = '''
+    You are an expert fashion stylist. Draw on all your
+    knowledge to provide concise and detailed answers to what users ask.
+
+    Cite examples of specific clothing items from particular brands, using knowledge of the
+    weather and current fashion trends to better influence your recommendations.
+
+    When citing specific examples using provided functions, be sure to extract
+    all items when there are multiple. Attempt to extract image links whenever possible
+    as well.
+
+    Only respond to fashion-related questions.
+
+    Address the user as "you".
+    '''
+
+    response_generator = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": 
-            '''
-            You are an expert fashion stylist. Draw on all your
-            knowledge to provide concise and detailed answers to what users ask.
-
-            Cite examples of specific clothing items from particular brands, using knowledge of the
-            weather and current fashion trends to better influence your recommendations.
-
-            Information labled "Additional Info:" may be used to inform your response, but is
-            not necessary.
-
-            Only respond to fashion-related questions.
-
-            Address the user as "you".
-            '''},
+            {"role": "system", "content": system_message},
             {"role": "user", "content": user_query}
         ],
+        functions=function_descriptions,
+        function_call="auto",
         stream=True
     )
 
-    for chunk in response:
-        if chunk.choices[0].delta.content is not None:
-            yield chunk.choices[0].delta.content
+    arguments, name = "", ""
+    function_return = None
 
-class OutputParser(BaseOutputParser):
-    # parse the output into a simple string
-    def parse(self, text: str):
-        return text.strip()
+    for chunk in response_generator:
+        if chunk.choices[0].delta.function_call is not None:
+            arguments += chunk.choices[0].delta.function_call.arguments
+
+            if chunk.choices[0].delta.function_call.name:
+                name = chunk.choices[0].delta.function_call.name
+        else:
+            if len(name):
+                params = json.loads(arguments)
+
+                chosen_function = eval(name)
+                function_return = chosen_function(**params)
+            else:
+                if chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+
+    if function_return:
+        refined_response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_query},
+                {"role": "function", "name": name, "content": function_return}
+            ],
+            functions=function_descriptions,
+            function_call="auto",
+            stream=True
+        )
+
+        for chunk in refined_response:
+            if chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
     
-    # make the string work for some reason, don't ask me
-    @property
-    def OutputType(self) -> str:
-        """Specify the output type."""
-        return str  # Adjust this based on the expected output type
 
 class LangServeHandle(APIView):
     def get(self, request):
