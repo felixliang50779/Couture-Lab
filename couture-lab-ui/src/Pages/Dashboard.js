@@ -3,10 +3,12 @@ import { useDetectClickOutside } from "react-detect-click-outside";
 import { Link } from "react-router-dom";
 import { Input } from "@chakra-ui/react";
 import { AnimationWrapper } from "animation-wrapper";
-import { motion, AnimatePresence } from "framer-motion"; 
+import { motion, AnimatePresence } from "framer-motion";
+import parse from "html-react-parser";
 
 import ScrollToBottom from "react-scroll-to-bottom";
 import Loader from "react-dots-loader";
+import Linkify from "linkify-react";
 
 import DashboardNavbar from '../Components/dashboardnavbar';
 
@@ -53,9 +55,11 @@ export default function Dashboard() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         const loopRunner = true;
+        const imgLabel = /!\[.*?\]/g;
+        const imgLink = /(https?:\/\/.*\.(?:png|jpg))/g;
 
         let stylistResponse = "";
-
+        
         responseLog.push("");
 
         while (loopRunner) {
@@ -64,10 +68,20 @@ export default function Dashboard() {
             if (done) {
                 break;
             }
-            const decodedChunk = decoder.decode(value, { stream: true });
+            let decodedChunk = decoder.decode(value, { stream: true });
 
             const logCopy = responseLog.slice();
             stylistResponse += decodedChunk;
+
+            stylistResponse = stylistResponse.replaceAll(imgLabel, "");
+
+            const imgUrls = stylistResponse.match(imgLink);
+
+            if (imgUrls) {
+                for (const url of imgUrls) {
+                    stylistResponse = stylistResponse.replace(`(${url})`, `<img src="${url}" alt="itemImg"/>`);
+                }
+            }
             
             logCopy[logCopy.length - 1] = stylistResponse;
             setResponseLog(logCopy);
@@ -129,11 +143,20 @@ export default function Dashboard() {
                                     {queryLog.map((query, index) => {
                                         return (
                                             <div key={index}>
-                                                <p className={styles['chatbot-query']}>You: {query}</p>
+                                                <p className={styles['chatbot-query']}>
+                                                    You: {query}
+                                                </p>
                                                 <br />
                                                 {typeof(responseLog[index]) === "string" ?
-                                                    <p
-                                                        className={styles.response}>{responseLog[index]}</p> : 
+                                                    <Linkify 
+                                                        options={{
+                                                            target: "_blank",
+                                                            className: styles.link
+                                                        }}>
+                                                        <p className={styles.response}>
+                                                            {parse(responseLog[index])}
+                                                        </p>
+                                                    </Linkify> : 
                                                     <Loader 
                                                         size={8}
                                                         color="black"

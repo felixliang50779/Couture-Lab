@@ -70,10 +70,24 @@
 }
 
 .response {
-    display: flex;
     font-size: 1.1em;
     font-weight: bold;
     white-space: pre-line;
+}
+
+.response img {
+    width: 30%;
+    border: 0.1em solid #555;
+    border-radius: 1em;
+    margin: 1% 4%;
+}
+
+.link {
+    color: #DE7E5D;
+}
+
+.link:hover {
+    color: #DE7E5D;
 }
 
 .chatbot-container {

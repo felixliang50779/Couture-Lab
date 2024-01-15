@@ -29,6 +29,7 @@ def get_weather_data():
     # city, country = geolocation_dict['city']['name'], geolocation_dict['country']['name']
     pass
 
+# Retrieves real-time amazon product info
 def get_amazon_data(
     clothing_items, 
     country=None,
@@ -54,7 +55,11 @@ def get_amazon_data(
         
         return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
 
+# Generate response based on user query
 def send_stylist_response(user_query):
+
+    # Providing descriptions of all
+    # available functions for the stylist to call
     function_descriptions = [
         {
             "name": "get_amazon_data",
@@ -72,12 +77,14 @@ def send_stylist_response(user_query):
         }
     ]
 
+    # High-level instructions for the stylist
     system_message = '''
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    Cite examples of specific clothing items from particular brands, using knowledge of the
-    weather and current fashion trends to better influence your recommendations.
+    Always try to cite examples of specific clothing items from particular brands,
+    using knowledge of the weather and current fashion trends to better influence
+    your recommendations.
 
     When citing specific examples using provided functions, be sure to extract
     all items when there are multiple. Attempt to extract image links whenever possible
@@ -88,12 +95,15 @@ def send_stylist_response(user_query):
     Address the user as "you".
     '''
 
+    # Initial response generator that we can extract
+    # any required function call details from
     response_generator = client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_query}
         ],
+        temperature=0.2,
         functions=function_descriptions,
         function_call="auto",
         stream=True
@@ -102,6 +112,9 @@ def send_stylist_response(user_query):
     arguments, name = "", ""
     function_return = None
 
+    # Extracting function call info as it's streamed
+    # If no function calls are required, we yield
+    # a generator object for each chunk
     for chunk in response_generator:
         if chunk.choices[0].delta.function_call is not None:
             arguments += chunk.choices[0].delta.function_call.arguments
@@ -118,6 +131,8 @@ def send_stylist_response(user_query):
                 if chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
 
+    # If a function was called we feed its output
+    # back through the API for a refined response
     if function_return:
         refined_response = client.chat.completions.create(
             model="gpt-4",
@@ -126,11 +141,13 @@ def send_stylist_response(user_query):
                 {"role": "user", "content": user_query},
                 {"role": "function", "name": name, "content": function_return}
             ],
+            temperature=0.2,
             functions=function_descriptions,
             function_call="auto",
             stream=True
         )
 
+        # Streaming the final response
         for chunk in refined_response:
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
