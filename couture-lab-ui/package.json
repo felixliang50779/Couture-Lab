@@ -15,6 +15,7 @@
     "animation-wrapper": "^1.1.1",
     "framer-motion": "^10.16.4",
     "html-react-parser": "^5.1.1",
+    "jwt-decode": "^4.0.0",
     "langchain": "^0.0.209",
     "linkify-react": "^4.1.3",
     "react": "^18.2.0",

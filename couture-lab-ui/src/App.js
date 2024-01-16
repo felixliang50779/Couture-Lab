@@ -1,5 +1,7 @@
-import { BrowserRouter as Router, Routes, Route, Navigate }
-    from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+
+import { AuthProvider } from './Context/authcontext.js';
 
 import Home from './Pages/Home.js';
 import Dashboard from './Pages/Dashboard.js';
@@ -12,7 +14,8 @@ import SignUp from './Pages/SignUp.js';
 import About from './Pages/About.js';
 import Contact from './Pages/Contact.js'
 
-import { ChakraProvider } from '@chakra-ui/react';
+import ProtectedRoute from './Utilities/ProtectedRoute.js';
+
 
 import './App.css';
 
@@ -20,19 +23,20 @@ function App() {
   return (
     <ChakraProvider>
       <Router>
-        <Routes>
-          <Route path='/' element={<Navigate replace to='/Home' />} />
-          <Route path='/Home' element={<Home />} />
-          <Route path='/SignIn' element={<SignIn />} />
-          <Route path='/SignUp' element={<SignUp />} />
-          <Route path='/Dashboard' element={<Dashboard />} />
-          <Route path='/Closet' element={<Closet />} />
-          <Route path='/AddClothes' element={<AddClothes />} />
-          <Route path='/Calendar' element={<Calendar />} />
-          <Route path='/Recommend' element={<Recommend />} />
-          <Route path='/About' element={<About />} />
-          <Route path='/Contact' element={<Contact />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/SignIn' element={<SignIn />} />
+            <Route path='/SignUp' element={<SignUp />} />
+            <Route path='/Dashboard' element={<ProtectedRoute>  <Dashboard />  </ProtectedRoute>} />
+            <Route path='/Closet' element={<Closet />} />
+            <Route path='/AddClothes' element={<AddClothes />} />
+            <Route path='/Calendar' element={<Calendar />} />
+            <Route path='/Recommend' element={<Recommend />} />
+            <Route path='/About' element={<About />} />
+            <Route path='/Contact' element={<Contact />} />
+          </Routes>
+        </AuthProvider>
       </Router>
     </ChakraProvider>
   );
