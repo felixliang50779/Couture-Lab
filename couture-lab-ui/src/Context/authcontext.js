@@ -30,7 +30,7 @@
 
             let data = await response.json();
 
-            if (data) {
+            if (data.detail !== "No active account found with the given credentials") {
                 localStorage.setItem('authTokens', JSON.stringify(data));
                 setAuthTokens(data);
                 setUser(jwtDecode(data.access));

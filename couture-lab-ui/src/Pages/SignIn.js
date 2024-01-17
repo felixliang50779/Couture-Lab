@@ -11,6 +11,7 @@ export default function SignIn() {
     return (
         <div className={styles['signin-container']}>
             <Link to="/" className={styles['signin-logo']}>CoutureLab</Link>
+            <h1>Login</h1>
             <h1 className={styles['signin-header']}>Welcome back!</h1>
             {user ? (
                 <h1 className={styles['signin-header']}>You are already logged in!</h1>
