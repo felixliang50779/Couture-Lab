@@ -141,7 +141,7 @@ export default function Dashboard() {
                                     className={styles['answer-log']}
                                     tabIndex="0"
                                     ref={ref}>
-                                    {queryLog.map((query, index) => {
+                                    {queryLog.length !== 0 ? queryLog.map((query, index) => {
                                         return (
                                             <div key={index}>
                                                 <p className={styles['chatbot-query']}>
@@ -166,7 +166,10 @@ export default function Dashboard() {
                                                 <br />
                                             </div>
                                         )
-                                    })}
+                                    }) : 
+                                    <p className={styles['starter-text']}>
+                                        Ask me anything to get started!
+                                    </p>}
                                 </ScrollToBottom>
                         </AnimationWrapper>
                     }
@@ -175,15 +178,34 @@ export default function Dashboard() {
                     className={styles['chatbot-container']}
                     onSubmit={handleQuery}>
                         <Input
-                            className={styles['chatbot-input']}
-                            width="88vw"
+                            width="85vw"
+                            minHeight="8vh"
                             value={chatInput}
-                            variant="flushed"
-                            borderColor="black"
+                            bgColor="#F5F4EB"
+                            _hover="black"
+                            variant="filled"
+                            borderColor="gray"
                             focusBorderColor="black"
                             onFocus={() => setAssistantActive(true)}
                             onChange={e => setChatInput(e.target.value)}
                             placeholder="Chat with Your Styling Assistant"/>
+                        <button className={styles['query-button']}>
+                            <span data-state="closed">
+                                <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    class="text-white dark:text-black">
+                                        <path
+                                            d="M7 11L12 6L17 11M12 18V7"
+                                            stroke="white"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"></path>
+                                </svg>
+                            </span>
+                        </button>
                 </form>
             </div>
         </div>
