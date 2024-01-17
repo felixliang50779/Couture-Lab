@@ -1,101 +1,112 @@
-    import { createContext, useState, useEffect, useRef, useCallback } from 'react'
-    import { jwtDecode } from 'jwt-decode';
-    import { useNavigate } from 'react-router-dom'
+import { createContext, useState, useEffect, useRef, useCallback } from 'react'
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
-    const AuthContext = createContext();
+const AuthContext = createContext();
 
-    export default AuthContext;
+export default AuthContext;
 
-    export const AuthProvider = ({children}) => {
+export const AuthProvider = ({children}) => {
+    let [user, setUser] = useState(() => 
+        (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null));
+    let [authTokens, setAuthTokens] = useState(() => 
+        (localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null));
+    let [loading, setLoading] = useState(true);
 
-        let [user, setUser] = useState(() => 
-            (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null));
-        let [authTokens, setAuthTokens] = useState(() => 
-            (localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null));
-        let [loading, setLoading] = useState(true);
+    const hasPageBeenRendered = useRef(false);
 
-        const hasPageBeenRendered = useRef(false);
+    const navigate = useNavigate();
 
-        const navigate = useNavigate();
+    let loginUser = async (e) => {
+        e.preventDefault();
 
-        let loginUser = async (e) => {
-            e.preventDefault();
-            const response = await fetch('http://127.0.0.1:8000/token/', {
+        // checks if username or target are empty on submit button click
+        if (!e.target.username.value || !e.target.password.value) {
+            toast.error("Invalid login. Please try again.");
+            return;
+        }
+
+        console.log("ayo")
+        const response = await fetch('http://127.0.0.1:8000/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username: e.target.username.value, password: e.target.password.value })
+        });
+
+        let data = await response.json();
+
+        if (data.detail !== "No active account found with the given credentials") {
+            localStorage.setItem('authTokens', JSON.stringify(data));
+            setAuthTokens(data);
+            setUser(jwtDecode(data.access));
+            navigate('/Dashboard');
+        } else {
+            toast.error("Invalid login. Please try again.");
+        }
+    }
+
+    // automatically redirects to page on start
+    let logoutUser = useCallback((e) => {
+        localStorage.removeItem('authTokens');
+        setAuthTokens(null);
+        setUser(null);
+        navigate('/SignIn');
+    }, [navigate]);
+
+    let contextData = {
+        user:user,
+        authTokens:authTokens,
+        loginUser:loginUser,
+        logoutUser:logoutUser,
+    }
+
+    useEffect(() => {
+        const updateToken = async () => {
+            const response = await fetch('http://127.0.0.1:8000/token/refresh/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type':'application/json'
                 },
-                body: JSON.stringify({username: e.target.username.value, password: e.target.password.value })
-            });
-
-            let data = await response.json();
-
-            if (data.detail !== "No active account found with the given credentials") {
-                localStorage.setItem('authTokens', JSON.stringify(data));
+                body:JSON.stringify({refresh:authTokens?.refresh})
+            })
+    
+            const data = await response.json();
+            if (response.status === 200) {
                 setAuthTokens(data);
                 setUser(jwtDecode(data.access));
-                navigate('/Dashboard');
+                localStorage.setItem('authTokens',JSON.stringify(data));
             } else {
-                alert('Something went wrong while logging in the user!');
+                logoutUser();
+            }
+    
+            if (loading) {
+                setLoading(false);
             }
         }
 
-        // automatically redirects to page on start
-        let logoutUser = useCallback((e) => {
-            localStorage.removeItem('authTokens');
-            setAuthTokens(null);
-            setUser(null);
-            navigate('/SignIn');
-        }, [navigate]);
-
-        let contextData = {
-            user:user,
-            authTokens:authTokens,
-            loginUser:loginUser,
-            logoutUser:logoutUser,
+        if (loading && hasPageBeenRendered.current) {
+            updateToken();
         }
 
-        useEffect(() => {
-            const updateToken = async () => {
-                const response = await fetch('http://127.0.0.1:8000/token/refresh/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type':'application/json'
-                    },
-                    body:JSON.stringify({refresh:authTokens?.refresh})
-                })
-        
-                const data = await response.json();
-                if (response.status === 200) {
-                    setAuthTokens(data);
-                    setUser(jwtDecode(data.access));
-                    localStorage.setItem('authTokens',JSON.stringify(data));
-                } else {
-                    logoutUser();
-                }
-        
-                if (loading) {
-                    setLoading(false);
-                }
-            }
-
-            if (loading && hasPageBeenRendered.current) {
+        const REFRESH_INTERVAL = 1000 * 60 * 4; // 4 minutes
+        let interval = setInterval(()=>{
+            if (authTokens) {
                 updateToken();
             }
+        }, REFRESH_INTERVAL)
+        return () => clearInterval(interval);
 
-            const REFRESH_INTERVAL = 1000 * 60 * 4; // 4 minutes
-            let interval = setInterval(()=>{
-                if (authTokens) {
-                    updateToken();
-                }
-            }, REFRESH_INTERVAL)
-            return () => clearInterval(interval);
+    },[authTokens, loading, logoutUser])
 
-        },[authTokens, loading, logoutUser])
-
-        return(
+    return(
+        <div>
             <AuthContext.Provider value={contextData}>
                 {children}
             </AuthContext.Provider>
-        )
-    }
+            <Toaster />
+        </div>
+    )
+}
