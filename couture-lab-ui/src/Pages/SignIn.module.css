@@ -15,6 +15,10 @@
     width: 80%;
 }
 
+.form-title{
+    padding-top: 1em;
+}
+
 .signin-register {
     display: flex;
 }
@@ -26,3 +30,4 @@
 .signin-text-container {
     margin: 0 auto;
 }
+
