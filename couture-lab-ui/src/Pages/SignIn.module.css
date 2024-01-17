@@ -1,22 +1,28 @@
 .signin-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     font-family: "FuturaMaxi";
 }
 
 .signin-logo {
-    margin-right: auto;
     padding: 1em;
     font-size: 2em;
 }
 
-.signin-header {
-    font-size: 3em;
-    color: #C0C0C0;
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
 }
 
-.signin-button:hover {
-    opacity: 0.7;
+.signin-register {
+    display: flex;
+}
+
+.signin-register-link {
+    color: #0000FF;
+}
+
+.signin-text-container {
+    margin: 0 auto;
 }
