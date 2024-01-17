@@ -19,13 +19,13 @@ export default function Contact() {
                         </h2>
                     </section>
                     <form className={styles["contact-form"]}>
-                        <input className={styles["contact-input"]} type="text" maxlength="100" name="name" placeholder="Your name" required></input>
-                        <input className={styles["contact-input"]} type="email" maxlength="100" name="email" placeholder="Your email" required></input>
-                        <textarea className={styles["contact-input"]} maxlength="1000" name="field" placeholder="Your text" required></textarea>
+                        <input className={styles["contact-input"]} type="text" name="name" placeholder="Your name" required></input>
+                        <input className={styles["contact-input"]} type="email" name="email" placeholder="Your email" required></input>
+                        <textarea className={styles["contact-input"]} name="field" placeholder="Your text" required></textarea>
                         <input type="submit" value="submit" />
                     </form>
                 </div>
-                <a href="/SignIn" className={styles["contact-letstalk"]}>Let's talk</a  >
+                <a href="/Dashboard" className={styles["contact-letstalk"]}>Let's talk</a>
             </div>
             <Footer />
         </div>

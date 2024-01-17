@@ -20,10 +20,15 @@ from .ImageViews import StoreImage, GetImage
 from django.conf import settings
 from django.conf.urls.static import static
 from .AIView import LangServeHandle
+from .LoginInView import MyTokenObtainPairView, GetProfile
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('store-image/', StoreImage.as_view()),
     path('get-image/<str:image_name>/', GetImage.as_view()),
-    path('langserve/', LangServeHandle.as_view())
+    path('langserve/', LangServeHandle.as_view()),
+    path('profile/', GetProfile.as_view()),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), 
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
