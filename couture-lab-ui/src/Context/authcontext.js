@@ -27,23 +27,23 @@ export const AuthProvider = ({children}) => {
             return;
         }
 
-        console.log("ayo")
         const response = await fetch('http://127.0.0.1:8000/token/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username: e.target.username.value, password: e.target.password.value })
+            body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value })
         });
 
-        let data = await response.json();
-
-        if (data.detail !== "No active account found with the given credentials") {
+        if (response.ok) {
+            // Successful login
+            let data = await response.json();
             localStorage.setItem('authTokens', JSON.stringify(data));
             setAuthTokens(data);
             setUser(jwtDecode(data.access));
             navigate('/Dashboard');
         } else {
+            // Unsuccessful login
             toast.error("Invalid login. Please try again.");
         }
     }

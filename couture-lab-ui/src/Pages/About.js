@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './About.module.css';
 import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 import dungMemberImage from '../Assets/Images/dungImage.png';
 import oliviaMemberImage from '../Assets/Images/oliviaImage.jpg';
 
@@ -25,7 +23,6 @@ export default function About() {
                     <p>webapp idea originator and designer</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/oliviaengler/" className="linkedin">
-                            <FontAwesomeIcon icon={faLinkedin} />
                         </a></li>
                     </ul>
                 </div>
@@ -38,10 +35,8 @@ export default function About() {
                     <p>Info. about Felix here</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/felix-liang-0b401a1ba/" className="linkedin">
-                            <FontAwesomeIcon icon={faLinkedin} />
                         </a></li>
                         <li><a href="https://github.com/felixliang50779" className="github">
-                            <FontAwesomeIcon icon={faGithub} />
                         </a></li>
                     </ul>
                 </div>
@@ -54,10 +49,8 @@ export default function About() {
                     <p>Info. About Tucker here</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/tucker-radgens-26413a287/" className="linkedin">
-                            <FontAwesomeIcon icon={faLinkedin} />
                         </a></li>
                         <li><a href="https://github.com/radgenst14" className="github">
-                            <FontAwesomeIcon icon={faGithub} />
                         </a></li>
                     </ul>
                 </div>
@@ -71,10 +64,8 @@ export default function About() {
                     <p>Worked on: Figma, UX frontend, homepage design, About Page</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/dung-zoom-nguyen3000/" className="linkedin">
-                            <FontAwesomeIcon icon={faLinkedin} />
                         </a></li>
                         <li><a href="https://github.com/Zooomulus" className="github">
-                            <FontAwesomeIcon icon={faGithub} />
                         </a></li>
                     </ul>
                 </div>

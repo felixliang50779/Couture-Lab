@@ -5,11 +5,9 @@ from rest_framework.views import APIView
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from backendapi.serializer import ProfileSerializer
 
 # adds user identification to token
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token['username'] = user.username
@@ -17,13 +15,3 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
-
-class GetProfile(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        user = request.user
-        profile = user.profile
-        serializer = ProfileSerializer(profile, many=False)
-        return Response(serializer.data)
