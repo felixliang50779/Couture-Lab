@@ -11,35 +11,88 @@ import json
 import requests
 import os
 
-# Fetch location info
+valid_countries = ["US", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "IT", "MX", 
+"NL", "SG", "ES", "TR", "AE", "GB", "JP", "SA", "PL", "SE", "BE", "EG"]
+
+# Fetch country code of user
+def get_country_code():
+    url = "https://ip-geo-location.p.rapidapi.com/ip/check"
+
+    querystring = {"format":"json"}
+
+    headers = {
+    	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+    	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        country_dict = response.json()
+
+        country = country_dict["country"]["code"]
+
+        return country
+
+    return f"Error: Unable to fetch country data. Status code: {response.status_code}"
+
+# Fetch weather data
 def get_weather_data():
-    # url = "https://ip-geo-location.p.rapidapi.com/ip/check"
+    url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
-    # querystring = {"format":"json"}
+    querystring = {"format":"json"}
 
-    # headers = {
-    # 	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-    # 	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
-    # }
+    headers = {
+    	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+    	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
+    }
 
-    # response = requests.get(url, headers=headers, params=querystring)
+    response = requests.get(url, headers=headers, params=querystring)
 
-    # geolocation_dict = response.json()
+    if response.status_code == 200:
+        geolocation_dict = response.json()
 
-    # city, country = geolocation_dict['city']['name'], geolocation_dict['country']['name']
-    pass
+        latitude, longitude = geolocation_dict["location"]["latitude"], geolocation_dict["location"]["longitude"]
+
+        url = "https://weatherapi-com.p.rapidapi.com/current.json"
+
+        querystring = {"q":f"{latitude},{longitude}"}
+
+        headers = {
+            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            wind_speed_in_kilometers_per_hour, precipitation_in_inches, temperature_in_celsius = response["current"]["wind_kph"], 
+            response["current"]["precip_in"], response["current"]["temperature_in_celsius"]
+
+            weather_dict = {"wind_speed_in_kilometers_per_hour": wind_speed_in_kilometers_per_hour, 
+            "precipitation_in_inches": precipitation_in_inches,
+            "temperature_in_celsius": temperature_in_celsius}
+
+            return json.dumps(weather_dict)
+
+        return f"Error: Unable to fetch weather data. Status code: {response.status_code}"
+
+    return f"Error: Unable to fetch geolocation data. Status code: {response.status_code}"
 
 # Retrieves real-time amazon product info
 def get_amazon_data(
     clothing_items, 
-    country=None,
+    country="US",
     sort_by=None,
     max_price=None,
     brand=None
     ):
         url = "https://real-time-amazon-data.p.rapidapi.com/search"
 
-        querystring = {"query": clothing_items,"page":"1","country":"US","category_id":"aps"}
+        querystring = {"query": clothing_items,
+        "page":"1",
+        "country": country,
+        "category_id":"aps"}
 
         headers = {
             "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
@@ -86,6 +139,9 @@ def send_stylist_response(user_query):
     using knowledge of the weather and current fashion trends to better influence
     your recommendations.
 
+    You only need real-time weather data when actually providing recommendations, and
+    not for greetings, etc.
+
     When citing specific examples using provided functions, be sure to extract
     all items when there are multiple. Attempt to extract image links whenever possible
     as well.
@@ -126,7 +182,17 @@ def send_stylist_response(user_query):
                 params = json.loads(arguments)
 
                 chosen_function = eval(name)
-                function_return = chosen_function(**params)
+
+                if name == "get_amazon_data":
+                    current_country = get_country_code()
+
+                    if current_country in valid_countries:
+                        params["country"] = current_country
+                        function_return = chosen_function(**params)
+                    else:
+                        function_return = chosen_function(**params)
+                else:
+                    function_return = chosen_function(**params)
             else:
                 if chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
