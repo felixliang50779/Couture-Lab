@@ -7,3 +7,13 @@
     font-family: "MarkPro";
     src: url('./Assets/Fonts/Mark-Pro.ttf');
 }
+
+@font-face {
+    font-family: "ApercuReg";
+    src: url('./Assets/Fonts/apercu-regular-pro.ttf');
+}
+
+@font-face {
+    font-family: "SauvageAnt";
+    src: url('./Assets/Fonts/sauvage-antique.ttf');
+}

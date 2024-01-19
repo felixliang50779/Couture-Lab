@@ -15,6 +15,10 @@
     width: 80%;
 }
 
+.form-title{
+    padding-top: 1em;
+}
+
 .signup-register {
     display: flex;
 }

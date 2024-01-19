@@ -7,6 +7,8 @@ import Footer from '../Components/footer';
 import BannerImage from '../Assets/Images/home-banner.png';
 import GreenDressImage from '../Assets/Images/green-dress.jpg';
 import WardrobeImage from '../Assets/Images/wardrobe.png';
+import CollageImage from '../Assets/Images/collage-style.png';
+
 import styles from './Home.module.css';
 
 const LoadOnView = ({children}) => (
@@ -29,16 +31,19 @@ export default function Home() {
             <h2 className={styles['banner-text']}>Revolutionizing Fashion</h2>
             <LoadOnView>
                 <section className={styles['getstarted-container']}>
-                    <h1 className={styles['getstarted-header']}>Let's Get Started, Together.</h1>
+                    <h1 className={styles['getstarted-header']}>Let's Get Started, Together</h1>
                     <Button text="Get Started" />
                 </section>
             </LoadOnView>
             <LoadOnView>
                 <hr className={styles['divider']} />
+                <h1>HELLO/</h1>
+                <img src={CollageImage} alt='collage' loading='lazy' />
+            </LoadOnView>
+            <LoadOnView>
                 <section className={styles['whatweare-container']}>
-                    <h1 className={styles['whatweare-header']}>Our Goal</h1>
-                    <h1 className={styles['whatweare-text']}>Creating personalized recommendations through an AI-powered 
-                    stylist, all to help <i>You</i> look and feel your best.</h1>
+                    <h1 className={styles['whatweare-text']}>COUTURELAB SEEKS TO CREATE PERSONALIZED RECOMMENDATIONS 
+                    THROUGH AN AI-POWERED STYLIST, ALL TO HELP <u>YOU</u> LOOK AND FEEL YOUR BEST.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
