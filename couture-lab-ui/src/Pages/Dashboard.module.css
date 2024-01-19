@@ -123,5 +123,4 @@ h1 {
 .query-button:hover {
     background-color: #DE7E5D;
     background-position: 100%;
-    transform: scale(1.05);
 }

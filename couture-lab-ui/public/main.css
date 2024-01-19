@@ -10,7 +10,7 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f8f8f2;
+    background: transparent;
 }
 
 /* Handle */
