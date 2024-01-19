@@ -62,22 +62,3 @@ a:hover {
 .dropdown-list a:hover {
     text-decoration: underline;
 }
-
-@media screen and (max-width: 60em) {
-    .navbarInformation {
-        display: none;
-    }
-
-    .navbar-signin {
-        display: none;
-    }
-
-    .navbar-menu {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .navbar-button {
-        margin-left: 5em;
-    }
-}
