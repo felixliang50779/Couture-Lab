@@ -1,10 +1,12 @@
 .signin-container {
+    font-family: "FuturaMaxi";
     display: flex;
     flex-direction: column;
-    font-family: "FuturaMaxi";
+    color: #ffffff;
 }
 
 .signin-logo {
+    font-family: "Linotype";
     padding: 1em;
     font-size: 2em;
 }
@@ -15,8 +17,12 @@
     width: 80%;
 }
 
-.form-title{
+.form-title {
     padding-top: 1em;
+}
+
+.form-input {
+    color: #000000;
 }
 
 .signin-register {

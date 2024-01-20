@@ -10,8 +10,6 @@ export default function About() {
         <div className={styles['about-container']}>
             <NavBar />
             <h1>About The Team</h1>
-            <p className="about-subtitle">This project is part of a 2023-2024 MSU AI Club year-long project. We tracked the project through checkpoints and presentations.</p>
-
             <div className={styles['team-container']}>
             {/* member section*/}
             

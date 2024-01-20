@@ -1,10 +1,11 @@
 .dashboard-container {
+    font-family: "MarkPro";
     display: flex;
     flex-direction: column;
-    font-family: "MarkPro";
     align-items: center;
     margin: 0;
     padding: 0;
+    background-color: #e2e2e2e2;
 }
 
 .chatbot-query {

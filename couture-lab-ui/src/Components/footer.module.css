@@ -1,11 +1,12 @@
 .footer-container {
     font-family: "FuturaMaxi";
-    color: #FFFFFF;
+    color: #ffffff;
     background-color: #000000;
     width: 100%;
 }
 
 .footer-title {
+    font-family: "Linotype";
     display: flex;
     padding: 1.5em 1.5em 1em 1.5em;
     font-size: 2em;
@@ -18,14 +19,18 @@
     justify-content: space-between;
 }
 
+.footer-date {
+    font-family: "Linotype";
+}
+
 .footerLinks {
     list-style: none; 
     display: flex; 
     gap: 2em;
-    color: #808080;
-    font-family: "MarkPro";
+    color: #ffffff;
+    font-family: "ApercuReg";
 }
 
 .footerLinks:hover {
-    color: #FFFFFF;
+    color: #ffffff;
 }
