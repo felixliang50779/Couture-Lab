@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from backendapi.models import ImageModel, User, Profile
+from django.contrib.auth.password_validation import validate_password
+from backendapi.models import ImageModel
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.models import User
+
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,13 +13,34 @@ class ImageSerializer(serializers.ModelSerializer):
 class AISerializer(serializers.Serializer):
     text = serializers.CharField()
 
-class UserSerializer(serializers.ModelSerializer):  
+# adds user identification to token
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        return token
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('username', 'password', 'password2')
 
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    class Meta:
-        model = Profile
-        fields = ('user', 'first_name', 'last_name', 'email')
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match."})
+
+        return attrs
+    
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username'],
+        )
+
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user

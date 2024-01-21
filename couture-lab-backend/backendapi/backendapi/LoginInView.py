@@ -1,29 +1,17 @@
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import generics
+
 from rest_framework_simplejwt.views import TokenObtainPairView
-from backendapi.serializer import ProfileSerializer
 
-# adds user identification to token
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['username'] = user.username
-        return token
+from backendapi.serializer import MyTokenObtainPairSerializer, RegisterSerializer
+from django.contrib.auth.models import User
     
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
-class GetProfile(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        user = request.user
-        profile = user.profile
-        serializer = ProfileSerializer(profile, many=False)
-        return Response(serializer.data)
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer

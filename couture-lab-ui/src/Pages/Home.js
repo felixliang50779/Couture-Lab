@@ -4,11 +4,14 @@ import NavBar from '../Components/navbar';
 import Button from '../Components/button';
 import Footer from '../Components/footer';
 
-import BannerImage from '../Assets/Images/home-banner.png';
 import GreenDressImage from '../Assets/Images/green-dress.jpg';
-import WardrobeImage from '../Assets/Images/wardrobe.png';
+import WardrobeImage from '../Assets/Images/wardrobe.jpg';
+import LongwearImage from '../Assets/Images/longwear.jpg';
+import CalendarImage from '../Assets/Images/calendar.png';
+
 import styles from './Home.module.css';
 
+//loads content on scroll
 const LoadOnView = ({children}) => (
     <motion.div initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -19,50 +22,74 @@ const LoadOnView = ({children}) => (
     </motion.div>
 );
 
+const StaggeredTextAnimation = (text) => {
+    return (
+        <div className={styles['intro-header']}>
+            {text.text.split("").map((char, index) => (
+                <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                    {char}
+                </motion.span>
+            ))}
+        </div>
+    );
+};
+
+const WardrobeCard = ({ imageSrc, altText, header, description }) => (
+    <div className={styles['wardrobe-card']}>
+        <img className={styles['wardrobe-img']} src={imageSrc} alt={altText} loading="lazy" />
+        <h1 className={styles['wardrobe-header']}>{header}</h1>
+        <h2 className={styles['wardrobe-desc']}>{description}</h2>
+        <Button text="GET STARTED" />
+    </div>
+);
 
 export default function Home() {
     return (
         <div className={styles['content-container']}>
-            <NavBar />
-            <img className={styles['banner-img']} src={BannerImage} alt="bannerImg" loading="lazy"/>
-            <h1 className={styles['banner-header']}>CoutureLab</h1>
-            <h2 className={styles['banner-text']}>Revolutionizing Fashion</h2>
+            <NavBar />  
             <LoadOnView>
-                <section className={styles['getstarted-container']}>
-                    <h1 className={styles['getstarted-header']}>Let's Get Started, Together.</h1>
-                    <Button text="Get Started" />
+                <section className={styles['intro-container']}>
+                    <StaggeredTextAnimation text="Revolutionizing Fashion." />
+                    <img className={styles['intro-img']} src={LongwearImage} alt='longwear' loading='lazy' />
                 </section>
             </LoadOnView>
             <LoadOnView>
-                <hr className={styles['divider']} />
                 <section className={styles['whatweare-container']}>
-                    <h1 className={styles['whatweare-header']}>Our Goal</h1>
-                    <h1 className={styles['whatweare-text']}>Creating personalized recommendations through an AI-powered 
-                    stylist, all to help <i>You</i> look and feel your best.</h1>
+                    <Button text="GET STARTED" />
+                    <h1 className={styles['whatweare-text']}>COUTURELAB SEEKS TO CREATE PERSONALIZED RECOMMENDATIONS 
+                    THROUGH AI, ALL TO HELP <u>YOU</u> LOOK AND FEEL YOUR BEST.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
                 <section className={styles['greendress-container']}>
                     <img className={styles['green-dress']} src={GreenDressImage} alt="greendress" loading="lazy" />
-                    <h1 className={styles['greendress-text']}>From fashion advice to a personal shopper, your very own AI stylist 
-                    has you covered.</h1>
+                    <h1 className={styles['greendress-text']}>Introducing a location and weather-based
+                    artifical intelligence style expert.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
-                <section className={styles['outfit-container']}>
-                    <h1 className={styles['outfit-header']}>Organize Your Outfits</h1>
-                    <h1 className={styles['outfit-text']}>Keep track of everything you've worn in the past, and plan ahead to 
-                    keep yourself organized.</h1>
+                <section className={styles['changeway-container']}>
+                    <h1 className={styles['changeway-text']}>We seek to change the Way you dress.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
                 <section className={styles['wardrobe-container']}>
-                    <div className={styles['wardrobe-text']}>
-                        <h1 className={styles['wardrobe-header']}>Your Entire Closet At Your Fingertips</h1>
-                        <h2 className={styles['wardrobe-desc']}>Access anytime, anywhere by uploading pictures of your 
-                        wardrobe.</h2>
-                    </div>
-                    <img className={styles['wardrobe-img']} src={WardrobeImage} alt='wardrobe' loading="lazy" />
+                    <WardrobeCard
+                        imageSrc={WardrobeImage}
+                        altText="wardrobe"
+                        header="VIRTUAL CLOSET"
+                        description="Your Entire Closet At Your Fingertips"
+                    />
+                    <WardrobeCard
+                        imageSrc={CalendarImage}
+                        altText="calendar"
+                        header="PERSONALIZED CALENDAR"
+                        description="Know What Clothes You've Worn"
+                    />
                 </section>
             </LoadOnView>
             <LoadOnView>
@@ -73,6 +100,7 @@ export default function Home() {
                     </div>
                 </div>
             </LoadOnView>
+            <hr className={styles['footer-divider']} />
             <Footer />
         </div>
     )

@@ -27,24 +27,65 @@ export const AuthProvider = ({children}) => {
             return;
         }
 
-        console.log("ayo")
         const response = await fetch('http://127.0.0.1:8000/token/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username: e.target.username.value, password: e.target.password.value })
+            body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value })
         });
 
-        let data = await response.json();
-
-        if (data.detail !== "No active account found with the given credentials") {
+        if (response.ok) {
+            // Successful login
+            let data = await response.json();
             localStorage.setItem('authTokens', JSON.stringify(data));
             setAuthTokens(data);
             setUser(jwtDecode(data.access));
             navigate('/Dashboard');
         } else {
+            // Unsuccessful login
             toast.error("Invalid login. Please try again.");
+        }
+    }
+
+    let registerUser = async (e) => {
+        e.preventDefault();
+
+        // checks if username length is correct
+        if (e.target.username.value < 3 || e.target.username.value > 12) {
+            toast.error("Username length should be more than 2 and less than 12. Please try again.");
+            return;
+        }
+
+        // checks if password length is correct
+        if (e.target.password.value < 8 || e.target.verifypassword.value < 8 || 
+            e.target.username.value > 20 || e.target.password.value > 20 || e.target.verifypassword.value > 20) {
+            toast.error("Password length should be more than 7 and less than 20. Please try again.");
+            return;
+        }
+
+        // checks if passwords are the same
+        if (e.target.password.value !== e.target.verifypassword.value) {
+            toast.error("Passwords are not the same.");
+            return;
+        }
+
+        const response = await fetch('http://127.0.0.1:8000/register/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value, 
+                password2: e.target.verifypassword.value })
+        });
+
+        if (response.ok) {
+            // Successful sign up
+            navigate('/SignIn');
+            toast.success('Successfully registered account!');
+        } else {
+            // Unsuccessful sign up
+            toast.error("Invalid sign up. Please try again.");
         }
     }
 
@@ -61,6 +102,7 @@ export const AuthProvider = ({children}) => {
         authTokens:authTokens,
         loginUser:loginUser,
         logoutUser:logoutUser,
+        registerUser:registerUser,
     }
 
     useEffect(() => {

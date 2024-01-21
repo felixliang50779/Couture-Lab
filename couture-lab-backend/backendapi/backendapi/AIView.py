@@ -8,38 +8,94 @@ from openai import OpenAI
 from django.http import StreamingHttpResponse
 
 import json
+import concurrent.futures
 import requests
 import os
 
-# Fetch location info
-def get_weather_data():
-    # url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
-    # querystring = {"format":"json"}
+valid_countries = ["US", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "IT", "MX", 
+"NL", "SG", "ES", "TR", "AE", "GB", "JP", "SA", "PL", "SE", "BE", "EG"]
 
-    # headers = {
-    # 	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-    # 	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
-    # }
+# Fetch country code of user
+def get_country_code():
+    url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
-    # response = requests.get(url, headers=headers, params=querystring)
+    querystring = {"format":"json"}
 
-    # geolocation_dict = response.json()
+    headers = {
+    	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+    	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
+    }
 
-    # city, country = geolocation_dict['city']['name'], geolocation_dict['country']['name']
-    pass
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        country_dict = response.json()
+
+        country = country_dict["country"]["code"]
+
+        return country
+
+    return f"Error: Unable to fetch country data. Status code: {response.status_code}"
+
+# Fetch local (to user) weather data
+def get_local_weather():
+    url = "https://ip-geo-location.p.rapidapi.com/ip/check"
+
+    querystring = {"format":"json"}
+
+    headers = {
+        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        geolocation_dict = response.json()
+
+        latitude, longitude = geolocation_dict["location"]["latitude"], geolocation_dict["location"]["longitude"]
+
+        url = "https://weatherapi-com.p.rapidapi.com/current.json"
+
+        querystring = {"q":f"{latitude},{longitude}"}
+
+        headers = {
+            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            response = response.json()
+
+            wind_speed_in_kilometers_per_hour, precipitation_in_inches, temperature_in_celsius = response["current"]["wind_kph"], response["current"]["precip_in"], response["current"]["temp_c"]
+
+            weather_dict = {"wind_speed_in_kilometers_per_hour": wind_speed_in_kilometers_per_hour, 
+            "precipitation_in_inches": precipitation_in_inches,
+            "temperature_in_celsius": temperature_in_celsius}
+
+            return json.dumps(weather_dict)
+
+        return f"Error: Unable to fetch weather data. Status code: {response.status_code}"
+
+    return f"Error: Unable to fetch geolocation data. Status code: {response.status_code}"
 
 # Retrieves real-time amazon product info
 def get_amazon_data(
     clothing_items, 
-    country=None,
+    country="US",
     sort_by=None,
     max_price=None,
     brand=None
     ):
         url = "https://real-time-amazon-data.p.rapidapi.com/search"
 
-        querystring = {"query": clothing_items,"page":"1","country":"US","category_id":"aps"}
+        querystring = {"query": clothing_items,
+        "page":"1",
+        "country": country,
+        "category_id":"aps"}
 
         headers = {
             "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
@@ -51,28 +107,103 @@ def get_amazon_data(
         if response.status_code == 200:
             result = response.json()
 
-            return json.dumps(result['data'])
+            return result['data']['products'][:3]
         
         return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
+
+# Fetch weather data of a given location
+def get_weather_data(location):
+    url = "https://ai-weather-by-meteosource.p.rapidapi.com/find_places"
+
+    querystring = {"text":location,"language":"en"}
+
+    headers = {
+        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        location_dict = response.json()
+
+        location_id = location_dict[0]["place_id"]
+
+        url = "https://ai-weather-by-meteosource.p.rapidapi.com/current"
+
+        querystring = {"place_id": location_id,"timezone":"auto","language":"en","units":"metric"}
+
+        headers = {
+            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+            "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        if response.status_code == 200:
+            weather_dict = response.json()
+
+            temperature_in_celsius, wind_chill, wind_speed_in_meters_per_second, precipitation_in_cm = weather_dict["current"]["temperature"], weather_dict["current"]["wind_chill"], weather_dict["current"]["wind"]["speed"], weather_dict["current"]["precipitation"]["total"]
+
+            response_dict = {"temperature_in_celsius": temperature_in_celsius, "wind_chill": 
+            wind_chill, "wind_speed_in_meters_per_second": wind_speed_in_meters_per_second, "precipitation_in_cm": precipitation_in_cm}
+
+            return json.dumps(response_dict)
+
+        return f"Error: Unable to fetch weather data. Status code: {response.status_code}"
+
+    return f"Error: Unable to fetch location data. Status code: {response.status_code}"
 
 # Generate response based on user query
 def send_stylist_response(user_query):
 
     # Providing descriptions of all
     # available functions for the stylist to call
-    function_descriptions = [
+    tools = [
         {
-            "name": "get_amazon_data",
-            "description": "Get specific clothing item recommendations",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "clothing_items": {
-                        "type": "string",
-                        "description": "The name of one or more clothing items, e.g. t-shirt, t-shirt and jeans"
-                    }
-                },
-                "required": ["clothing_items"]
+            "type": "function",
+            "function": {
+                "name": "get_amazon_data",
+                "description": "Get specific clothing item recommendations",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "clothing_items": {
+                            "type": "string",
+                            "description": "The name of one or more clothing items, e.g. t-shirt, t-shirt and jeans"
+                        }
+                    },
+                    "required": ["clothing_items"]
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_local_weather",
+                "description": "Get real-time weather data of local area",
+                "parameters": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "get_weather_data",
+                "description": "Get real-time weather data of a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The name of a location. Can be a city, e.g. New York City"
+                        }
+                    },
+                    "required": ["location"]
+                }
             }
         }
     ]
@@ -83,75 +214,136 @@ def send_stylist_response(user_query):
     knowledge to provide concise and detailed answers to what users ask.
 
     Always try to cite examples of specific clothing items from particular brands,
-    using knowledge of the weather and current fashion trends to better influence
+    using knowledge of the weather, current fashion trends, and real-time product data to better influence
     your recommendations.
 
-    When citing specific examples using provided functions, be sure to extract
-    all items when there are multiple. Attempt to extract image links whenever possible
-    as well.
+    You only have one chance of providing all the necessary information, so call the following
+    functions in one go - do not expect follow-up opportunities:
+    1. 'get_local_weather' whenever you need weather conditions of the user's local area
+    2. 'get_weather_data' whenever you need weather conditions of a specific location
+    3. 'get_amazon_data' whenever making a general or specific style recommendation
+
+    When citing specific examples using the provided functions, be sure to extract
+    all items when there are multiple. Always extract product links and images.
 
     Only respond to fashion-related questions.
 
     Address the user as "you".
     '''
 
-    # Initial response generator that we can extract
-    # any required function call details from
-    response_generator = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": user_query}
-        ],
-        temperature=0.2,
-        functions=function_descriptions,
-        function_call="auto",
+    messages = [
+        {"role": "system", "content": system_message},
+        {"role": "user", "content": user_query}
+    ]
+
+    # Initial response that we can stream
+    # a reply from if no function calls are required
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        messages=messages,
+        tools=tools,
+        tool_choice="auto",
         stream=True
     )
 
-    arguments, name = "", ""
-    function_return = None
+    functions_required = False
 
-    # Extracting function call info as it's streamed
-    # If no function calls are required, we yield
-    # a generator object for each chunk
-    for chunk in response_generator:
-        if chunk.choices[0].delta.function_call is not None:
-            arguments += chunk.choices[0].delta.function_call.arguments
+    for chunk in response:
+        if chunk.choices[0].delta.tool_calls is not None:
+            functions_required = True
+            break
 
-            if chunk.choices[0].delta.function_call.name:
-                name = chunk.choices[0].delta.function_call.name
-        else:
-            if len(name):
-                params = json.loads(arguments)
+        if chunk.choices[0].delta.content:
+            yield chunk.choices[0].delta.content
 
-                chosen_function = eval(name)
-                function_return = chosen_function(**params)
+    # Alternatively, if functions are required...
+    if functions_required:
+        for i in range(2):
+            if i == 0:
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo-1106",
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto"
+                )
             else:
-                if chunk.choices[0].delta.content:
-                    yield chunk.choices[0].delta.content
+                response = client.chat.completions.create(
+                    model="gpt-4-1106-preview",
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto"
+                )
 
-    # If a function was called we feed its output
-    # back through the API for a refined response
-    if function_return:
+            function_name = None
+
+            response_message = response.choices[0].message
+            tool_calls = response_message.tool_calls
+
+            if tool_calls:
+                available_functions = {
+                    "get_amazon_data": get_amazon_data,
+                    "get_local_weather": get_local_weather,
+                    "get_weather_data": get_weather_data
+                }
+                messages.append(response_message)
+
+                for tool_call in tool_calls:
+                    function_name = tool_call.function.name
+                    function_to_call = available_functions[function_name]
+                    function_args = json.loads(tool_call.function.arguments)
+                    function_response = None
+
+                    if function_name == "get_amazon_data":
+                        user_country_code = get_country_code()
+
+                        if user_country_code in valid_countries:
+                            function_args["country"] = user_country_code
+
+                        item_list = function_args["clothing_items"].split(', ')
+                        function_responses = None
+
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                            if "country" in function_args:
+                                function_responses = [executor.submit(get_amazon_data, item, function_args["country"]) for item in item_list]
+                            else:
+                                function_responses = [executor.submit(get_amazon_data, item) for item in item_list]
+                            
+                            processed_responses = []
+
+                            for response in concurrent.futures.as_completed(function_responses):
+                                processed_responses += response.result()
+
+                        function_response = json.dumps(processed_responses, indent=2)
+                            
+
+                    if function_name == "get_local_weather":
+                        function_response = function_to_call()
+                    elif function_name == "get_weather_data":
+                        function_response = function_to_call(
+                            location=function_args.get("location")
+                        )
+
+                    messages.append(
+                        {
+                            "tool_call_id": tool_call.id,
+                            "role": "tool",
+                            "name": function_name,
+                            "content": function_response
+                        }
+                    )
+
+                if function_name == "get_amazon_data":
+                    break
+
         refined_response = client.chat.completions.create(
             model="gpt-4",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": user_query},
-                {"role": "function", "name": name, "content": function_return}
-            ],
-            temperature=0.2,
-            functions=function_descriptions,
-            function_call="auto",
+            messages=messages,
             stream=True
         )
 
-        # Streaming the final response
         for chunk in refined_response:
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
-    
 
 class LangServeHandle(APIView):
     def get(self, request):

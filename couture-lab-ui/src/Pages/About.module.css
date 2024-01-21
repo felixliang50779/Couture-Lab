@@ -1,26 +1,15 @@
 .about-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20mm;
-}
-  
-h1 {
     text-align: center;
+    background-color: #000000;
 }
-  
-.about-subtitle {
-    text-align: center;
-}  
 
 .team-container {
-    padding: 20mm;
+    width: 100%;
+    padding: 5em;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around; 
   }
   
 .team-member { 
     flex: 1; 
-    margin: 10px; 
+    margin: 1.5em;
 }

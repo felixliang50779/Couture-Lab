@@ -1,60 +1,46 @@
 .content-container {
     display: flex;
     flex-direction: column;
-    font-family: "FuturaMaxi";
+    font-family: "ApercuReg";
     transition: 0.5s;
+    background-color: #000000;
 }
 
-.banner-header {
-    color: #FFFFFF;
-    font-size: 9em;
-    position: absolute;
-    top: 1%;
-    left: 10%;
-}
-
-.banner-text {
-    color: #FFFFFF;
-    font-size: 3em;
-    position: absolute;
-    top: 6%;
-    left: 11%;
-}
-
-.getstarted-container {
+.intro-container {
     text-align: center;
-    padding: 8em 0 8em 0;
+    font-family: "Linotype";
+    color: #ffffff;
+    padding-top: 10em;
 }
 
-.getstarted-header {
+.intro-header {
     font-size: 5em;
+    padding: 0 0 0.5em 0;
 }
 
-.divider {
-    border: 0.05em solid #000000;
-    width: 80%;
-    margin: auto;
+.intro-img {
+    width: 70em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .whatweare-container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    padding: 4em 4em 4em 4em;
-}
-
-.whatweare-header {
-    margin-top: 1.2em;
-    font-size: 2em;
+    padding: 6em 4em 9em 4em;
+    justify-items: center;
+    text-align: center;
+    color: #ffffff;
 }
 
 .whatweare-text {
+    padding: 0.8em 0 0 0;
     font-size: 4.5em;
 }
 
 .greendress-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0.5em 0.5em 8em 0.5em;
+    color: #ffffff;
 }
 
 .green-dress {
@@ -67,26 +53,46 @@
     margin-top: 2.5em;
 }
 
+.changeway-container {
+    color: #ffffff;
+    padding: 4em;
+    text-align: center;
+}
+
+.changeway-text {
+    font-size: 3em;
+    padding: 0 0 1em 0;
+}
+
 .wardrobe-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0.5em;
+    justify-items: center;
+    margin: 0 2em 0 2em;    
 }
 
-.wardrobe-text {
-    padding: 3em 2em 2em 2em;
-}
-
-.wardrobe-header {
-    font-size: 4em;
-}
-
-.wardrobe-desc {
-    font-size: 3em;
+.wardrobe-card {
+    color: #ffffff;
+    background-color: #141414;
+    text-align: center;
+    align-items: center;
+    width: 42em;
+    padding: 0 0 2em 0;
 }
 
 .wardrobe-img {
-    width: 40em;
+    height: 28em;
+}
+
+.wardrobe-header {
+    font-size: 2em;
+    padding: 1em 0 0.5em 0;
+}
+
+.wardrobe-desc {
+    font-family: "MarkPro";
+    font-size: 1.6em;
+    padding: 0.4em 0.5em 1.5em 0.5em;
 }
 
 .outfit-container {
@@ -106,7 +112,8 @@
     display: flex;
     justify-content: center;
     text-align: center;
-    padding: 13em 0 5em 0;
+    padding: 8em 0 5em 0;
+    color: #ffffff;
 }
 
 .last-page-link {
@@ -115,11 +122,15 @@
 }
 
 .last-page-link:hover {
-    color: #000000;
     text-decoration: underline; 
 }
 
 .last-page-title {
-    color: #808080;
     font-size: 3em;
+}
+
+.footer-divider {
+    border: 0.01em solid #ffffff;
+    width: 90%;
+    margin: auto;
 }
