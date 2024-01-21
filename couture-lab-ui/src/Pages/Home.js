@@ -38,6 +38,15 @@ const StaggeredTextAnimation = (text) => {
     );
 };
 
+const WardrobeCard = ({ imageSrc, altText, header, description }) => (
+    <div className={styles['wardrobe-card']}>
+        <img className={styles['wardrobe-img']} src={imageSrc} alt={altText} loading="lazy" />
+        <h1 className={styles['wardrobe-header']}>{header}</h1>
+        <h2 className={styles['wardrobe-desc']}>{description}</h2>
+        <Button text="GET STARTED" />
+    </div>
+);
+
 export default function Home() {
     return (
         <div className={styles['content-container']}>
@@ -69,19 +78,18 @@ export default function Home() {
             </LoadOnView>
             <LoadOnView>
                 <section className={styles['wardrobe-container']}>
-                    <div className={styles['wardrobe-card']}>
-                        <img className={styles['wardrobe-img']} src={WardrobeImage} alt='wardrobe' loading="lazy" />
-                        <h1 className={styles['wardrobe-header']}>VIRTUAL CLOSET</h1>
-                        <h2 className={styles['wardrobe-desc']}>Your Entire Closet At Your Fingertips</h2>
-                        <Button text="GET STARTED" />
-                    </div>
-                    <div className={styles['wardrobe-card']}>
-                        <img className={styles['wardrobe-img']} src={CalendarImage} alt='calendar' loading="lazy" />
-                        <h1 className={styles['wardrobe-header']}>PERSONALIZED CALENDAR</h1>
-                        <h2 className={styles['wardrobe-desc']}>Know What Clothes You've Worn
-                        </h2>
-                        <Button text="GET STARTED" />
-                    </div>
+                    <WardrobeCard
+                        imageSrc={WardrobeImage}
+                        altText="wardrobe"
+                        header="VIRTUAL CLOSET"
+                        description="Your Entire Closet At Your Fingertips"
+                    />
+                    <WardrobeCard
+                        imageSrc={CalendarImage}
+                        altText="calendar"
+                        header="PERSONALIZED CALENDAR"
+                        description="Know What Clothes You've Worn"
+                    />
                 </section>
             </LoadOnView>
             <LoadOnView>

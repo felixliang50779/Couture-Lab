@@ -4,6 +4,7 @@
 
 .contact-intro-container {
     color: #ffffff;
+    background-color: #000000;
     display: grid;
     grid-template-columns: 3fr 1fr;
     padding: 6em 4em 3em 4em;
@@ -20,5 +21,10 @@
 
 .contact-form-container {
     background-color: #ffffff;
-    padding: 10em;
+    padding: 3em;
+}
+
+.contact-form-header {
+    padding: 1em;
+    font-size: 3em;
 }

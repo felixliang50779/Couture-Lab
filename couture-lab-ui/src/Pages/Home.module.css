@@ -3,6 +3,7 @@
     flex-direction: column;
     font-family: "ApercuReg";
     transition: 0.5s;
+    background-color: #000000;
 }
 
 .intro-container {
