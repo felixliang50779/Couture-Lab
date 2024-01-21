@@ -8,8 +8,10 @@ from openai import OpenAI
 from django.http import StreamingHttpResponse
 
 import json
+import concurrent.futures
 import requests
 import os
+
 
 valid_countries = ["US", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "IT", "MX", 
 "NL", "SG", "ES", "TR", "AE", "GB", "JP", "SA", "PL", "SE", "BE", "EG"]
@@ -105,7 +107,7 @@ def get_amazon_data(
         if response.status_code == 200:
             result = response.json()
 
-            return json.dumps(result['data'])
+            return result['data']['products'][:3]
         
         return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
 
@@ -215,14 +217,14 @@ def send_stylist_response(user_query):
     using knowledge of the weather, current fashion trends, and real-time product data to better influence
     your recommendations.
 
-    When the user wants a recommendation in a provided location and does not provide a specific clothing item,
-    call the get_weather_data function.
-    When the user wants a general recommendation without providing their location or local weather,
-    call the get_local_weather function.
+    You only have one chance of providing all the necessary information, so call the following
+    functions in one go - do not expect follow-up opportunities:
+    1. 'get_local_weather' whenever you need weather conditions of the user's local area
+    2. 'get_weather_data' whenever you need weather conditions of a specific location
+    3. 'get_amazon_data' whenever making a general or specific style recommendation
 
     When citing specific examples using the provided functions, be sure to extract
-    all items when there are multiple. Attempt to extract image links whenever possible
-    as well.
+    all items when there are multiple. Always extract product links and images.
 
     Only respond to fashion-related questions.
 
@@ -234,12 +236,11 @@ def send_stylist_response(user_query):
         {"role": "user", "content": user_query}
     ]
 
-    # Initial response generator that we can stream
+    # Initial response that we can stream
     # a reply from if no function calls are required
-    response_generator = client.chat.completions.create(
-        model="gpt-4",
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
         messages=messages,
-        temperature=0.2,
         tools=tools,
         tool_choice="auto",
         stream=True
@@ -247,7 +248,7 @@ def send_stylist_response(user_query):
 
     functions_required = False
 
-    for chunk in response_generator:
+    for chunk in response:
         if chunk.choices[0].delta.tool_calls is not None:
             functions_required = True
             break
@@ -258,13 +259,20 @@ def send_stylist_response(user_query):
     # Alternatively, if functions are required...
     if functions_required:
         for i in range(2):
-            response = client.chat.completions.create(
-                model="gpt-4",
-                messages=messages,
-                temperature=0.2,
-                tools=tools,
-                tool_choice="auto"
-            )
+            if i == 0:
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo-1106",
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto"
+                )
+            else:
+                response = client.chat.completions.create(
+                    model="gpt-4-1106-preview",
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto"
+                )
 
             function_name = None
 
@@ -291,12 +299,24 @@ def send_stylist_response(user_query):
                         if user_country_code in valid_countries:
                             function_args["country"] = user_country_code
 
-                    if function_name == "get_amazon_data":
-                        function_response = function_to_call(
-                            clothing_items=function_args.get("clothing_items"),
-                            country=function_args.get("country")
-                        )
-                    elif function_name == "get_local_weather":
+                        item_list = function_args["clothing_items"].split(', ')
+                        function_responses = None
+
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                            if "country" in function_args:
+                                function_responses = [executor.submit(get_amazon_data, item, function_args["country"]) for item in item_list]
+                            else:
+                                function_responses = [executor.submit(get_amazon_data, item) for item in item_list]
+                            
+                            processed_responses = []
+
+                            for response in concurrent.futures.as_completed(function_responses):
+                                processed_responses += response.result()
+
+                        function_response = json.dumps(processed_responses, indent=2)
+                            
+
+                    if function_name == "get_local_weather":
                         function_response = function_to_call()
                     elif function_name == "get_weather_data":
                         function_response = function_to_call(
@@ -318,14 +338,12 @@ def send_stylist_response(user_query):
         refined_response = client.chat.completions.create(
             model="gpt-4",
             messages=messages,
-            temperature=0.2,
             stream=True
         )
 
         for chunk in refined_response:
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
-    
 
 class LangServeHandle(APIView):
     def get(self, request):
