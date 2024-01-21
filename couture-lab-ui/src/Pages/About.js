@@ -18,7 +18,7 @@ export default function About() {
                 <h3>Olivia Rose Engler</h3>
                 <div className="team-info">
                     <p>Junior at MSU</p>
-                    <p>webapp idea originator and designer</p>
+                    <p>Originator of webapp concept and director of visionary planning</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/oliviaengler/" className="linkedin">
                         </a></li>
@@ -59,7 +59,7 @@ export default function About() {
                 <h3>Dung Nguyen</h3>
                 <div className="team-info">
                     <p>Computer Science Major at MSU, Sophomore</p>
-                    <p>Worked on: Figma, UX frontend, homepage design, About Page</p>
+                    <p>Assisted on: Figma, UX frontend, homepage design. Worked on: About Page</p>
                     <ul className="team-icon">
                         <li><a href="https://www.linkedin.com/in/dung-zoom-nguyen3000/" className="linkedin">
                         </a></li>
