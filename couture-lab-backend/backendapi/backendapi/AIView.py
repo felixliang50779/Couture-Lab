@@ -215,7 +215,7 @@ def send_stylist_response(user_query):
     knowledge to provide concise and detailed answers to what users ask.
 
     Always try to cite examples of specific clothing items from particular brands,
-    using knowledge of current fashion trends and real-time product data to better influence
+    using knowledge of current fashion trends and product data to better influence
     your recommendations.
 
     You only have one chance of providing all the necessary information, so call the following
@@ -334,7 +334,7 @@ def send_stylist_response(user_query):
                     break
 
         refined_response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=messages,
             stream=True
         )
