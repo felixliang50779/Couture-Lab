@@ -2,49 +2,23 @@
     font-family: "FuturaMaxi";
 }
 
-.contact-header {
-    text-align: center;
-    font-size: 9em;
-    padding: 0.5em;
-    background-color: #FFFFFF;
-}
-
-.contact-info-container {
+.contact-intro-container {
+    color: #ffffff;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 5em;
-    background-color: #FFFFFF;
-}
-
-.contact-getintouch {
-    font-size: 3em;
-}
-
-.contact-info {
+    grid-template-columns: 3fr 1fr;
+    padding: 6em 4em 3em 4em;
     font-size: 1.5em;
-    padding: 0.25em 0 0.25em 0;
 }
 
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-}
-
-.contact-input {
-    border: none;
-    border-bottom: 0.1em solid red;
-    margin-bottom: 1em;
-}
-
-.contact-number {
-    padding-bottom: 0.3em;
-}
-
-.contact-letstalk {
-    font-size: 8em;
+.contact-header {
+    font-size: 4em;
 }
 
 .contact-info:hover {
-    color: green;
+    text-decoration: underline;
+}
+
+.contact-form-container {
+    background-color: #ffffff;
+    padding: 10em;
 }

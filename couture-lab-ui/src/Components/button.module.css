@@ -1,15 +1,13 @@
 .button {
-    background-color: #282a36;
+    background-color: #000000;
     color: white;
     padding: 1em;
     font-size: 1.2em;
-    border-radius: 1em;
-    border-color: black;
-    border-style: solid;
-    border-width: 0.1em;
+    border: #ffffff 0.1em solid;
     font-weight: bold;
     transition: 0.9s ease-out;
     outline: none;
+    width: 9em;
 }
 
 .button:hover {

@@ -20,9 +20,11 @@ export default function SignIn() {
                     <div className={styles['signin-input-container']}>
                         <form className={styles['signin-form']} onSubmit={loginUser}>
                             <h2 className={styles['form-title']}>Username</h2>
-                            <input type="text" name="username" placeholder="E.u. lebronjames" />
+                            <input className={styles['form-input']} type="text" name="username" 
+                                placeholder="E.u. lebronjames" />
                             <h2 className={styles['form-title']}>Password</h2>
-                            <input type="password" name="password" placeholder="Enter Your Password" />
+                            <input className={styles['form-input']} 
+                                type="password" name="password" placeholder="Enter Your Password" />
                             <input type="submit" />
                         </form>
                         <div className={styles['signin-register']}>
