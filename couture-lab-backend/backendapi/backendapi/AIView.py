@@ -303,18 +303,15 @@ def send_stylist_response(user_query):
                         item_list = function_args["clothing_items"].split(', ')
                         function_responses = None
 
-                        with concurrent.futures.ProcessPoolExecutor(initializer=django.setup) as executor:
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
                             if "country" in function_args:
-                                function_responses = [executor.submit(get_amazon_data, item, function_args["country"]) for item in item_list]
+                                function_responses = executor.map(get_amazon_data, item_list, [function_args["country"]] * len(item_list))
                             else:
-                                function_responses = [executor.submit(get_amazon_data, item) for item in item_list]
+                                function_responses = executor.map(get_amazon_data, item_list)
                             
-                            processed_responses = []
+                            function_responses = sum(function_responses, [])
 
-                            for response in concurrent.futures.as_completed(function_responses):
-                                processed_responses += response.result()
-
-                        function_response = json.dumps(processed_responses, indent=2)
+                        function_response = json.dumps(function_responses, indent=2)
                             
 
                     if function_name == "get_local_weather":
