@@ -84,6 +84,7 @@
 
 .response img {
     width: 30%;
+    background-color: white;
     border: 0.1em solid #555;
     border-radius: 1em;
     margin: 1% 4%;
