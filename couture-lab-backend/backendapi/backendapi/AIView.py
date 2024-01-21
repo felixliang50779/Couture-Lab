@@ -8,8 +8,9 @@ from openai import OpenAI
 from django.http import StreamingHttpResponse
 
 import json
-import concurrent.futures
 import requests
+import django
+import concurrent.futures
 import os
 
 
@@ -214,12 +215,12 @@ def send_stylist_response(user_query):
     knowledge to provide concise and detailed answers to what users ask.
 
     Always try to cite examples of specific clothing items from particular brands,
-    using knowledge of the weather, current fashion trends, and real-time product data to better influence
+    using knowledge of current fashion trends and real-time product data to better influence
     your recommendations.
 
     You only have one chance of providing all the necessary information, so call the following
     functions in one go - do not expect follow-up opportunities:
-    1. 'get_local_weather' whenever you need weather conditions of the user's local area
+    1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
     3. 'get_amazon_data' whenever making a general or specific style recommendation
 
@@ -302,7 +303,7 @@ def send_stylist_response(user_query):
                         item_list = function_args["clothing_items"].split(', ')
                         function_responses = None
 
-                        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                        with concurrent.futures.ProcessPoolExecutor(initializer=django.setup) as executor:
                             if "country" in function_args:
                                 function_responses = [executor.submit(get_amazon_data, item, function_args["country"]) for item in item_list]
                             else:
