@@ -1,4 +1,3 @@
-from langchain.schema import BaseOutputParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +5,7 @@ from .serializer import AISerializer
 from dotenv import load_dotenv
 from openai import OpenAI
 from django.http import StreamingHttpResponse
+from functools import partial
 
 import json
 import requests
@@ -83,6 +83,33 @@ def get_local_weather():
 
     return f"Error: Unable to fetch geolocation data. Status code: {response.status_code}"
 
+def get_amazon_product(
+    item,
+    country="US"
+):
+    url = "https://real-time-amazon-data.p.rapidapi.com/search"
+
+    querystring = {"query": item,
+    "page":"1",
+    "country": country,
+    "category_id":"aps"}
+
+    headers = {
+        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        result = response.json()
+
+        return result['data']['products'][:3]
+    
+    return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
+
+
+
 # Retrieves real-time amazon product info
 def get_amazon_data(
     clothing_items, 
@@ -91,26 +118,17 @@ def get_amazon_data(
     max_price=None,
     brand=None
     ):
-        url = "https://real-time-amazon-data.p.rapidapi.com/search"
+        item_list = clothing_items.split(", ")
 
-        querystring = {"query": clothing_items,
-        "page":"1",
-        "country": country,
-        "category_id":"aps"}
+        function_responses = None
 
-        headers = {
-            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-            "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
-        }
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+            function_responses = executor.map(get_amazon_product, item_list, 
+                [country] * len(item_list))
+            
+            function_responses = sum(function_responses, [])
 
-        response = requests.get(url, headers=headers, params=querystring)
-
-        if response.status_code == 200:
-            result = response.json()
-
-            return result['data']['products'][:3]
-        
-        return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
+        return json.dumps(function_responses, indent=2)
 
 # Fetch weather data of a given location
 def get_weather_data(location):
@@ -291,50 +309,46 @@ def send_stylist_response(user_query):
                 }
                 messages.append(response_message)
 
+                call_list, fetched_products = [], False
+
                 for tool_call in tool_calls:
                     function_name = tool_call.function.name
                     function_to_call = available_functions[function_name]
                     function_args = json.loads(tool_call.function.arguments)
-                    function_response = None
 
                     if function_name == "get_amazon_data":
+                        fetched_products = True
+
                         user_country_code = get_country_code()
 
                         if user_country_code in valid_countries:
                             function_args["country"] = user_country_code
 
-                        item_list = function_args["clothing_items"].split(', ')
-                        function_responses = None
+                    call_list.append({"function_to_call": function_to_call, 
+                        "function_name": function_name, "function_args": function_args,
+                        "tool_call_id": tool_call.id})
 
-                        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-                            if "country" in function_args:
-                                function_responses = executor.map(get_amazon_data, item_list, [function_args["country"]] * len(item_list))
-                            else:
-                                function_responses = executor.map(get_amazon_data, item_list)
-                            
-                            function_responses = sum(function_responses, [])
+                function_responses = []
 
-                        function_response = json.dumps(function_responses, indent=2)
-                            
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    response_futures = [executor.submit(
+                        call["function_to_call"], **call["function_args"]) for call in call_list]
+                        
+                    for response in concurrent.futures.as_completed(response_futures):
+                        function_responses.append(response.result())
 
-                    if function_name == "get_local_weather":
-                        function_response = function_to_call()
-                    elif function_name == "get_weather_data":
-                        function_response = function_to_call(
-                            location=function_args.get("location")
+                    for response_index in range(len(function_responses)):
+                        messages.append(
+                            {
+                                "tool_call_id": call_list[response_index]["tool_call_id"],
+                                "role": "tool",
+                                "name": call_list[response_index]["function_name"],
+                                "content": function_responses[response_index]
+                            }
                         )
 
-                    messages.append(
-                        {
-                            "tool_call_id": tool_call.id,
-                            "role": "tool",
-                            "name": function_name,
-                            "content": function_response
-                        }
-                    )
-
-                if function_name == "get_amazon_data":
-                    break
+                    if fetched_products:
+                        break
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
