@@ -171,7 +171,7 @@ def send_stylist_response(user_query):
                     "properties": {
                         "clothing_items": {
                             "type": "string",
-                            "description": "The name of one or more clothing items, e.g. t-shirt, t-shirt and jeans"
+                            "description": "The name of a single clothing item, e.g. 't-shirt'."
                         }
                     },
                     "required": ["clothing_items"]
@@ -222,10 +222,10 @@ def send_stylist_response(user_query):
     functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
-    3. 'get_amazon_data' whenever making a general or specific style recommendation
+    3. 'get_amazon_data' whenever making a general or specific style recommendation.
 
     When citing specific examples using the provided functions, be sure to extract
-    all items when there are multiple. Always extract product links and images.
+    all items when there are multiple. Always identify and extract product links and images.
 
     Only respond to fashion-related questions.
 
@@ -240,10 +240,11 @@ def send_stylist_response(user_query):
     # Initial response that we can stream
     # a reply from if no function calls are required
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-4",
         messages=messages,
         tools=tools,
         tool_choice="auto",
+        temperature=0.2,
         stream=True
     )
 
@@ -265,6 +266,7 @@ def send_stylist_response(user_query):
                     model="gpt-3.5-turbo-1106",
                     messages=messages,
                     tools=tools,
+                    temperature=0.2,
                     tool_choice="auto"
                 )
             else:
@@ -272,6 +274,7 @@ def send_stylist_response(user_query):
                     model="gpt-4-1106-preview",
                     messages=messages,
                     tools=tools,
+                    temperature=0.2,
                     tool_choice="auto"
                 )
 
@@ -334,8 +337,9 @@ def send_stylist_response(user_query):
                     break
 
         refined_response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+            model="gpt-3.5-turbo",
             messages=messages,
+            temperature=0.2,
             stream=True
         )
 
