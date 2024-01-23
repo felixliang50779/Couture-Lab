@@ -5,7 +5,7 @@ from .serializer import AISerializer
 from dotenv import load_dotenv
 from openai import OpenAI
 from django.http import StreamingHttpResponse
-from functools import partial
+from random import sample
 
 import json
 import requests
@@ -104,7 +104,7 @@ def get_amazon_product(
     if response.status_code == 200:
         result = response.json()
 
-        return result['data']['products'][:10]
+        return sample(result['data']['products'], 2)
     
     return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
 
@@ -231,19 +231,20 @@ def send_stylist_response(user_query):
     system_message = '''
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
+    
+    When the user asks for an outfit, stick to one gender unless explicitly
+    specified by the user. Always try to cite examples of specific clothing items
+    from particular brands, using real-time product data to better influence
+    your recommendations. Print product image links.
 
-    Always try to cite examples of specific clothing items from particular brands,
-    using knowledge of current fashion trends and product data to better influence
-    your recommendations.
-
-    You only have one chance of providing all the necessary information, so call the following
-    functions in one go - do not expect follow-up opportunities:
-    1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
+    Call the following functions to aid you in making recommendations:
+    1. 'get_local_weather' whenever you specifically need weather conditions of the
+    user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
     3. 'get_amazon_data' whenever making a general or specific style recommendation.
 
     When citing specific examples using the provided functions, be sure to extract
-    all items when there are multiple. Always identify and extract product links and images.
+    all items when there are multiple. Always identify and extract product/image links.
 
     Only respond to fashion-related questions.
 
