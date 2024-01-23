@@ -27,6 +27,7 @@ const StaggeredTextAnimation = (text) => {
         <div className={styles['intro-header']}>
             {text.text.split("").map((char, index) => (
                 <motion.span
+                    key={index} //unique key prop for each child
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}

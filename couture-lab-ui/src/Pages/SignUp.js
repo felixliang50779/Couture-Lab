@@ -6,7 +6,7 @@ import AuthContext from '../Context/authcontext.js';
 import styles from './SignIn.module.css';
 
 export default function SignUp() {
-    let { user, registerUser } = useContext(AuthContext);
+    let { user, registerUser, logoutUser } = useContext(AuthContext);
     return (
         <div className={styles['signin-container']}>
             <Link to="/" className={styles['signin-logo']}>CoutureLab</Link>
@@ -14,18 +14,21 @@ export default function SignUp() {
                 <h1>Register</h1>
                 <h2>Create your account 😊</h2>
                 {user ? (
-                    <h1>You are already logged in, meaning you have already signed up!</h1>
+                    <div>
+                        <h1>{user.email} You are already logged in, meaning you have already signed up!</h1>
+                        <button type="button" onClick={logoutUser}>Logout</button>
+                    </div>
                 ) : (
                     <div className={styles['signin-input-container']}>
                         <form className={styles['signin-form']} onSubmit={registerUser}>
                             <h2 className={styles['form-title']}>Username</h2>
                             <input className={styles['form-input']} 
-                                type="text" name="username" placeholder="E.u. lebronjames" />
+                                type="text" name="email" placeholder="E.u. lebronjames" />
                             <h2 className={styles['form-title']}>Password</h2>
                             <input className={styles['form-input']} 
                                 type="password" name="password" placeholder="Enter Your Password" />
                             <input className={styles['form-input']} 
-                                type="password" name="verifypassword" placeholder="Verify Your Password" />
+                                type="password" name="password2" placeholder="Verify Your Password" />
                             <input type="submit"/>
                         </form>
                         <div className={styles['signin-register']}>
