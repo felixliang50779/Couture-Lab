@@ -104,7 +104,7 @@ def get_amazon_product(
     if response.status_code == 200:
         result = response.json()
 
-        return result['data']['products'][:3]
+        return result['data']['products'][:10]
     
     return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
 
@@ -322,31 +322,31 @@ def send_stylist_response(user_query):
                 futures = {}
                 creation_order = 0
                 
-                with concurrent.futures.ThreadPoolExecutor(max_workers=len(call_list)) as executor:
+                with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
                     for call in call_list:
                         future = executor.submit(call["function_to_call"], **call["function_args"])
                         futures[future] = creation_order
                         creation_order += 1
 
-                results = [None] * creation_order
+                    results = [None] * creation_order
 
-                for future in concurrent.futures.as_completed(futures):
-                    result = future.result()
-                    index = futures[future]
-                    results[index] = result
-                    
-                for response_index in range(len(results)):
-                    messages.append(
-                    {
-                        "tool_call_id": call_list[response_index]["tool_call_id"],
-                        "role": "tool",
-                        "name": call_list[response_index]["function_name"],
-                        "content": results[response_index]
-                    }
-                )
+                    for future in concurrent.futures.as_completed(futures):
+                        result = future.result()
+                        index = futures[future]
+                        results[index] = result
+                        
+                    for response_index in range(len(results)):
+                        messages.append(
+                        {
+                            "tool_call_id": call_list[response_index]["tool_call_id"],
+                            "role": "tool",
+                            "name": call_list[response_index]["function_name"],
+                            "content": results[response_index]
+                        }
+                    )
 
-                if fetched_products:
-                    break
+                    if fetched_products:
+                        break
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
