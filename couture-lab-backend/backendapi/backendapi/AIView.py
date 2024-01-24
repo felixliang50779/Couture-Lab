@@ -9,8 +9,9 @@ from random import sample
 
 import json
 import requests
+import asyncio
+import aiohttp
 import django
-import concurrent.futures
 import os
 
 
@@ -40,7 +41,7 @@ def get_country_code():
     return f"Error: Unable to fetch country data. Status code: {response.status_code}"
 
 # Fetch local (to user) weather data
-def get_local_weather():
+async def get_local_weather(session):
     url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
     querystring = {"format":"json"}
@@ -50,10 +51,8 @@ def get_local_weather():
         "X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
-
-    if response.status_code == 200:
-        geolocation_dict = response.json()
+    async with session.get(url, params=querystring, headers=headers) as response:
+        geolocation_dict = await response.json()
 
         latitude, longitude = geolocation_dict["location"]["latitude"], geolocation_dict["location"]["longitude"]
 
@@ -66,10 +65,8 @@ def get_local_weather():
             "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers, params=querystring)
-
-        if response.status_code == 200:
-            response = response.json()
+        async with session.get(url, params=querystring, headers=headers) as response:
+            response = await response.json()
 
             wind_speed_in_kilometers_per_hour, precipitation_in_inches, temperature_in_celsius = response["current"]["wind_kph"], response["current"]["precip_in"], response["current"]["temp_c"]
 
@@ -79,12 +76,9 @@ def get_local_weather():
 
             return json.dumps(weather_dict)
 
-        return f"Error: Unable to fetch weather data. Status code: {response.status_code}"
-
-    return f"Error: Unable to fetch geolocation data. Status code: {response.status_code}"
-
-def get_amazon_product(
+async def get_amazon_product(
     item,
+    session,
     country="US"
 ):
     url = "https://real-time-amazon-data.p.rapidapi.com/search"
@@ -99,20 +93,15 @@ def get_amazon_product(
         "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
+    async with session.get(url, headers=headers, params=querystring) as resp:
+        product_dict = await resp.json()
 
-    if response.status_code == 200:
-        result = response.json()
-
-        return sample(result['data']['products'], 2)
-    
-    return f"Error: Unable to fetch product listings. Status code: {response.status_code}"
-
-
+        return sample(product_dict['data']['products'], 5)
 
 # Retrieves real-time amazon product info
-def get_amazon_data(
-    clothing_items, 
+async def get_amazon_data(
+    clothing_items,
+    session,
     country="US",
     sort_by=None,
     max_price=None,
@@ -120,18 +109,20 @@ def get_amazon_data(
     ):
         item_list = clothing_items.split(", ")
 
-        function_responses = None
+        product_promises = []
+        
+        for item in item_list:
+            product_promises.append(asyncio.ensure_future(get_amazon_product(
+                item, session, country)))
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-            function_responses = executor.map(get_amazon_product, item_list, 
-                [country] * len(item_list))
-            
-            function_responses = sum(function_responses, [])
+        product_responses = await asyncio.gather(*product_promises)
 
-        return json.dumps(function_responses, indent=2)
+        product_responses = sum(product_responses, [])
+
+        return json.dumps(product_responses, indent=2)
 
 # Fetch weather data of a given location
-def get_weather_data(location):
+async def get_weather_data(location, session):
     url = "https://ai-weather-by-meteosource.p.rapidapi.com/find_places"
 
     querystring = {"text":location,"language":"en"}
@@ -141,10 +132,8 @@ def get_weather_data(location):
         "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
-
-    if response.status_code == 200:
-        location_dict = response.json()
+    async with session.get(url, params=querystring, headers=headers) as response:
+        location_dict = await response.json()
 
         location_id = location_dict[0]["place_id"]
 
@@ -157,10 +146,8 @@ def get_weather_data(location):
             "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers, params=querystring)
-
-        if response.status_code == 200:
-            weather_dict = response.json()
+        async with session.get(url, params=querystring, headers=headers) as response:
+            weather_dict = await response.json()
 
             temperature_in_celsius, wind_chill, wind_speed_in_meters_per_second, precipitation_in_cm = weather_dict["current"]["temperature"], weather_dict["current"]["wind_chill"], weather_dict["current"]["wind"]["speed"], weather_dict["current"]["precipitation"]["total"]
 
@@ -169,9 +156,73 @@ def get_weather_data(location):
 
             return json.dumps(response_dict)
 
-        return f"Error: Unable to fetch weather data. Status code: {response.status_code}"
+async def process_functions(messages, tools):
+    async with aiohttp.ClientSession() as session:
+        for i in range(2):
+            response = client.chat.completions.create(
+                model="gpt-4-1106-preview",
+                messages=messages,
+                tools=tools,
+                temperature=0.2,
+                tool_choice="auto"
+            )
 
-    return f"Error: Unable to fetch location data. Status code: {response.status_code}"
+            function_name = None
+
+            response_message = response.choices[0].message
+            tool_calls = response_message.tool_calls
+
+            if tool_calls:
+                available_functions = {
+                    "get_amazon_data": get_amazon_data,
+                    "get_local_weather": get_local_weather,
+                    "get_weather_data": get_weather_data
+                }
+                messages.append(response_message)
+
+                call_list, fetched_products = [], False
+
+                for tool_call in tool_calls:
+                    function_name = tool_call.function.name
+                    function_to_call = available_functions[function_name]
+                    function_args = json.loads(tool_call.function.arguments)
+
+                    function_args["session"] = session
+
+                    if function_name == "get_amazon_data":
+                        fetched_products = True
+
+                        user_country_code = get_country_code()
+
+                        if user_country_code in valid_countries:
+                            function_args["country"] = user_country_code
+
+                    call_list.append({"function_to_call": function_to_call, 
+                    "function_name": function_name, "function_args": function_args,
+                    "tool_call_id": tool_call.id})
+
+                call_promises = []
+
+                for call in call_list:
+                    my_function = call["function_to_call"]
+                    my_args = call["function_args"]
+
+                    call_promises.append(my_function(**my_args))
+
+                call_responses = await asyncio.gather(*call_promises)
+
+                for response_index in range(len(call_responses)):
+                    messages.append({
+                        "tool_call_id": call_list[response_index]["tool_call_id"],
+                        "role": "tool",
+                        "name": call_list[response_index]["function_name"],
+                        "content": call_responses[response_index]
+                    })
+
+                if fetched_products:
+                    break
+
+        return messages
 
 # Generate response based on user query
 def send_stylist_response(user_query):
@@ -231,20 +282,19 @@ def send_stylist_response(user_query):
     system_message = '''
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
-    
-    When the user asks for an outfit, stick to one gender unless explicitly
-    specified by the user. Always try to cite examples of specific clothing items
-    from particular brands, using real-time product data to better influence
-    your recommendations. Print product image links.
 
-    Call the following functions to aid you in making recommendations:
-    1. 'get_local_weather' whenever you specifically need weather conditions of the
-    user's local area
+    Always try to cite examples of specific clothing items from particular brands,
+    using knowledge of current fashion trends and product data to better influence
+    your recommendations. When asked for an outfit, provide a complete set of items,
+    including tops, hats, bottoms, and accessories. Always provide pictures for items.
+
+    Call the following functions in one go - do not expect follow-up opportunities:
+    1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
     3. 'get_amazon_data' whenever making a general or specific style recommendation.
 
     When citing specific examples using the provided functions, be sure to extract
-    all items when there are multiple. Always identify and extract product/image links.
+    all items when there are multiple. Always identify and extract product links and images.
 
     Only respond to fashion-related questions.
 
@@ -263,7 +313,6 @@ def send_stylist_response(user_query):
         messages=messages,
         tools=tools,
         tool_choice="auto",
-        temperature=0.2,
         stream=True
     )
 
@@ -279,80 +328,12 @@ def send_stylist_response(user_query):
 
     # Alternatively, if functions are required...
     if functions_required:
-        for i in range(2):
-            response = client.chat.completions.create(
-                model="gpt-4-1106-preview",
-                messages=messages,
-                tools=tools,
-                temperature=0.2,
-                tool_choice="auto"
-            )
-
-            function_name = None
-
-            response_message = response.choices[0].message
-            tool_calls = response_message.tool_calls
-
-            if tool_calls:
-                available_functions = {
-                    "get_amazon_data": get_amazon_data,
-                    "get_local_weather": get_local_weather,
-                    "get_weather_data": get_weather_data
-                }
-                messages.append(response_message)
-
-                call_list, fetched_products = [], False
-
-                for tool_call in tool_calls:
-                    function_name = tool_call.function.name
-                    function_to_call = available_functions[function_name]
-                    function_args = json.loads(tool_call.function.arguments)
-
-                    if function_name == "get_amazon_data":
-                        fetched_products = True
-
-                        user_country_code = get_country_code()
-
-                        if user_country_code in valid_countries:
-                            function_args["country"] = user_country_code
-
-                    call_list.append({"function_to_call": function_to_call, 
-                        "function_name": function_name, "function_args": function_args,
-                        "tool_call_id": tool_call.id})
-
-                futures = {}
-                creation_order = 0
-                
-                with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-                    for call in call_list:
-                        future = executor.submit(call["function_to_call"], **call["function_args"])
-                        futures[future] = creation_order
-                        creation_order += 1
-
-                    results = [None] * creation_order
-
-                    for future in concurrent.futures.as_completed(futures):
-                        result = future.result()
-                        index = futures[future]
-                        results[index] = result
-                        
-                    for response_index in range(len(results)):
-                        messages.append(
-                        {
-                            "tool_call_id": call_list[response_index]["tool_call_id"],
-                            "role": "tool",
-                            "name": call_list[response_index]["function_name"],
-                            "content": results[response_index]
-                        }
-                    )
-
-                    if fetched_products:
-                        break
+        coroutine = process_functions(messages, tools)
+        coroutine_loop.run_until_complete(coroutine)
 
         refined_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-1106",
             messages=messages,
-            temperature=0.2,
             stream=True
         )
 
@@ -382,3 +363,5 @@ load_dotenv()
 openai_key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI()
+
+coroutine_loop = asyncio.new_event_loop()
