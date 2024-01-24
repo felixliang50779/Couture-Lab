@@ -22,51 +22,39 @@ export const AuthProvider = ({children}) => {
         e.preventDefault();
 
         // checks if username or target are empty on submit button click
-        if (!e.target.username.value || !e.target.password.value) {
+        if (!e.target.email.value || !e.target.password.value) {
             toast.error("Invalid login. Please try again.");
             return;
         }
 
-        const response = await fetch('http://127.0.0.1:8000/token/', {
+        const response = await fetch('http://127.0.0.1:8000/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value })
+            body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value })
         });
+        console.log(response);  
 
         if (response.ok) {
             // Successful login
             let data = await response.json();
-            localStorage.setItem('authTokens', JSON.stringify(data));
-            setAuthTokens(data);
-            setUser(jwtDecode(data.access));
+            localStorage.setItem('authTokens', JSON.stringify(data.tokens));
+            setAuthTokens(data.tokens);
+            setUser(data.email);
             navigate('/Dashboard');
         } else {
             // Unsuccessful login
-            toast.error("Invalid login. Please try again.");
+            toast.error("Invalid login bad post. Please try again.");
         }
     }
 
     let registerUser = async (e) => {
         e.preventDefault();
 
-        // checks if username length is correct
-        if (e.target.username.value < 3 || e.target.username.value > 12) {
-            toast.error("Username length should be more than 2 and less than 12. Please try again.");
-            return;
-        }
-
-        // checks if password length is correct
-        if (e.target.password.value < 8 || e.target.verifypassword.value < 8 || 
-            e.target.username.value > 20 || e.target.password.value > 20 || e.target.verifypassword.value > 20) {
-            toast.error("Password length should be more than 7 and less than 20. Please try again.");
-            return;
-        }
-
-        // checks if passwords are the same
-        if (e.target.password.value !== e.target.verifypassword.value) {
-            toast.error("Passwords are not the same.");
+        // Checks if passwords are the same
+        if (e.target.password.value !== e.target.password2.value) {
+            toast.error("Passwords are not the same. Please try again.");
             return;
         }
 
@@ -75,8 +63,11 @@ export const AuthProvider = ({children}) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username: e.target.username.value, password: e.target.password.value, 
-                password2: e.target.verifypassword.value })
+            body: JSON.stringify({ 
+                email: e.target.email.value, 
+                password: e.target.password.value, 
+                password2: e.target.password2.value
+            })
         });
 
         if (response.ok) {
@@ -89,7 +80,7 @@ export const AuthProvider = ({children}) => {
         }
     }
 
-    // automatically redirects to page on start
+    // Automatically redirects to page on start and deletes authtoken
     let logoutUser = useCallback((e) => {
         localStorage.removeItem('authTokens');
         setAuthTokens(null);
@@ -117,9 +108,9 @@ export const AuthProvider = ({children}) => {
     
             const data = await response.json();
             if (response.status === 200) {
-                setAuthTokens(data);
-                setUser(jwtDecode(data.access));
-                localStorage.setItem('authTokens',JSON.stringify(data));
+                setAuthTokens(data.tokens);
+                setUser(data.email);
+                localStorage.setItem('authTokens',JSON.stringify(data.tokens));
             } else {
                 logoutUser();
             }

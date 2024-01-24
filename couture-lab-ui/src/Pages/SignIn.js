@@ -6,8 +6,8 @@ import AuthContext from '../Context/authcontext.js';
 import styles from './SignIn.module.css';
 
 export default function SignIn() {
-    let { user, loginUser } = useContext(AuthContext);
-
+    let { user, loginUser, logoutUser } = useContext(AuthContext);
+    
     return (
         <div className={styles['signin-container']}>
             <Link to="/" className={styles['signin-logo']}>CoutureLab</Link>
@@ -15,12 +15,15 @@ export default function SignIn() {
                 <h1>Login</h1>
                 <h2>Hi, Welcome back 👋</h2>
                 {user ? (
-                    <h1>You are already logged in!</h1>
+                    <div>
+                        <h1>{user.email}, You are already logged in! </h1>
+                        <button type="button" onClick={logoutUser}>Logout</button>
+                    </div>
                 ) : (
                     <div className={styles['signin-input-container']}>
                         <form className={styles['signin-form']} onSubmit={loginUser}>
                             <h2 className={styles['form-title']}>Username</h2>
-                            <input className={styles['form-input']} type="text" name="username" 
+                            <input className={styles['form-input']} type="email" name="email" 
                                 placeholder="E.u. lebronjames" />
                             <h2 className={styles['form-title']}>Password</h2>
                             <input className={styles['form-input']} 
