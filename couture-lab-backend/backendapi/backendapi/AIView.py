@@ -160,7 +160,7 @@ async def process_functions(messages, tools):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-3.5-turbo-1106",
                 messages=messages,
                 tools=tools,
                 temperature=0.2,
@@ -286,9 +286,10 @@ def send_stylist_response(user_query):
     Always try to cite examples of specific clothing items from particular brands,
     using knowledge of current fashion trends and product data to better influence
     your recommendations. When asked for an outfit, provide a complete set of items,
-    including tops, hats, bottoms, and accessories. Always provide pictures for items.
+    including tops, hats, bottoms, and accessories. Provide picture links for all items.
 
-    Call the following functions in one go - do not expect follow-up opportunities:
+    Execute the following functions in one go - do not expect follow-up opportunities,
+    and do not indicate that code is being ran under any circumstances:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
     3. 'get_amazon_data' whenever making a general or specific style recommendation.
@@ -296,8 +297,8 @@ def send_stylist_response(user_query):
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always identify and extract product links and images.
 
-    Only respond to fashion-related questions. You cannot provide any recommendations
-    for non-clothing related accessories or items.
+    Only respond to fashion-related questions. You can only provide recommendations
+    for fashion-related accessories or items.
 
     Address the user as "you".
     '''
@@ -329,8 +330,9 @@ def send_stylist_response(user_query):
 
     # Alternatively, if functions are required...
     if functions_required:
+        coroutine_loop = asyncio.new_event_loop()
         coroutine = process_functions(messages, tools)
-        coroutine_loop.run_until_complete(coroutine)
+        coroutine_loop.run_until_complete(asyncio.wait_for(coroutine, 30))
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
@@ -364,5 +366,3 @@ load_dotenv()
 openai_key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI()
-
-coroutine_loop = asyncio.new_event_loop()
