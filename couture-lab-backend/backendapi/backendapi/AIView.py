@@ -328,9 +328,8 @@ def send_stylist_response(user_query):
 
     # Alternatively, if functions are required...
     if functions_required:
-        loop = asyncio.new_event_loop()
         coroutine = process_functions(messages, tools)
-        loop.run_until_complete(coroutine)
+        coroutine_loop.run_until_complete(coroutine)
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
@@ -364,3 +363,5 @@ load_dotenv()
 openai_key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI()
+
+coroutine_loop = asyncio.new_event_loop()
