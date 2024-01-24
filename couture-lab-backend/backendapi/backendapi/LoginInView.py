@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 from backendapi.serializer import RegisterSerializer, LoginSerializer
 from backendapi.models import UserManager
+from django.core.mail import send_mail
     
 
 User = get_user_model()
@@ -22,6 +24,13 @@ class RegisterView(CreateAPIView):
         user_data = serializer.data
         # Retrieves user object from database using email
         user=User.objects.get(email=user_data['email']) 
+        
+        subject = 'Welcome to CoutureLab!'
+        message = 'Hello, thank you for signing up! From, CoutureLab Team'
+        from_email = 'couturelab2@gmail.com'
+        recipient_list = [user.email]
+
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
         return Response(user_data, status=status.HTTP_201_CREATED)
 

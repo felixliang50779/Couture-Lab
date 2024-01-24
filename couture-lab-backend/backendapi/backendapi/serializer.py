@@ -55,7 +55,7 @@ class LoginSerializer(serializers.ModelSerializer):
     def get_tokens(self, obj):
         user = User.objects.get(email=obj['email'])
 
-        # Create refresh and access tokens with email payload
+        # Create refresh and access tokens and adds email payload
         refresh = RefreshToken.for_user(user)
         refresh['email'] = user.email
 
