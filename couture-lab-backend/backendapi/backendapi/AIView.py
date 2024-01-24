@@ -8,10 +8,8 @@ from django.http import StreamingHttpResponse
 from random import sample
 
 import json
-import requests
 import asyncio
 import aiohttp
-import django
 import os
 
 
@@ -19,7 +17,7 @@ valid_countries = ["US", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "IT", "MX",
 "NL", "SG", "ES", "TR", "AE", "GB", "JP", "SA", "PL", "SE", "BE", "EG"]
 
 # Fetch country code of user
-def get_country_code():
+async def get_country_code(session):
     url = "https://ip-geo-location.p.rapidapi.com/ip/check"
 
     querystring = {"format":"json"}
@@ -29,16 +27,15 @@ def get_country_code():
     	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
+    async with session.get(url, params=querystring, headers=headers) as response:
+        if response.status == 200:
+            country_dict = await response.json()
 
-    if response.status_code == 200:
-        country_dict = response.json()
+            country = country_dict["country"]["code"]
 
-        country = country_dict["country"]["code"]
+            return country
 
-        return country
-
-    return f"Error: Unable to fetch country data. Status code: {response.status_code}"
+        return f"Error: Unable to fetch country data. Status code: {response.status}"
 
 # Fetch local (to user) weather data
 async def get_local_weather(session):
@@ -52,29 +49,35 @@ async def get_local_weather(session):
     }
 
     async with session.get(url, params=querystring, headers=headers) as response:
-        geolocation_dict = await response.json()
+        if response.status == 200:
+            geolocation_dict = await response.json()
 
-        latitude, longitude = geolocation_dict["location"]["latitude"], geolocation_dict["location"]["longitude"]
+            latitude, longitude = geolocation_dict["location"]["latitude"], geolocation_dict["location"]["longitude"]
 
-        url = "https://weatherapi-com.p.rapidapi.com/current.json"
+            url = "https://weatherapi-com.p.rapidapi.com/current.json"
 
-        querystring = {"q":f"{latitude},{longitude}"}
+            querystring = {"q":f"{latitude},{longitude}"}
 
-        headers = {
-            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
-        }
+            headers = {
+                "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+                "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+            }
 
-        async with session.get(url, params=querystring, headers=headers) as response:
-            response = await response.json()
+            async with session.get(url, params=querystring, headers=headers) as response:
+                if response.status == 200:
+                    response = await response.json()
 
-            wind_speed_in_kilometers_per_hour, precipitation_in_inches, temperature_in_celsius = response["current"]["wind_kph"], response["current"]["precip_in"], response["current"]["temp_c"]
+                    wind_speed_in_kilometers_per_hour, precipitation_in_inches, temperature_in_celsius = response["current"]["wind_kph"], response["current"]["precip_in"], response["current"]["temp_c"]
 
-            weather_dict = {"wind_speed_in_kilometers_per_hour": wind_speed_in_kilometers_per_hour, 
-            "precipitation_in_inches": precipitation_in_inches,
-            "temperature_in_celsius": temperature_in_celsius}
+                    weather_dict = {"wind_speed_in_kilometers_per_hour": wind_speed_in_kilometers_per_hour, 
+                    "precipitation_in_inches": precipitation_in_inches,
+                    "temperature_in_celsius": temperature_in_celsius}
 
-            return json.dumps(weather_dict)
+                    return json.dumps(weather_dict)
+
+                return f"Error: Unable to fetch local weather. Status code: {response.status}"
+
+        return f"Error: Unable to fetch geolocation data. Status code: {response.status}"
 
 async def get_amazon_product(
     item,
@@ -86,17 +89,20 @@ async def get_amazon_product(
     querystring = {"query": item,
     "page":"1",
     "country": country,
-    "category_id":"aps"}
+    "category_id":"fashion"}
 
     headers = {
         "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
         "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
     }
 
-    async with session.get(url, headers=headers, params=querystring) as resp:
-        product_dict = await resp.json()
+    async with session.get(url, headers=headers, params=querystring) as response:
+        if response.status == 200:
+            product_dict = await response.json()
 
-        return sample(product_dict['data']['products'], 5)
+            return sample(product_dict['data']['products'], 5)
+
+        return f"Error: Unable to fetch amazon product data. Status code: {response.status}"
 
 # Retrieves real-time amazon product info
 async def get_amazon_data(
@@ -109,15 +115,19 @@ async def get_amazon_data(
     ):
         item_list = clothing_items.split(", ")
 
-        product_promises = []
+        product_promises, product_responses = [], []
         
         for item in item_list:
             product_promises.append(asyncio.ensure_future(get_amazon_product(
                 item, session, country)))
 
-        product_responses = await asyncio.gather(*product_promises)
+        for promise in asyncio.as_completed(product_promises, timeout=60):
+            response = await promise
 
-        product_responses = sum(product_responses, [])
+            if type(response) == str:
+                return f"Error: Unable to fetch from amazon."
+
+            product_responses += response
 
         return json.dumps(product_responses, indent=2)
 
@@ -160,10 +170,9 @@ async def process_functions(messages, tools):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo-1106",
+                model="gpt-4-1106-preview",
                 messages=messages,
                 tools=tools,
-                temperature=0.2,
                 tool_choice="auto"
             )
 
@@ -192,7 +201,7 @@ async def process_functions(messages, tools):
                     if function_name == "get_amazon_data":
                         fetched_products = True
 
-                        user_country_code = get_country_code()
+                        user_country_code = await get_country_code(session)
 
                         if user_country_code in valid_countries:
                             function_args["country"] = user_country_code
@@ -286,10 +295,9 @@ def send_stylist_response(user_query):
     Always try to cite examples of specific clothing items from particular brands,
     using knowledge of current fashion trends and product data to better influence
     your recommendations. When asked for an outfit, provide a complete set of items,
-    including tops, hats, bottoms, and accessories. Provide picture links for all items.
+    including tops, hats, bottoms, and accessories. Always provide pictures for items.
 
-    Execute the following functions in one go - do not expect follow-up opportunities,
-    and do not indicate that code is being ran under any circumstances:
+    Call the following functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
     3. 'get_amazon_data' whenever making a general or specific style recommendation.
@@ -330,9 +338,7 @@ def send_stylist_response(user_query):
 
     # Alternatively, if functions are required...
     if functions_required:
-        coroutine_loop = asyncio.new_event_loop()
-        coroutine = process_functions(messages, tools)
-        coroutine_loop.run_until_complete(asyncio.wait_for(coroutine, 30))
+        messages = asyncio.run(process_functions(messages, tools))
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo-1106",
