@@ -97,7 +97,20 @@ async def get_clothing_item(
         if response.status == 200:
             product_dict = await response.json()
 
-            return sample(product_dict['data'], 5)
+            product_recommendations = sample(product_dict['data'], 5)
+
+            for product_index in range(len(product_recommendations)):
+                del product_recommendations[product_index]["product_id"]
+                del product_recommendations[product_index]["product_description"]
+                del product_recommendations[product_index]["product_offers_page_url"]
+                del product_recommendations[product_index]["product_specs_page_url"]
+                del product_recommendations[product_index]["product_reviews_page_url"]
+                del product_recommendations[product_index]["product_num_reviews"]
+                del product_recommendations[product_index]["product_num_offers"]
+                del product_recommendations[product_index]["typical_price_range"]
+                del product_recommendations[product_index]["offer"]
+
+            return product_recommendations
 
         return f"Error: Unable to fetch clothing item data. Status code: {response.status}"
 
