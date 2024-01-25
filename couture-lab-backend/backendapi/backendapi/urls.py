@@ -30,5 +30,6 @@ urlpatterns = [
     path('langserve/', LangServeHandle.as_view()),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),  
+    path('email-verify/', RegisterView.as_view(), name='email-verify'),  
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
