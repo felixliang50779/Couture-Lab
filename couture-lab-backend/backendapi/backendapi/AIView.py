@@ -12,7 +12,7 @@ import asyncio
 import aiohttp
 import os
 
-
+# Countries supported by the product fetch API
 valid_countries = ["US", "AU", "BR", "CA", "CN", "FR", "DE", "IN", "IT", "MX", 
 "NL", "SG", "ES", "TR", "AE", "GB", "JP", "SA", "PL", "SE", "BE", "EG"]
 
@@ -79,6 +79,7 @@ async def get_local_weather(session):
 
         return f"Error: Unable to fetch geolocation data. Status code: {response.status}"
 
+# Fetch product search results for a single clothing item
 async def get_clothing_item(
     item,
     session,
@@ -97,7 +98,7 @@ async def get_clothing_item(
         if response.status == 200:
             product_dict = await response.json()
 
-            product_recommendations = sample(product_dict['data'], 5)
+            product_recommendations = sample(product_dict['data'], 3)
 
             for product_index in range(len(product_recommendations)):
                 del product_recommendations[product_index]["product_id"]
@@ -114,7 +115,7 @@ async def get_clothing_item(
 
         return f"Error: Unable to fetch clothing item data. Status code: {response.status}"
 
-# Retrieves real-time product info
+# Retrieves real-time product info for one or more clothing items
 async def get_clothing_data(
     clothing_items,
     session,
@@ -176,11 +177,12 @@ async def get_weather_data(location, session):
 
             return json.dumps(response_dict)
 
+# Asynchronous function for the styling assistant to process any function calls concurrently
 async def process_functions(messages, tools):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-3.5-turbo-1106",
                 messages=messages,
                 tools=tools,
                 tool_choice="auto"
@@ -302,18 +304,17 @@ def send_stylist_response(user_query):
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    Always try to cite examples of specific clothing items from particular brands,
-    using knowledge of current fashion trends and product data to better influence
+    Use knowledge of current fashion trends and product data to better influence
     your recommendations. When asked for an outfit, provide a complete set of items,
     including tops, hats, bottoms, and accessories. Always provide pictures for items.
 
     Call the following functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
-    3. 'get_clothing_data' whenever making a general or specific style recommendation.
+    3. 'get_clothing_data' whenever making a specific style recommendation.
 
     When citing specific examples using the provided functions, be sure to extract
-    all items when there are multiple. Always identify and extract product links and images.
+    all items when there are multiple. Always extract product links and images.
 
     Only respond to fashion-related questions. You can only provide recommendations
     for fashion-related accessories or items.
@@ -329,7 +330,7 @@ def send_stylist_response(user_query):
     # Initial response that we can stream
     # a reply from if no function calls are required
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo-1106",
         messages=messages,
         tools=tools,
         tool_choice="auto",

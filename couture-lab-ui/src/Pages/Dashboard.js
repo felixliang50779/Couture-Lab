@@ -63,7 +63,7 @@ export default function Dashboard() {
         responseLog.push("");
 
         while (loopRunner) {
-            // Here we start reading the stream, until its done.
+            // Here we start reading the stream, until it's done.
             const { value, done } = await reader.read();
             if (done) {
                 break;
