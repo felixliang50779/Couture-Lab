@@ -124,7 +124,7 @@ export const AuthProvider = ({children}) => {
             updateToken();
         }
 
-        const REFRESH_INTERVAL = 1000 * 60 * 4; // 4 minutes
+        const REFRESH_INTERVAL = 1000 * 60 * 60; // Every hour
         let interval = setInterval(()=>{
             if (authTokens) {
                 updateToken();

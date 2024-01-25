@@ -79,33 +79,30 @@ async def get_local_weather(session):
 
         return f"Error: Unable to fetch geolocation data. Status code: {response.status}"
 
-async def get_amazon_product(
+async def get_clothing_item(
     item,
     session,
     country="US"
 ):
-    url = "https://real-time-amazon-data.p.rapidapi.com/search"
+    url = "https://real-time-product-search.p.rapidapi.com/search"
 
-    querystring = {"query": item,
-    "page":"1",
-    "country": country,
-    "category_id":"fashion"}
+    querystring = {"q":item,"country":country,"language":"en"}
 
     headers = {
         "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-        "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
+        "X-RapidAPI-Host": "real-time-product-search.p.rapidapi.com"
     }
 
     async with session.get(url, headers=headers, params=querystring) as response:
         if response.status == 200:
             product_dict = await response.json()
 
-            return sample(product_dict['data']['products'], 5)
+            return sample(product_dict['data'], 5)
 
-        return f"Error: Unable to fetch amazon product data. Status code: {response.status}"
+        return f"Error: Unable to fetch clothing item data. Status code: {response.status}"
 
-# Retrieves real-time amazon product info
-async def get_amazon_data(
+# Retrieves real-time product info
+async def get_clothing_data(
     clothing_items,
     session,
     country="US",
@@ -118,14 +115,14 @@ async def get_amazon_data(
         product_promises, product_responses = [], []
         
         for item in item_list:
-            product_promises.append(asyncio.ensure_future(get_amazon_product(
+            product_promises.append(asyncio.ensure_future(get_clothing_item(
                 item, session, country)))
 
         for promise in asyncio.as_completed(product_promises, timeout=60):
             response = await promise
 
             if type(response) == str:
-                return f"Error: Unable to fetch from amazon."
+                return f"Error: Unable to fetch clothing data."
 
             product_responses += response
 
@@ -183,7 +180,7 @@ async def process_functions(messages, tools):
 
             if tool_calls:
                 available_functions = {
-                    "get_amazon_data": get_amazon_data,
+                    "get_clothing_data": get_clothing_data,
                     "get_local_weather": get_local_weather,
                     "get_weather_data": get_weather_data
                 }
@@ -198,7 +195,7 @@ async def process_functions(messages, tools):
 
                     function_args["session"] = session
 
-                    if function_name == "get_amazon_data":
+                    if function_name == "get_clothing_data":
                         fetched_products = True
 
                         user_country_code = await get_country_code(session)
@@ -242,7 +239,7 @@ def send_stylist_response(user_query):
         {
             "type": "function",
             "function": {
-                "name": "get_amazon_data",
+                "name": "get_clothing_data",
                 "description": "Get specific clothing item recommendations",
                 "parameters": {
                     "type": "object",
@@ -300,7 +297,7 @@ def send_stylist_response(user_query):
     Call the following functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
-    3. 'get_amazon_data' whenever making a general or specific style recommendation.
+    3. 'get_clothing_data' whenever making a general or specific style recommendation.
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always identify and extract product links and images.

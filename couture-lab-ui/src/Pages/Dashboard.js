@@ -56,7 +56,7 @@ export default function Dashboard() {
         const decoder = new TextDecoder();
         const loopRunner = true;
         const imgLabel = /!\[.*?\]/g;
-        const imgLink = /(\(https?:\/\/m.media.*\.(?:png|jpg))\)/g;
+        const imgLink = /(\(https?:\/\/encrypted-tbn.*=CAE\))/g;
 
         let stylistResponse = "";
         
