@@ -4,6 +4,7 @@ import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 import dungMemberImage from '../Assets/Images/dungImage.png';
 import oliviaMemberImage from '../Assets/Images/oliviaImage.jpg';
+import { FaLinkedin, FaGithub } from 'react-icons/fa'; 
 
 export default function About() {
     return (
@@ -15,13 +16,11 @@ export default function About() {
             
             <div className={styles['team-member']}>
                 <img src={oliviaMemberImage} alt="Olivia Engler" />
-                <h3>Olivia Rose Engler</h3>
+                <h3>Olivia Engler</h3>
                 <div className="team-info">
-                    <p>Junior at MSU</p>
-                    <p>Originator of webapp concept and director of visionary planning</p>
-                    <ul className="team-icon">
-                        <li><a href="https://www.linkedin.com/in/oliviaengler/" className="linkedin">
-                        </a></li>
+                    <p>Visionary for webapp concept</p>
+                    <ul className={styles['team-icon']}> 
+                        <li><a href="https://www.linkedin.com/in/oliviaengler/"><FaLinkedin /></a></li> 
                     </ul>
                 </div>
             </div>
@@ -29,27 +28,10 @@ export default function About() {
             <div className={styles['team-member']}>
                 <h3>Felix Liang</h3>
                 <div className="team-info">
-                    <p>student at MSU</p>
-                    <p>Info. about Felix here</p>
-                    <ul className="team-icon">
-                        <li><a href="https://www.linkedin.com/in/felix-liang-0b401a1ba/" className="linkedin">
-                        </a></li>
-                        <li><a href="https://github.com/felixliang50779" className="github">
-                        </a></li>
-                    </ul>
-                </div>
-            </div>
-            {/* member section */}
-            <div className={styles['team-member']}>
-                <h3>Tucker Radgens</h3>
-                <div className="team-info">
-                    <p>student at MSU</p>
-                    <p>Info. About Tucker here</p>
-                    <ul className="team-icon">
-                        <li><a href="https://www.linkedin.com/in/tucker-radgens-26413a287/" className="linkedin">
-                        </a></li>
-                        <li><a href="https://github.com/radgenst14" className="github">
-                        </a></li>
+                    <p>Worked on AI chatbot, pulling from online shopping platforms using OpenAI technology</p>
+                    <ul className={styles['team-icon']}> 
+                        <li><a href="https://www.linkedin.com/in/felix-liang-0b401a1ba/"><FaLinkedin /></a></li> 
+                        <li><a href="https://github.com/felixliang50779"><FaGithub /></a></li> 
                     </ul>
                 </div>
             </div>
@@ -58,24 +40,42 @@ export default function About() {
                 <img src={dungMemberImage} alt="Dung Nguyen" />
                 <h3>Dung Nguyen</h3>
                 <div className="team-info">
-                    <p>Computer Science Major at MSU, Sophomore</p>
-                    <p>Assisted on: Figma, UX frontend, homepage design. Worked on: About Page</p>
-                    <ul className="team-icon">
-                        <li><a href="https://www.linkedin.com/in/dung-zoom-nguyen3000/" className="linkedin">
-                        </a></li>
-                        <li><a href="https://github.com/Zooomulus" className="github">
-                        </a></li>
+                    <p>Worked on About Page and assisted with frontend design</p>
+                    <ul className={styles['team-icon']}> 
+                        <li><a href="https://www.linkedin.com/in/dung-zoom-nguyen3000/"><FaLinkedin /></a></li> 
+                        <li><a href="https://github.com/Zooomulus"><FaGithub /></a></li> 
                     </ul>
                 </div>
             </div>
             {/* member section */}
 
+            <div className={styles['team-member']}>
+                <h3>Tucker Radgens</h3>
+                <div className="team-info">
+                    <p>Worked on backend databases</p>
+                    <ul className={styles['team-icon']}>
+                        <li><a href="https://www.linkedin.com/in/tucker-radgens-26413a287/"><FaLinkedin /></a></li> 
+                        <li><a href="https://github.com/radgenst14"><FaGithub /></a></li> 
+                    </ul>
+                </div>
+            </div>
+            {/* member section */}
+            <div className={styles['team-member']}>
+                <h3>David Xiong</h3>
+                <div className="team-info">
+                    <p>worked on UI Design, Animations</p>
+                    <ul className={styles['team-icon']}> 
+                        <li><a href="https://www.linkedin.com/in/dung-zoom-nguyen3000/"><FaLinkedin /></a></li> 
+                        <li><a href="https://github.com/dahabibi"><FaGithub /></a></li> 
+                    </ul>
+                </div>
+            </div>
+            {/* member section */}
             </div>
 
             <Footer/>
         </div>
     );
 };
-
 
 

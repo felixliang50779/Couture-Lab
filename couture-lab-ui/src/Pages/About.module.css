@@ -1,15 +1,50 @@
 .about-container {
     text-align: center;
     background-color: #000000;
+    color: #ffffff; 
+    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
+}
+
+.about-container h1 {
+    font-size: 4em;
+    margin-top: 10px;
+    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
 }
 
 .team-container {
     width: 100%;
     padding: 5em;
     display: flex;
-  }
+    color: #ffffff; 
+    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
+}
   
 .team-member { 
     flex: 1; 
     margin: 1.5em;
+    color: #ffffff; 
+    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
+}
+
+.team-member img {
+    width: 100px; 
+    height: 100px;
+    object-fit: cover;
+    display: block; 
+    margin: 0 auto; 
+}
+
+.team-member h3, .team-member p {
+    font-size: 0.8em; 
+    text-align: center; 
+}
+
+.team-member h3 {
+    font-size: 1.5em;
+}
+
+.team-icon {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
