@@ -1,14 +1,13 @@
 .about-container {
     text-align: center;
     background-color: #000000;
-    color: #ffffff; 
-    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf';  
+    color: #ffffff;
     height: 100vh;
 }
 
 .about-container h1 {
     font-size: 4em;
-    margin-top: 10px;
+    margin-top: 1.7em;
 }
 
 .team-container {
@@ -25,8 +24,8 @@
 }
 
 .team-member img {
-    width: 100px; 
-    height: 100px;
+    width: 100vw;
+    height: 30vh;
     object-fit: cover;
     display: block; 
     margin: 0 auto; 
