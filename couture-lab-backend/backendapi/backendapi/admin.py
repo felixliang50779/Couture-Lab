@@ -8,7 +8,7 @@ class EmailUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Permissions'), {
-            'fields': ('is_staff', 'is_superuser'),
+            'fields': ('is_staff', 'is_superuser', 'is_verified'),
         }),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
@@ -18,8 +18,8 @@ class EmailUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ('email', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser')
+    list_display = ('email', 'is_staff', 'is_verified')
+    list_filter = ('is_staff', 'is_superuser', 'is_verified')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 

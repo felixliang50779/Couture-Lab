@@ -3,10 +3,12 @@ from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from backendapi.serializer import RegisterSerializer, LoginSerializer
+from backendapi.serializer import RegisterSerializer, LoginSerializer, EmailVerificationSerializer
 from backendapi.models import UserManager
 from django.core.mail import send_mail
-    
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+import jwt
 
 User = get_user_model()
 
@@ -24,15 +26,47 @@ class RegisterView(CreateAPIView):
         user_data = serializer.data
         # Retrieves user object from database using email
         user=User.objects.get(email=user_data['email']) 
+        tokens = RefreshToken.for_user(user).access_token
         
-        subject = 'Welcome to CoutureLab!'
-        message = 'Hello, thank you for signing up! From, CoutureLab Team'
-        from_email = 'couturelab2@gmail.com'
+        # Send email for user verification
+        current_site = get_current_site(request).domain
+        relative_link = reverse('email-verify')
+        absurl = 'http://'+ current_site + relative_link + "?token=" + str(tokens)
+        email_body = (
+            'Hey,\n\n'
+            'Thank you for joining CoutureLab. Use the link below to verify your email: \n\n'
+            + absurl + '\n\n'
+            'Didn\'t verify? Feel free to ignore this email then.\n\n'
+            'Thanks,\n'
+            'CoutureLab'
+        )
+        data = {'email_body': email_body, 'to_email': user.email,
+                'email_subject': 'Verify your email'}
+
         recipient_list = [user.email]
 
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+        send_mail(data['email_subject'], data['email_body'], data['to_email'], recipient_list, fail_silently=False)
 
         return Response(user_data, status=status.HTTP_201_CREATED)
+    
+
+class VerifyEmail(GenericAPIView):
+    serializer_class = EmailVerificationSerializer
+
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, options={"verify_signature": False})
+            print(payload)
+            user = User.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(GenericAPIView):

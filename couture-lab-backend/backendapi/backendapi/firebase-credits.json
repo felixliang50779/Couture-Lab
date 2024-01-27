@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "couturelab-a79f5",
+  "private_key_id": "25e5a910bc2c49895341a9d5d15d371b3daeac55",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmQfGvV9XhXmeU\ndEnO9pBoIFLVO03CRKcAGiNiI19DBYGMKGBmtOCwKITU3nX6QdRee96Cv8ghyVRS\nFDAvVvEY9vPaBgVvANFU4Hk+JXVdLVcgIxygxXm4D+tRful95l0MhhM5oMBBb1df\nckhhR0WOYVaTely9Q2fBW/Ig0GkvyVMNXyLZTfFsUz740osTtaQ905PMAfCkmSdy\nPaibFSHHtW05fPkzATDxB7WKZFX1mzDuDTfoz3lxDoNqqdTpnAmFvTxgyUzz9uRR\nCLfN7oG9ZFqpuhrv0fHy9EPwhV3MNlUT8COyOCNFUeK7tFHOhawjRrE+uUnhlzEG\nOjq/7q9HAgMBAAECggEACuspxCowkaxxgP5iGoV21l/JENfkM23uycLtr/RCvVQP\nPfUo35Xha7A9iP1TIixQliPsaQnPSui98OYChBlhnBIb0aWzlaaoGLrlO3+aRZRE\ntIeZybUuWTgybBe5ndsTIU9s08wK1EFLq6kFt93GY6Ng3C6dCJD0r24qaJ1HSywC\ned6vRtRSZ3TVG0wKLR+97s168myROpxKQOdSt+0hBGgnJsktswg8G2DYRvYfrZce\nLNm59OKBJYf+7nlp+ymjyUJBRYNCi4FCCQY5UEodKJx+dp4D+dz+QhQQ8WTa37QT\nABjj6a5i5Mxu5sfYgomCXVfOH4u8wmX25vYubWSXAQKBgQDWnpuh/TyJZvN0+RTC\nFf+sWy9M5UYhgQFOYOgxnvNFujSQerE5ZFozBAARJDSmWyFpEkkli4FESSunOtS7\nMYr50ELp4wn/iUzdt45M/YR/N3BN+YJ72ktiL6p7Y6IZd+P5iACz8Ez74xeJjq/8\nVek9q7JQa7RQrIJOHLyGSKwa7wKBgQDGUD25oc1J0Y2sfUtCQpfPDMnDk327rbu4\n4LRqqGTlemZ6yT6ih+AkusXCY20mV3RSkRDAmmxNa9zidrYk3esOlbaaWzevgy50\nYco3/PBY9qDVTmeG0tnTYwfwMiJMn5EB11yj8lEvwmMM2dHv+esg+VqYiSd0FYOt\nzR1D9LORKQKBgQCzA0i9LQS5du3Ku5fc64x+rvAdK3/7oib8wUfrW7F+j3oYqL36\nKQIzWzrTEWf4+jo78cyhTGNeGcoXirK2EPTiuhuWCpHkWxmKNfizryI9GnjKETwN\nIl+OXkPM96XVqHK3SAGOFPmhgCG50xJnXyFVF0l8WtnkEH//t2hoeWVUcQKBgBZK\nEoX4v6AaY3gNpRXPckydPVg0DZ+4iS7gYqbSQnTgawBF+jo+V10JeQy+LBhxH+vf\nzig3sxCInQz/Fr3SC4daIGn88qdRcTk3fIkKbuEw5ybSZyRqMn1l1hCTMfO2w4+X\naxwqMiHSEVvyZ3w3dMwB+sLGN57+hAxWz4FB0aTxAoGBAJ6WbaDAOm1tfM2OjPUS\n2JgLKvJ7Fa7wIEnwlRF8Tyw4w86/4dR26VSr/JuvdnvdKscQkwcqNZKR3WSg2MUy\nLHCQJBPuBFiT8ZDxfNVIcEiEh8n96eKpTfQgYNDwJDEbCWoZhqzqkgK4d5wTCmKN\nZMJ/BDY60YRmsAG2IxvG1USg\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-2q7hc@couturelab-a79f5.iam.gserviceaccount.com",
+  "client_id": "106951461157273186196",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2q7hc%40couturelab-a79f5.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

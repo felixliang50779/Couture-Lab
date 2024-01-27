@@ -73,7 +73,7 @@ export const AuthProvider = ({children}) => {
         if (response.ok) {
             // Successful sign up
             navigate('/SignIn');
-            toast.success('Successfully registered account!');
+            toast.success('Successfully registered account! Verify your email to login.');
         } else {
             // Unsuccessful sign up
             toast.error("Invalid sign up. Please try again.");
@@ -107,6 +107,8 @@ export const AuthProvider = ({children}) => {
             })
     
             const data = await response.json();
+            console.log(1);
+            
             if (response.status === 200) {
                 setAuthTokens(data.tokens);
                 setUser(data.email);
@@ -127,6 +129,7 @@ export const AuthProvider = ({children}) => {
         const REFRESH_INTERVAL = 1000 * 60 * 60; // 1 hour
         let interval = setInterval(() => {
             if (authTokens) {
+                console.log(2);
                 updateToken();
             }
         }, REFRESH_INTERVAL)

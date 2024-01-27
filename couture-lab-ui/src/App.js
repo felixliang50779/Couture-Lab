@@ -13,6 +13,7 @@ import SignIn from './Pages/SignIn.js';
 import SignUp from './Pages/SignUp.js';
 import About from './Pages/About.js';
 import Contact from './Pages/Contact.js'
+import VerifyEmail from './Pages/VerifyEmail.js';
 
 import ProtectedRoute from './Utilities/ProtectedRoute.js';
 
@@ -26,15 +27,16 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/SignIn' element={<SignIn />} />
-            <Route path='/SignUp' element={<SignUp />} />
-            <Route path='/Dashboard' element={<ProtectedRoute>  <Dashboard />  </ProtectedRoute>} />
-            <Route path='/Closet' element={<Closet />} />
-            <Route path='/AddClothes' element={<AddClothes />} />
-            <Route path='/Calendar' element={<Calendar />} />
-            <Route path='/Recommend' element={<Recommend />} />
-            <Route path='/About' element={<About />} />
-            <Route path='/Contact' element={<Contact />} />
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/dashboard' element={<ProtectedRoute>  <Dashboard />  </ProtectedRoute>} />
+            <Route path='/closet' element={<Closet />} />
+            <Route path='/addclothes' element={<AddClothes />} />
+            <Route path='/calendar' element={<Calendar />} />
+            <Route path='/recommend' element={<Recommend />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path='/verifyemail' element={<VerifyEmail />} />
           </Routes>
         </AuthProvider>
       </Router>

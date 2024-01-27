@@ -8,7 +8,7 @@ export default function Footer() {
                 <p className={styles['footer-date']}>&copy; {new Date().getFullYear()} CoutureLab</p>
                 <ul className={styles.footerLinks}>
                     <li><a className={styles.footerLinks} href="/about">About</a></li>
-                    <li><a className={styles.footerLinks} href="/Contact">Contact</a></li>
+                    <li><a className={styles.footerLinks} href="/contact">Contact</a></li>
                 </ul>
             </div>
         </footer>

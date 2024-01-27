@@ -4,7 +4,7 @@ import styles from './button.module.css';
 export default function Button(props) {
     let navigate = useNavigate();
     const handleClick = () => {
-        navigate('../Dashboard')
+        navigate('../dashboard')
     }
 
     return (

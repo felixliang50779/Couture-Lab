@@ -2,13 +2,13 @@
     text-align: center;
     background-color: #000000;
     color: #ffffff; 
-    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
+    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf';  
+    height: 100vh;
 }
 
 .about-container h1 {
     font-size: 4em;
     margin-top: 10px;
-    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
 }
 
 .team-container {
@@ -16,14 +16,12 @@
     padding: 5em;
     display: flex;
     color: #ffffff; 
-    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
 }
   
 .team-member { 
     flex: 1; 
     margin: 1.5em;
     color: #ffffff; 
-    font-family: '../Assets/Fonts/FuturaMaxi-Regular.otf'
 }
 
 .team-member img {

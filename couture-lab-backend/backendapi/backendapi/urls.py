@@ -20,8 +20,9 @@ from .ImageViews import StoreImage, GetImage
 from django.conf import settings
 from django.conf.urls.static import static
 from .AIView import LangServeHandle
-from .LoginInView import RegisterView, LoginView
+from .LoginInView import RegisterView, LoginView, VerifyEmail
 from rest_framework_simplejwt.views import TokenRefreshView
+from .DatabaseView import StoreBookDataView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('langserve/', LangServeHandle.as_view()),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),  
-    path('email-verify/', RegisterView.as_view(), name='email-verify'),  
+    path('email-verify/', VerifyEmail.as_view(), name='email-verify'),  
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('storebook/', StoreBookDataView.as_view(), name='store_book'),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

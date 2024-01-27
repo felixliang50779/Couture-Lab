@@ -13,7 +13,7 @@ export default function Closet() {
             <div className={styles['clothes-container']}>
                 <h1>Virtual Closet</h1>
                 <div class="adding-container">
-                    <a href="/AddClothes">
+                    <a href="/addclothes">
                         <button className={styles['addclothes-button']}>Add Clothes</button>
                     </a>
                 </div>

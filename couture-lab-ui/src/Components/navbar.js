@@ -14,7 +14,7 @@ export default function NavBar() {
             {user ? (
                 <button onClick={logoutUser}>Sign Out</button>
             ) : (
-                <a href="/SignIn" className={styles["navbar-signin"]}>Sign In</a>
+                <a href="/signin" className={styles["navbar-signin"]}>Sign In</a>
             )}
         </nav>
     );
