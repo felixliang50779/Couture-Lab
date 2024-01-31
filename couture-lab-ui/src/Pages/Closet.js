@@ -12,7 +12,7 @@ export default function Closet() {
             <DashboardNavbar />
             <div className={styles['clothes-container']}>
                 <h1>Virtual Closet</h1>
-                <div class="adding-container">
+                <div className="adding-container">
                     <a href="/addclothes">
                         <button className={styles['addclothes-button']}>Add Clothes</button>
                     </a>

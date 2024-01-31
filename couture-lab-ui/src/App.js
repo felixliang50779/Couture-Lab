@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 
-import { AuthProvider } from './Context/authcontext.js';
-
 import Home from './Pages/Home.js';
 import Dashboard from './Pages/Dashboard.js';
 import Closet from './Pages/Closet.js';
@@ -15,10 +13,11 @@ import About from './Pages/About.js';
 import Contact from './Pages/Contact.js'
 import VerifyEmail from './Pages/VerifyEmail.js';
 
-import ProtectedRoute from './Utilities/ProtectedRoute.js';
-
+import { AuthProvider } from './Utilities/authcontext';
+import PrivateRoute from './Utilities/PrivateRoute.js';
 
 import './App.css';
+
 
 function App() {
   return (
@@ -29,7 +28,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
-            <Route path='/dashboard' element={<ProtectedRoute>  <Dashboard />  </ProtectedRoute>} />
+            <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path='/closet' element={<Closet />} />
             <Route path='/addclothes' element={<AddClothes />} />
             <Route path='/calendar' element={<Calendar />} />

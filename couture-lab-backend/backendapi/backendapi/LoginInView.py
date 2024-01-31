@@ -48,25 +48,6 @@ class RegisterView(CreateAPIView):
         send_mail(data['email_subject'], data['email_body'], data['to_email'], recipient_list, fail_silently=False)
 
         return Response(user_data, status=status.HTTP_201_CREATED)
-    
-
-class VerifyEmail(GenericAPIView):
-    serializer_class = EmailVerificationSerializer
-
-    def get(self, request):
-        token = request.GET.get('token')
-        try:
-            payload = jwt.decode(token, options={"verify_signature": False})
-            print(payload)
-            user = User.objects.get(id=payload['user_id'])
-            if not user.is_verified:
-                user.is_verified = True
-                user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
-        except jwt.ExpiredSignatureError:
-            return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
-        except jwt.exceptions.DecodeError:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(GenericAPIView):

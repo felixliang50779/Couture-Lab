@@ -1,10 +1,12 @@
-import React from 'react';
-import styles from './About.module.css';
+import { FaLinkedin, FaGithub } from 'react-icons/fa';
+
 import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
+
 import dungMemberImage from '../Assets/Images/dungImage.png';
 import oliviaMemberImage from '../Assets/Images/oliviaImage.jpg';
-import { FaLinkedin, FaGithub } from 'react-icons/fa';
+
+import styles from './About.module.css';
 
 export default function About() {
     return (
@@ -76,6 +78,4 @@ export default function About() {
             <Footer />
         </div>
     );
-};
-
-
+}
