@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import toast, {Toaster} from 'react-hot-toast';
 
 import { auth } from '../Utilities/firebase.js';
 
@@ -24,7 +23,6 @@ const SignUp = () => {
             navigate("/signin");
         } catch (error) {
             console.log(error);
-            toast.error("Failed to register");
         }
     };
 
@@ -33,7 +31,6 @@ const SignUp = () => {
             <Link to="/" className={styles['signin-logo']}>
                 CoutureLab
             </Link>
-            <Toaster />
             <div className={styles['signin-text-container']}>
                 <h1>Register</h1>
                 <h2>Create your account 😊</h2>

@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 
-import Home from './Pages/Home.js';
-import Dashboard from './Pages/Dashboard.js';
-import Closet from './Pages/Closet.js';
-import AddClothes from './Pages/AddClothes.js';
-import Calendar from './Pages/Calendar.js';
-import Recommend from './Pages/Recommend.js';
-import SignIn from './Pages/SignIn.js';
-import SignUp from './Pages/SignUp.js';
-import About from './Pages/About.js';
-import Contact from './Pages/Contact.js'
-import VerifyEmail from './Pages/VerifyEmail.js';
+import Home from './Pages/Home';
+import Dashboard from './Pages/Dashboard';
+import Closet from './Pages/Closet';
+import AddClothes from './Pages/AddClothes';
+import Calendar from './Pages/Calendar';
+import Recommend from './Pages/Recommend';
+import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
+import About from './Pages/About';
+import Contact from './Pages/Contact'
+import VerifyEmail from './Pages/VerifyEmail';
+
+import BasicInfo from './Questionnaire/BasicInfo';
 
 import { AuthProvider } from './Utilities/authcontext';
-import PrivateRoute from './Utilities/PrivateRoute.js';
+import PrivateRoute from './Utilities/PrivateRoute';
 
 import './App.css';
 
@@ -36,6 +38,7 @@ function App() {
             <Route path='/about' element={<About />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/verifyemail' element={<VerifyEmail />} />
+            <Route path='/basicinfo' element={<BasicInfo />} />
           </Routes>
         </AuthProvider>
       </Router>
