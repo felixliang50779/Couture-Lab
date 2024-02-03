@@ -13,7 +13,7 @@ import About from './Pages/About';
 import Contact from './Pages/Contact'
 import VerifyEmail from './Pages/VerifyEmail';
 
-import BasicInfo from './Questionnaire/BasicInfo';
+import BasicInfo from './Form/BasicInfo';
 
 import { AuthProvider } from './Utilities/authcontext';
 import PrivateRoute from './Utilities/PrivateRoute';
