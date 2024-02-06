@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-import { auth } from '../Utilities/firebase.js';
+import { FirebaseAuth } from '../Utilities/firebase.js';
 
 import styles from './SignIn.module.css';
 
@@ -17,7 +17,7 @@ const SignIn = () => {
         e.preventDefault();
         // Log in user in Firebase
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(FirebaseAuth, email, password);
             const user = userCredential.user;
             console.log(user);
             navigate("/dashboard");

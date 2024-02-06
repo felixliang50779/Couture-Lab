@@ -30,14 +30,14 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
-            <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/closet' element={<Closet />} />
             <Route path='/addclothes' element={<AddClothes />} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/recommend' element={<Recommend />} />
             <Route path='/about' element={<About />} />
             <Route path='/contact' element={<Contact />} />
-            <Route path='/verifyemail' element={<VerifyEmail />} />
+            <Route path='/verifyemail' element={<PrivateRoute><VerifyEmail /></PrivateRoute>} />
             <Route path='/basicinfo' element={<BasicInfo />} />
           </Routes>
         </AuthProvider>

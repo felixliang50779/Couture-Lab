@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { auth } from '../Utilities/firebase.js';
+import { FirebaseAuth } from '../Utilities/firebase.js';
 
 import styles from './SignIn.module.css';
 
@@ -16,11 +16,11 @@ const SignUp = () => {
 
         // Creates user in Firebase
         try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            await userCredential.user.sendEmailVerification();
+            const userCredential = await FirebaseAuth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
+            await user.sendEmailVerification();
             console.log(user);
-            navigate("/signin");
+            navigate("/verifyemail");
         } catch (error) {
             console.log(error);
         }
