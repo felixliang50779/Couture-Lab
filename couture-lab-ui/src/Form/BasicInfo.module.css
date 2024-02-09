@@ -1,0 +1,14 @@
+.basicinfo-container {
+    display: flex;
+    flex-direction: column;
+    padding: 3em;
+}
+
+.inputinfo-container {
+    width: 20em;
+}
+
+.inputinfo-input {
+    margin: 1em;
+}
+    

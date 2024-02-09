@@ -183,7 +183,7 @@ export default function Dashboard() {
                             minHeight="8vh"
                             value={chatInput}
                             bgColor="#F5F4EB"
-                            _hover="black"
+                            _hover={{ bg: "black" }} 
                             variant="filled"
                             borderColor="gray"
                             focusBorderColor="black"

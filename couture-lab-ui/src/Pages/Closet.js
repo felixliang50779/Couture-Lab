@@ -1,51 +1,42 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-
-import DashboardNavbar from '../Components/dashboardnavbar';
-import Footer from '../Components/footer';
-import ImgCarousel from '../Components/imgcarousel';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 import styles from './Closet.module.css';
 
+
+const imageIds = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 
+    25, 26, 27, 28, 29, 30 ];
+
 export default function Closet() {
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const openImage = (id) => {
+        setSelectedImage(id);
+    };
+
     return (
         <div className={styles['closet-container']}>
-            <DashboardNavbar />
-            <div className={styles['clothes-container']}>
-                <h1>Virtual Closet</h1>
-                <div class="adding-container">
-                    <a href="/addclothes">
-                        <button className={styles['addclothes-button']}>Add Clothes</button>
-                    </a>
-                </div>
-            </div>
-            <Tabs isLazy isFitted variant='enclosed'>
-                <TabList>
-                    <Tab>All</Tab>
-                    <Tab>Tops</Tab>
-                    <Tab>Bottoms</Tab>
-                    <Tab>Shoes</Tab>
-                    <Tab>Accessories</Tab>
-                </TabList>
-
-                <TabPanels>
-                    <TabPanel>
-                        <ImgCarousel/>
-                    </TabPanel>
-                    <TabPanel>
-                        <ImgCarousel/>
-                    </TabPanel>
-                    <TabPanel>
-                        <ImgCarousel/>
-                    </TabPanel>
-                    <TabPanel>
-                        <ImgCarousel/>
-                    </TabPanel>
-                    <TabPanel>
-                        <ImgCarousel/>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
-            <Footer />
+            <motion.div className={styles['image-container']} layout>
+                {imageIds.map((i) => {
+                    return (
+                        <motion.div className={styles['image']} key={i}>
+                            <motion.img
+                                layoutId={`img-${i}`}
+                                src={`https://picsum.photos/id/${i}/800`}
+                                onClick={() => openImage(i)}
+                            />
+                        </motion.div>
+                    );
+                })}
+                {selectedImage ? (
+                    <motion.img
+                        layoutId={`img-${selectedImage}`}
+                        src={`https://picsum.photos/id/${selectedImage}/800`}
+                        className={styles["animate-open-image"]}
+                        onClick={() => setSelectedImage(null)}
+                    />
+                ) : null}
+            </motion.div>
         </div>
     )
 }
