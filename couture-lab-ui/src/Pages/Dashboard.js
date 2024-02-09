@@ -74,6 +74,7 @@ export default function Dashboard() {
             stylistResponse += decodedChunk;
 
             stylistResponse = stylistResponse.replaceAll(imgLabel, "");
+            stylistResponse = stylistResponse.replaceAll('**', '');
 
             const imgUrls = stylistResponse.match(imgLink);
 
