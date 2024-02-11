@@ -1,33 +1,73 @@
 .closet-container {
-    padding: 3em;
+    font-family: "FuturaMaxi";
 }
 
-.image-container {
+.closet-title {
+    text-align: center;
+    font-size: 3em;
+}
+
+.closet-category-button {
+    margin: 0.5em;
+    padding: 1em 2em 1em 2em;
+    background-color: #cccccc;
+    font-size: 1.2em;
+    border-radius: 0.4em;
+}
+
+.closet-category-button:hover {
+    background-color: red;
+}
+
+.clothes-image {
+    width: 20em;
+    height: 20em;
+    border-radius: 1em;
+    margin-bottom: 1em;
+}   
+
+.closet-gallery-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1em;
+}
+
+.closet-dialog-content {
+    text-align: center;
+}
+
+.closet-upload {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1em;
+    justify-content: center;
 }
 
-.image {
-    width: 5em;
-    height: 5em;
+.closet-upload-svg {
+    width: 15em;
+    border: 0.1em #1434a4 dashed;
 }
 
-/*
-.image-container {
+.closet-upload-svg:hover {
+    cursor: pointer;
+}
+
+.closet-dialog-user-interaction {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-direction: column;
 }
 
-.image {
-    width: 5em;
-    height: 5em;
+.closet-dialog-label {
+    margin: 1em 0 0.5em 0;
 }
 
-.animate-open-image {
-    position: absolute;
-    width: 30em;
-    height: 30em;
+.closet-input-name {
+    background-color: #d3d3d3;
+    border-radius: 0.2em;
 }
-*/
+
+.closet-addit-button {
+    margin: 1em;
+    padding: 0.5em 2em 0.5em 2em;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 0.5em;
+}
