@@ -74,7 +74,7 @@ export default function Home() {
             </LoadOnView>
             <LoadOnView>
                 <section className={styles['changeway-container']}>
-                    <h1 className={styles['changeway-text']}>We seek to change the Way you dress.</h1>
+                    <h1 className={styles['changeway-text']}>We seek to change the way you dress.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
