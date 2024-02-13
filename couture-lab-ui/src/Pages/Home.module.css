@@ -134,3 +134,28 @@
     width: 90%;
     margin: auto;
 }
+
+@media only screen and (max-width : 770px) {
+    .greendress-container {
+        grid-template-columns: 1fr;
+    }
+    .green-dress {
+        order: 1;
+    }
+    .greendress-text {
+        order: 2;
+    }
+    .content-container, .whatweare-container, .greendress-container, .wardrobe-container {
+        flex-direction: column;
+    }
+    .intro-img, .green-dress, .wardrobe-card {
+        width: 100%;
+    }
+    .intro-header, .whatweare-text, .changeway-text, .outfit-header, .last-page-link, .last-page-title {
+        font-size: 3em;
+    }
+    .wardrobe-header, .wardrobe-desc {
+        font-size: 1.5em;
+    }
+    
+}
