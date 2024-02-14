@@ -5,7 +5,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FirebaseAuth } from '../Utilities/firebase.js';
 
 import styles from './SignIn.module.css';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -21,17 +22,23 @@ const SignIn = () => {
             const user = userCredential.user;
             console.log(user);
             navigate("/dashboard");
+            toast.success('Sucesfully signed in');
+            
         } catch (error) {
             console.log(error);
         }
     };
-
+    
     return (
+        
         <div className={styles['signin-container']}>
+            
             <Link to="/" className={styles['signin-logo']}>
                 CoutureLab
             </Link>
+            
             <div className={styles['signin-text-container']}>
+            
                 <h1>Login</h1>
                 <h2>Welcome back 😊</h2>
                 <div className={styles['signin-input-container']}>
@@ -86,8 +93,11 @@ const SignIn = () => {
                     </div>
                 </div>
             </div>
+            
         </div>
+        
     );
 };
+
 
 export default SignIn;

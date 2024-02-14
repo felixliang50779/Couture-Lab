@@ -6,7 +6,8 @@ import { FirebaseAuth } from '../Utilities/firebase';
 import NavBar from '../Components/navbar';
 
 import styles from './VerifyEmail.module.css';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function VerifyEmail() {
     const navigate = useNavigate(); 
@@ -38,6 +39,7 @@ export default function VerifyEmail() {
                 await user.reload(); // Reload the user
                 if (user.emailVerified) {
                     navigate('/dashboard');
+                    toast.success('Sucesfully registered an account')
                 }
             }
         }

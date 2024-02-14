@@ -17,7 +17,8 @@ import BasicInfo from './Form/BasicInfo';
 
 import { AuthProvider } from './Utilities/authcontext';
 import PrivateRoute from './Utilities/PrivateRoute';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 
@@ -26,6 +27,7 @@ function App() {
     <ChakraProvider>
       <Router>
         <AuthProvider>
+          <ToastContainer />
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/signin' element={<SignIn />} />
