@@ -6,7 +6,7 @@ import { FirebaseAuth } from '../Utilities/firebase';
 import NavBar from '../Components/navbar';
 
 import styles from './VerifyEmail.module.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function VerifyEmail() {

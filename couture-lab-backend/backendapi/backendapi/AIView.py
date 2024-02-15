@@ -330,7 +330,7 @@ def send_stylist_response(user_query):
     # Initial response that we can stream
     # a reply from if no function calls are required
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
+        model="gpt-3.5-turbo-1106",
         messages=messages,
         tools=tools,
         tool_choice="auto",
@@ -352,7 +352,7 @@ def send_stylist_response(user_query):
         messages = asyncio.run(process_functions(messages, tools))
 
         refined_response = client.chat.completions.create(
-            model="gpt-3.5-turbo-0125",
+            model="gpt-3.5-turbo-1106",
             messages=messages,
             stream=True
         )

@@ -13,10 +13,12 @@
     background-color: #cccccc;
     font-size: 1.2em;
     border-radius: 0.4em;
+    transition: all 0.3s;
 }
 
 .closet-category-button:hover {
-    background-color: red;
+    background-color: black;
+    color: white;
 }
 
 .clothes-image {
@@ -41,13 +43,29 @@
     justify-content: center;
 }
 
-.closet-upload-svg {
-    width: 15em;
-    border: 0.1em #1434a4 dashed;
+.closet-upload-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3em 1.5em;
+    font-family: "MarkPro";
+    transition: all 0.3s ease-in-out;
+    border: 0.1em black dashed;
 }
 
-.closet-upload-svg:hover {
+.closet-upload-input:hover {
     cursor: pointer;
+    transform: scale(103%);
+}
+
+.closet-input-header {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.closet-input-caption {
+    font-weight: bold;
+    font-size: 0.8em;
 }
 
 .closet-dialog-user-interaction {
@@ -56,15 +74,19 @@
 }
 
 .closet-dialog-label {
+    font-weight: bold;
     margin: 1em 0 0.5em 0;
 }
 
 .closet-input-name {
-    background-color: #d3d3d3;
     border-radius: 0.2em;
 }
 
-.closet-addit-button {
+.closet-input-name::placeholder {
+    color: black;
+}
+
+.closet-add-button {
     margin: 1em;
     padding: 0.5em 2em 0.5em 2em;
     background-color: #000000;

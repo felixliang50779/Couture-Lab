@@ -142,6 +142,7 @@
         order: 1;
     }
     .greendress-text {
+        margin: 2vw;
         order: 2;
     }
     .content-container, .whatweare-container, .greendress-container, .wardrobe-container {

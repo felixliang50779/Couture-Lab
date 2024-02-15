@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import FirebaseApp from "./firebase";
+import { FirebaseAuth } from "./firebase";
 
 export const AuthContext = createContext();
 
@@ -12,7 +12,8 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        FirebaseApp.auth().onAuthStateChanged((user) => {
+        FirebaseAuth.onAuthStateChanged((user) => {
+            console.log(user);
             setCurrentUser(user);
             setPending(false);
         });
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     let logoutUser = () => {
-        FirebaseApp.auth().signOut();
+        FirebaseAuth.signOut();
         setCurrentUser(null);
         navigate('/signin');
     }
