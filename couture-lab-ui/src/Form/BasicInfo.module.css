@@ -1,14 +1,34 @@
 .basicinfo-container {
+    padding: 10em;
+}
+
+.basicinfo-header {
+    font-size: 2em;
+}
+
+.form-basicinfo {
     display: flex;
     flex-direction: column;
-    padding: 3em;
 }
 
-.inputinfo-container {
+.form-input, .form-select {
     width: 20em;
+    border-radius: 0.5em;
+    border: 0.1em black solid;
 }
 
-.inputinfo-input {
-    margin: 1em;
+.form-errormsg {
+    color: #ff0000;
 }
-    
+
+.basicinfo-next-button {
+    padding: 0.5em 1.5em 0.5em 1.5em;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 0.2em;
+}
+
+.basicinfo-next-button:disabled {
+    background-color: #d3d3d3;
+    color: #000000;
+}
