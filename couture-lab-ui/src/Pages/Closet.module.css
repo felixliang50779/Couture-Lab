@@ -21,6 +21,11 @@
     color: white;
 }
 
+.category-button-active {
+    background-color: black;
+    color: white;
+}
+
 .clothes-image {
     width: 20em;
     height: 20em;

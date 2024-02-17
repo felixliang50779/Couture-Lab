@@ -22,7 +22,7 @@ const SignIn = () => {
             const user = userCredential.user;
             console.log(user);
             navigate("/dashboard");
-            toast.success('Sucesfully signed in');
+            toast.success('Successfully signed in!');
             
         } catch (error) {
             console.log(error);
