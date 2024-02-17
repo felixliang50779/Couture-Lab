@@ -52,7 +52,7 @@ const Closet = () => {
         loadCloset();
     }, []);
 
-    const galleryFilter = (category) => {
+    const galleryFilter = (category, galleryData) => {
         const filterData = galleryData.filter((item) => item.category === category);
         setSelectedCategory(category);
         setFilteredGallery(filterData);
@@ -85,16 +85,23 @@ const Closet = () => {
 
         const itemsRef = doc(db, 'virtual-closet', 'items');
 
+        const newItem = {
+            category: itemCategory,
+            name: itemName,
+            url: `https://firebasestorage.googleapis.com/v0/b/couture-lab-backend.appspot.com/o/${storageName}?alt=media`
+        }
+
         let updateObj = {}
-        updateObj[FirebaseAuth.currentUser.uid] = arrayUnion(
-            {
-                category: itemCategory,
-                name: itemName,
-                url: `https://firebasestorage.googleapis.com/v0/b/couture-lab-backend.appspot.com/o/${storageName}?alt=media`
-            }
-        );
+        updateObj[FirebaseAuth.currentUser.uid] = arrayUnion(newItem);
 
         await updateDoc(itemsRef, updateObj);
+
+        setGalleryData(prevState => {
+            return [...prevState, newItem];
+        });
+        setFilteredGallery(prevState => {
+            return [...prevState, newItem]
+        });
 	}
 
     const AlertDialogComponent = () => (
@@ -144,8 +151,8 @@ const Closet = () => {
                             ref={uploadCategory} >
                                 <option value='top'>Top</option>
                                 <option value='bottom'>Bottom</option>
-                                <option value='shoe'>Shoes</option>
-                                <option value='accessory'>Accessories</option>
+                                <option value='shoe'>Shoe</option>
+                                <option value='accessory'>Accessory</option>
 						</Select>
 					</div>
 					<button
@@ -183,22 +190,22 @@ const Closet = () => {
 					</button>
 					<button
                         className={`${styles['closet-category-button']} ${selectedCategory === 'top' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('top')}>
+                        onClick={() => galleryFilter('top', galleryData)}>
 						    Top
 					</button>
 					<button
                         className={`${styles['closet-category-button']} ${selectedCategory === 'bottom' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('bottom')}>
+                        onClick={() => galleryFilter('bottom', galleryData)}>
 						    Bottom
 					</button>
 					<button
                         className={`${styles['closet-category-button']} ${selectedCategory === 'shoe' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('shoe')}>
+                        onClick={() => galleryFilter('shoe', galleryData)}>
 						    Shoes
 					</button>
 					<button
                         className={`${styles['closet-category-button']} ${selectedCategory === 'accessory' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('accessory')}>
+                        onClick={() => galleryFilter('accessory', galleryData)}>
 						    Accessories
 					</button>
 				</div>
