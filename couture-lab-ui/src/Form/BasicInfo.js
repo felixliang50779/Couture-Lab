@@ -30,24 +30,29 @@ const FormSelect = ({ name, options, register, errors, placeholder }) => (
 );
 
 export default function BasicInfo() {
+    // Current form state
     const [formStep, setFormStep] = useState(0);
 
+    // Manages form state and validation, tracks values and errors
     const { 
         watch, 
         register, 
         formState: { errors, isValid } 
     } = useForm({ mode: "all" });
 
+    // Goes to next questions
     const nextStep = () => {    
         setFormStep(step => step + 1);
     }
     
+    // Goes back, will be removed later 
     const prev = () => {
         if (formStep > 0) {
             setFormStep(step => step - 1);
         }
     }
 
+    // Renders next or submit based on form step
     const renderFormButton = () => {
         if (formStep > 2) return;
         return (
@@ -57,7 +62,7 @@ export default function BasicInfo() {
         );
     }
 
-    const handleclick = () => console.log(watch());
+    const handleClick = () => console.log(watch());
 
     return (
         <div className={styles['basicinfo-container']}>
@@ -70,10 +75,20 @@ export default function BasicInfo() {
                         <input placeholder='Name' required type='text' className={styles['form-input']} 
                             {...register('name', { required: 'Name required' })} 
                         />
+                        {errors.name && 
+                            <p className={styles['form-errormsg']}>
+                                {errors.name.message}
+                            </p>
+                        }
                         <label>Username</label>
                         <input placeholder='@' required type='text' className={styles['form-input']} 
                             {...register('username', { required: 'Username required' })}
                         />
+                        {errors.username && 
+                            <p className={styles['form-errormsg']}>
+                                {errors.username.message}
+                            </p>
+                        }
                         <FormSelect name="gender" options={options.gender} register={register} 
                             errors={errors} placeholder="Select gender" 
                         />
@@ -138,13 +153,15 @@ export default function BasicInfo() {
                     </div>
                 )}
             </form>
-            <button className={styles['basicinfo-next-button']} type='button' onClick={prev} 
-            disabled={formStep === 0}>
-                Prev
-            </button>
-            {renderFormButton()}
+            <div className={styles['basicinfo-navbuttons']}>
+                <button className={styles['basicinfo-next-button']} type='button' onClick={prev} 
+                disabled={formStep === 0}>
+                    Prev
+                </button>
+                {renderFormButton()}
+            </div>
             <pre>{JSON.stringify(watch(), null, 2)}</pre>
-            <button onClick={handleclick}>Click</button>
+            <button onClick={handleClick}>Click</button>
         </div>
     );
 }
