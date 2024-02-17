@@ -38,11 +38,6 @@
     text-align: center;
 }
 
-.closet-upload {
-    display: flex;
-    justify-content: center;
-}
-
 .closet-upload-input {
     display: flex;
     flex-direction: column;
@@ -61,6 +56,10 @@
 .closet-input-header {
     font-weight: bold;
     font-size: 1.2em;
+}
+
+.closet-upload-disabled {
+    display: none !important;
 }
 
 .closet-input-caption {

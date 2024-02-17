@@ -1,6 +1,7 @@
 // Needs to be firebase/compat/app to remove Module not found: Error: Package path . is not exported from package
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = ({
@@ -14,8 +15,9 @@ const firebaseConfig = ({
 })
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const FirebaseAuth = getAuth(app);
 const storage = getStorage(app);
 
 export default app;
-export { FirebaseAuth, storage };
+export { FirebaseAuth, storage, db };
