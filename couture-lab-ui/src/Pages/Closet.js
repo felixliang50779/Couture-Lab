@@ -65,7 +65,7 @@ const Closet = () => {
         handleClose();
         setUploadingStatus(false);
 
-        const usersRef = doc(db, 'virtual-closet', 'users');
+        const usersRef = doc(db, 'virtual-closet', 'images');
 
         let updateObj = {}
         updateObj[FirebaseAuth.currentUser.uid] = arrayUnion(
