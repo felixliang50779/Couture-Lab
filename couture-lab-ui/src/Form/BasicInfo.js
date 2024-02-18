@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { doc, updateDoc } from 'firebase/firestore';
+
+import { db, FirebaseAuth } from '../Utilities/firebase';
+
 import styles from './BasicInfo.module.css';
 
 
@@ -44,13 +48,6 @@ export default function BasicInfo() {
     const nextStep = () => {    
         setFormStep(step => step + 1);
     }
-    
-    // Goes back, will be removed later 
-    const prev = () => {
-        if (formStep > 0) {
-            setFormStep(step => step - 1);
-        }
-    }
 
     // Renders next or submit based on form step
     const renderFormButton = () => {
@@ -62,106 +59,123 @@ export default function BasicInfo() {
         );
     }
 
-    const handleClick = () => console.log(watch());
+    // Storing the form answers in Firestore 
+    const saveUserInfo = () => {
+        const formData = watch(); // Get the current form data
+        const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
+
+        let updateObj = {}
+        updateObj[FirebaseAuth.currentUser.uid] = formData;
+
+        updateDoc(questionnaireRef, updateObj);
+    }
+
+    const handleClick = () => console.log(watch);
 
     return (
         <div className={styles['basicinfo-container']}>
-            <h1 className={styles['basicinfo-header']}>Sign Up</h1>
-            <form>
-                {formStep === 0 && (
-                    <div className={styles['form-basicinfo']}>
-                        <h1>Basic Information</h1>
-                        <label>What should we call you?</label>
-                        <input placeholder='Name' required type='text' className={styles['form-input']} 
-                            {...register('name', { required: 'Name required' })} 
-                        />
-                        {errors.name && 
-                            <p className={styles['form-errormsg']}>
-                                {errors.name.message}
-                            </p>
-                        }
-                        <label>Username</label>
-                        <input placeholder='@' required type='text' className={styles['form-input']} 
-                            {...register('username', { required: 'Username required' })}
-                        />
-                        {errors.username && 
-                            <p className={styles['form-errormsg']}>
-                                {errors.username.message}
-                            </p>
-                        }
-                        <FormSelect name="gender" options={options.gender} register={register} 
-                            errors={errors} placeholder="Select gender" 
-                        />
-                        <label>Your age group helps us tailor suggestions more appropriately</label>
-                        <FormSelect name="ageGroup" options={options.ageGroup} register={register} 
-                            errors={errors} placeholder="Select age group" 
-                        />
-                    </div>
-                )}
-                {formStep === 1 && (
-                    <div className={styles['form-basicinfo']}>
-                        <h1>Fashion Preferences</h1>
-                        <label>Which style best describes your everyday fashion?</label>
-                        <FormSelect name="preferredStyle" options={options.preferredStyle} register={register} 
-                            errors={errors} placeholder="Preferred Style" 
-                        />
-                        <h1>Personal Characteristics</h1>
-                        <h2>These questions help the AI suggest colors that complement your look.</h2>
-                        <FormSelect name="hairColor" options={options.hairColor} register={register} 
-                            errors={errors} placeholder="Hair Color" 
-                        />
-                        <label>What's your skin tone?</label>
-                        <FormSelect name="skinTone" options={options.skinTone} register={register} 
-                            errors={errors} placeholder="Skin Tone" 
-                        />
-                        <label>What's your eye color?</label>
-                        <FormSelect name="eyeColor" options={options.eyeColor} register={register} 
-                            errors={errors} placeholder="Eye Color" 
-                        />
-                        <h1>Body type and Comfort</h1>
-                        <label>Identifying your body type helps us suggest the most flattering outfits</label>
-                        <FormSelect name="bodyType" options={options.bodyType} register={register} 
-                            errors={errors} placeholder="Body Type" 
-                        />
-                        <label>How open are you to trying new fashion styles?</label>
-                        <FormSelect name="experimentLevel" options={options.experimentLevel} register={register} 
-                            errors={errors} placeholder="Experiment Level" 
-                        />
-                    </div>
-                )}
-                {formStep === 2 && (
-                    <div className={styles['form-basicinfo']}>
-                        <h1>Shopping and Wardrobe Preferences</h1>
-                        <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
-                        <FormSelect name="budget" options={options.budget} register={register} 
-                            errors={errors} placeholder="Budget" />
-                        <label>How important is sustainability in fashion to you?</label>
-                        <FormSelect name="sustainability" options={options.sustainabilityImportance} register={register} 
-                            errors={errors} placeholder="Sustainability Importance" 
-                        />
-                        <h1>Events and Occasions</h1>
-                        <label>What types of events do you dress for most often?</label>
-                        <FormSelect name="frequentEvents" options={options.frequentEvents} register={register} 
-                            errors={errors} placeholder="Frequent Events" 
-                        />
-                    </div>
-                )}
-                {formStep === 3 && (
-                    <div className={styles['form-basicinfo']}>
-                        <h1>Shopping and Wardrobe Preferences</h1>
-                        <h1>Thanks for finishing the questionnaire!</h1>
-                    </div>
-                )}
-            </form>
-            <div className={styles['basicinfo-navbuttons']}>
-                <button className={styles['basicinfo-next-button']} type='button' onClick={prev} 
-                disabled={formStep === 0}>
-                    Prev
-                </button>
-                {renderFormButton()}
+            <div className={styles['basicinfo-form-container']}>
+                <h1 className={styles['basicinfo-header']}>Sign Up</h1>
+                <form>
+                    {formStep === 0 && (
+                        <div className={styles['form-basicinfo']}>
+                            <h1>Basic Information</h1>
+                            <label>What should we call you?</label>
+                            <input placeholder='Name' required type='text' className={styles['form-input']} 
+                                {...register('name', { required: 'Name required' })} 
+                            />
+                            {errors.name && 
+                                <p className={styles['form-errormsg']}>
+                                    {errors.name.message}
+                                </p>
+                            }
+                            <label>Username</label>
+                            <input placeholder='@' required type='text' className={styles['form-input']} 
+                                {...register('username', { required: 'Username required' })}
+                            />
+                            {errors.username && 
+                                <p className={styles['form-errormsg']}>
+                                    {errors.username.message}
+                                </p>
+                            }
+                            <FormSelect name="gender" options={options.gender} register={register} 
+                                errors={errors} placeholder="Select gender" 
+                            />
+                            <label>Your age group helps us tailor suggestions more appropriately</label>
+                            <FormSelect name="ageGroup" options={options.ageGroup} register={register} 
+                                errors={errors} placeholder="Select age group" 
+                            />
+                        </div>
+                    )}
+                    {formStep === 1 && (
+                        <div className={styles['form-basicinfo']}>
+                            <h1>Fashion Preferences</h1>
+                            <label>Which style best describes your everyday fashion?</label>
+                            <FormSelect name="preferredStyle" options={options.preferredStyle} register={register} 
+                                errors={errors} placeholder="Preferred Style" 
+                            />
+                            <h1>Personal Characteristics</h1>
+                            <h2>These questions help the AI suggest colors that complement your look.</h2>
+                            <FormSelect name="hairColor" options={options.hairColor} register={register} 
+                                errors={errors} placeholder="Hair Color" 
+                            />
+                            <label>What's your skin tone?</label>
+                            <FormSelect name="skinTone" options={options.skinTone} register={register} 
+                                errors={errors} placeholder="Skin Tone" 
+                            />
+                            <label>What's your eye color?</label>
+                            <FormSelect name="eyeColor" options={options.eyeColor} register={register} 
+                                errors={errors} placeholder="Eye Color" 
+                            />
+                            <h1>Body type and Comfort</h1>
+                            <label>Identifying your body type helps us suggest the most flattering outfits</label>
+                            <FormSelect name="bodyType" options={options.bodyType} register={register} 
+                                errors={errors} placeholder="Body Type" 
+                            />
+                            <label>How open are you to trying new fashion styles?</label>
+                            <FormSelect name="experimentLevel" options={options.experimentLevel} register={register} 
+                                errors={errors} placeholder="Experiment Level" 
+                            />
+                        </div>
+                    )}
+                    {formStep === 2 && (
+                        <div className={styles['form-basicinfo']}>
+                            <h1>Shopping and Wardrobe Preferences</h1>
+                            <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
+                            <FormSelect name="budget" options={options.budget} register={register} 
+                                errors={errors} placeholder="Budget" />
+                            <label>How important is sustainability in fashion to you?</label>
+                            <FormSelect name="sustainability" options={options.sustainabilityImportance} register={register} 
+                                errors={errors} placeholder="Sustainability Importance" 
+                            />
+                            <h1>Events and Occasions</h1>
+                            <label>What types of events do you dress for most often?</label>
+                            <FormSelect name="frequentEvents" options={options.frequentEvents} register={register} 
+                                errors={errors} placeholder="Frequent Events" 
+                            />
+                        </div>
+                    )}
+                    {formStep === 3 && (
+                        <div className={styles['form-basicinfo']}>
+                            <h1>Shopping and Wardrobe Preferences</h1>
+                            <h1>Thanks for finishing the questionnaire!</h1>
+                        </div>
+                    )}
+                </form>
+                <div className={styles['basicinfo-navbuttons']}>
+                    {renderFormButton()}
+                </div>
+                <pre>{JSON.stringify(watch(), null, 2)}</pre>
+                <button onClick={handleClick}>Click</button>
+                <button onClick={saveUserInfo}>Save User Info</button>
             </div>
-            <pre>{JSON.stringify(watch(), null, 2)}</pre>
-            <button onClick={handleClick}>Click</button>
+            <div className={styles['basicinfo-sidecontainer']}>
+                <h1 className={styles['basicinfo-sidetext']}>
+                    {'>'}Experience the greatest artificial intelligence 
+                </h1>
+                <h2 className={styles['basicinfo-sidetext-last']}>stylist.</h2>
+                <h2 className={styles['basicinfo-side-bottomtext']}>Transform your fashion.</h2>
+            </div>
         </div>
     );
 }

@@ -39,7 +39,7 @@ export default function VerifyEmail() {
                 await user.reload(); // Reload the user
                 if (user.emailVerified) {
                     navigate('/dashboard');
-                    toast.success('Sucesfully registered an account')
+                    toast.success('Succesfully registered an account')
                 }
             }
         }

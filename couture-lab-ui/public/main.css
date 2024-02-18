@@ -3,27 +3,6 @@
     box-sizing: border-box;
 }
 
-/* width */
-::-webkit-scrollbar {
-    width: 0.4em;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #44475a;
-    border-radius: 1em;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
 /* Setting flex column layout for the overall page and page body */
 /* Maximum width is no more than viewport width, max-height stretches to fit content */
 html, body {

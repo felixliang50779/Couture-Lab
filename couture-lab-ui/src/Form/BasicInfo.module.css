@@ -1,8 +1,17 @@
 .basicinfo-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-family: "MarkPro";
+    background-color: #ffffff;
+    /* Keeps background color on whole screen to not display grey background color */
+    min-height: 100vh;
+    height: 100%;
+}
+
+.basicinfo-form-container {
+    display: flex; 
     flex-direction: column;
-    padding: 10em;
-    align-items: center;
+    margin: 3em 5em 4em 9em;
 }
 
 .basicinfo-header {
@@ -37,4 +46,34 @@
 .basicinfo-next-button:disabled {
     background-color: #d3d3d3;
     color: #000000;
+}
+
+.basicinfo-navbuttons {
+    margin: 1em 0 1em 8em;
+}
+
+.basicinfo-sidecontainer {
+    background-image: linear-gradient(to right, #dfc7fe, #68b7ff);
+    height: 100%;
+}
+
+.basicinfo-sidetext, .basicinfo-sidetext-last {
+    font-size: 3.5em;
+    font-weight: 600;
+}
+
+.basicinfo-sidetext {
+    color: #ffffff;
+    margin: 1em 3em 0 3em;
+}
+
+.basicinfo-sidetext-last {
+    color: #000000;
+    margin: 0 3em 0 3em;
+}
+
+.basicinfo-side-bottomtext {
+    color: #ffffff;
+    font-size: 1.5em;
+    margin: 0 7em 0 7em;
 }
