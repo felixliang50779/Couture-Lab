@@ -29,9 +29,18 @@
 .clothes-image {
     width: 20em;
     height: 20em;
+    background-color: white;
+    object-fit: contain;
+    padding: 2em;
     border-radius: 1em;
     margin-bottom: 1em;
-}   
+}
+
+.preview-image {
+    width: 40em;
+    height: 15em;
+    object-fit: contain;
+}
 
 .closet-gallery-container {
     display: grid;

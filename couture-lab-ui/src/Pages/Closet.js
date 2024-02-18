@@ -6,6 +6,7 @@ import {
 } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+import FormData from 'form-data';
 
 // UI-related modules
 import {
@@ -15,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import ModalImage from "react-modal-image";
 import DashboardNavbar from '../Components/dashboardnavbar';
 import styles from './Closet.module.css';
 
@@ -69,6 +71,15 @@ const Closet = () => {
             return;
         }
 
+        const removebgKey = 'KAafDsCQvWoJLLnq2y3p8Q87';
+        const removebgUrl = 'https://api.remove.bg/v1.0/removebg';
+
+        const formData = new FormData();
+        formData.append('image_file', picture, itemName);
+        formData.append('size', 'auto');
+
+        let processedPicture = null;
+
         // Generate unique name for the image to prevent
         // duplicates overwriting each other
         const storageName = uuidv4();
@@ -77,7 +88,23 @@ const Closet = () => {
 
         setUploadingStatus(true);
 
-        await uploadBytes(storageRef, picture);
+        
+        try {
+            const res = await fetch(removebgUrl, {
+                method: 'POST',
+                headers: {
+                    'X-api-key': removebgKey
+                },
+                body: formData
+            });
+
+            processedPicture = await res.blob();
+        }
+        catch (e) {
+            console.log(e);
+        }
+
+        await uploadBytes(storageRef, processedPicture);
 
         toast("Item added successfully!");
         handleClose();
@@ -99,9 +126,12 @@ const Closet = () => {
         setGalleryData(prevState => {
             return [...prevState, newItem];
         });
-        setFilteredGallery(prevState => {
-            return [...prevState, newItem]
-        });
+
+        if (newItem.category === selectedCategory) {
+            setFilteredGallery(prevState => {
+                return [...prevState, newItem];
+            });
+        }
 	}
 
     const AlertDialogComponent = () => (
@@ -124,8 +154,8 @@ const Closet = () => {
 						<input type='file' hidden accept=".jpg,.png"
 							onChange={(e) => setClothesPicture(e.target.files[0])}
 						/>
-                        { uploadingStatus ? <Progress isIndeterminate colorScheme="black" /> :
-                        clothesPicture ? <img src={URL.createObjectURL(clothesPicture)} alt='clothesPic' loading='lazy' /> :
+                        { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
+                        clothesPicture ? <img className={styles['preview-image']} src={URL.createObjectURL(clothesPicture)} alt='clothesPic' loading='lazy' /> :
                         <div className={styles['closet-upload-input']}>
                             <AiOutlineCloudUpload size={40} />
                             <p className={styles['closet-input-header']}>
@@ -166,8 +196,13 @@ const Closet = () => {
     );
 
     const GalleryItem = ({ item }) => (
-        <div key={item.id} className="galleryItem">
-            <img className={styles['clothes-image']} src={item.url} alt={`ClothingItem`} />
+        <div key={item.id}>
+            <ModalImage
+                className={styles['clothes-image']}
+                imageBackgroundColor="white"
+                small={item.url}
+                large={item.url}
+                alt={item.name} />
         </div>
     );
 
