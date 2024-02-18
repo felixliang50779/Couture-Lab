@@ -9,7 +9,7 @@ import WardrobeImage from '../Assets/Images/wardrobe.jpg';
 import LongwearImage from '../Assets/Images/longwear.jpg';
 import CalendarImage from '../Assets/Images/calendar.png';
 
-import styles from './Home.module.css';
+import styles from '../PageStyles/Home.module.css';
 
 //loads content on scroll
 const LoadOnView = ({children}) => (

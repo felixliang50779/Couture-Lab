@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';  
 import { doc, updateDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 import { db, FirebaseAuth } from '../Utilities/firebase';
 
-import styles from './BasicInfo.module.css';
+import styles from '../PageStyles/BasicInfo.module.css';
 
 
 const options = {
@@ -36,6 +38,8 @@ const FormSelect = ({ name, options, register, errors, placeholder }) => (
 export default function BasicInfo() {
     // Current form state
     const [formStep, setFormStep] = useState(0);
+    // Redirect to dashboards
+    const navigate = useNavigate(); 
 
     // Manages form state and validation, tracks values and errors
     const { 
@@ -53,13 +57,14 @@ export default function BasicInfo() {
     const renderFormButton = () => {
         if (formStep > 2) return;
         return (
-            <button disabled={!isValid} onClick={nextStep} type='button' className={styles['basicinfo-next-button']}>
+            <button disabled={!isValid} onClick={formStep === 2 ? handleRedirectToDashboard : nextStep} type='button' 
+                className={styles['basicinfo-next-button']}
+            >
                 {formStep === 2 ? 'Submit' : 'Next'}
             </button>
         );
     }
 
-    // Storing the form answers in Firestore 
     const saveUserInfo = () => {
         const formData = watch(); // Get the current form data
         const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
@@ -69,8 +74,14 @@ export default function BasicInfo() {
 
         updateDoc(questionnaireRef, updateObj);
     }
-
-    const handleClick = () => console.log(watch);
+ 
+    const handleRedirectToDashboard = () => {
+        toast.success('Completed form!');
+        saveUserInfo();
+        setTimeout(() => {
+            navigate('/dashboard');
+        }, 1000);
+    }
 
     return (
         <div className={styles['basicinfo-container']}>
@@ -166,8 +177,6 @@ export default function BasicInfo() {
                     {renderFormButton()}
                 </div>
                 <pre>{JSON.stringify(watch(), null, 2)}</pre>
-                <button onClick={handleClick}>Click</button>
-                <button onClick={saveUserInfo}>Save User Info</button>
             </div>
             <div className={styles['basicinfo-sidecontainer']}>
                 <h1 className={styles['basicinfo-sidetext']}>

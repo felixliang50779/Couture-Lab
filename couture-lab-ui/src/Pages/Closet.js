@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import ModalImage from "react-modal-image";
 import DashboardNavbar from '../Components/dashboardnavbar';
-import styles from './Closet.module.css';
+import styles from '../PageStyles/Closet.module.css';
 
 
 const Closet = () => {

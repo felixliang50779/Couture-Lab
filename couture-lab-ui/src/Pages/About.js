@@ -6,7 +6,7 @@ import Footer from '../Components/footer';
 import dungMemberImage from '../Assets/Images/dungImage.png';
 import oliviaMemberImage from '../Assets/Images/oliviaImage.jpg';
 
-import styles from './About.module.css';
+import styles from '../PageStyles/About.module.css';
 
 export default function About() {
     return (

@@ -18,7 +18,7 @@ import StylingRecommendImage from '../Assets/Images/styling-image.png';
 import VirtualClosetImage from '../Assets/Images/virtual-closet.jpg';
 import OutfitHistoryImage from '../Assets/Images/outfit-history.png';
 
-import styles from './Dashboard.module.css';
+import styles from '../PageStyles/Dashboard.module.css';
 
 export default function Dashboard() {
     const [assistantActive, setAssistantActive] = useState(false);

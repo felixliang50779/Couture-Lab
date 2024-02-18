@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 
 import DashboardNavbar from '../Components/dashboardnavbar';
 
-import styles from './Calendar.module.css';
+import styles from '../PageStyles/Calendar.module.css';
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Calendar() {

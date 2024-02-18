@@ -5,9 +5,10 @@ import { FirebaseAuth } from '../Utilities/firebase';
 
 import NavBar from '../Components/navbar';
 
-import styles from './VerifyEmail.module.css';
+import styles from '../PageStyles/VerifyEmail.module.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { sendEmailVerification } from 'firebase/auth';
 
 export default function VerifyEmail() {
     const navigate = useNavigate(); 
@@ -18,7 +19,7 @@ export default function VerifyEmail() {
         e.preventDefault();
 
         try {
-            await user.sendEmailVerification();
+            sendEmailVerification(user);
             console.log("Clicked verify email");
         } catch (error) {
             console.log(error);
@@ -38,7 +39,7 @@ export default function VerifyEmail() {
             if (user) {
                 await user.reload(); // Reload the user
                 if (user.emailVerified) {
-                    navigate('/dashboard');
+                    navigate('/basicinfo');
                     toast.success('Successfully registered an account')
                 }
             }

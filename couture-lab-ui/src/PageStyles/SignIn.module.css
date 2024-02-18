@@ -7,10 +7,8 @@
     height: 100vh;
 }
 
-.signin-logo {
-    font-family: "Linotype";
-    padding: 1em;
-    font-size: 2em;
+.signin-text-container {
+    padding: 13em 0 0 0;
 }
 
 .signin-form {

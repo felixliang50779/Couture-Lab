@@ -1,7 +1,7 @@
 import DashboardNavbar from '../Components/dashboardnavbar';
 import Footer from '../Components/footer';
 
-import styles from './Recommend.module.css';
+import styles from '../PageStyles/Recommend.module.css';
 
 export default function Recommend() {
     return (

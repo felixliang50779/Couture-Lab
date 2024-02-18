@@ -1,7 +1,7 @@
 import Navbar from '../Components/navbar';
 import Footer from '../Components/footer';
 
-import styles from './Contact.module.css';
+import styles from '../PageStyles/Contact.module.css';
 
 export default function Contact() {
     return (
