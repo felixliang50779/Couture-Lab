@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     font-family: "MarkPro";
-    background-color: #ffffff;
+    background-color: #FFFFFF;
     /* Keeps background color on whole screen to not display grey background color */
     min-height: 100vh;
     height: 100%;
