@@ -155,7 +155,16 @@ const Closet = () => {
 							onChange={(e) => setClothesPicture(e.target.files[0])}
 						/>
                         { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
-                        clothesPicture ? <img className={styles['preview-image']} src={URL.createObjectURL(clothesPicture)} alt='clothesPic' loading='lazy' /> :
+                        clothesPicture ?
+                        <div className={styles['preview-image-container']}>
+                            <img
+                                className={styles['preview-image']}
+                                src={URL.createObjectURL(clothesPicture)}
+                                alt='clothesPic' loading='lazy' />
+                            <div className={styles['preview-image-overlay']}>
+                                Change Image
+                            </div>
+                        </div> :
                         <div className={styles['closet-upload-input']}>
                             <AiOutlineCloudUpload size={40} />
                             <p className={styles['closet-input-header']}>
