@@ -16,7 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import ModalImage from "react-modal-image";
+import { PiCursorClickFill } from "react-icons/pi";
+import { IoMdAdd } from "react-icons/io";
 import DashboardNavbar from '../Components/dashboardnavbar';
 import styles from '../PageStyles/Closet.module.css';
 
@@ -75,8 +76,15 @@ const Closet = () => {
         const removebgUrl = 'https://api.remove.bg/v1.0/removebg';
 
         const formData = new FormData();
-        formData.append('image_file', picture, itemName);
-        formData.append('size', 'auto');
+
+        try {
+            formData.append('image_file', picture, itemName);
+            formData.append('size', 'auto');
+        }
+        catch (e) {
+            toast("Please upload a valid image file!");
+            return;
+        }
 
         let processedPicture = null;
 
@@ -101,10 +109,17 @@ const Closet = () => {
             processedPicture = await res.blob();
         }
         catch (e) {
-            console.log(e);
+            toast("Error removing background from the item image");
+            return;
         }
 
-        await uploadBytes(storageRef, processedPicture);
+        try {
+            await uploadBytes(storageRef, processedPicture);
+        }
+        catch (e) {
+            toast("Error uploading image!");
+            return;
+        }
 
         toast("Item added successfully!");
         handleClose();
@@ -195,7 +210,7 @@ const Closet = () => {
 						</Select>
 					</div>
 					<button
-                        className={`${styles['closet-add-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
+                        className={`${styles['closet-upload-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
                         onClick={() => handleAdd(clothesPicture, uploadName.current, uploadCategory.current.value)}>
                             Add
                     </button>
@@ -205,13 +220,12 @@ const Closet = () => {
     );
 
     const GalleryItem = ({ item }) => (
-        <div key={item.id}>
-            <ModalImage
+        <div className={styles['gallery-item']} key={item.id}>
+            <img
                 className={styles['clothes-image']}
-                imageBackgroundColor="white"
-                small={item.url}
-                large={item.url}
-                alt={item.name} />
+                src={item.url}
+                alt={item.name}
+                loading="lazy" />
         </div>
     );
 
@@ -220,38 +234,42 @@ const Closet = () => {
             <div className={styles['closet-container']}>
                 <DashboardNavbar />
                 <h1 className={styles['closet-title']}>My Closet</h1>
-                <div className={styles['closet-button-categories']}>
-					<button className={styles['closet-category-button']} onClick={onOpen}>
-                        Add Item
+                <div className={styles['closet-options']}>
+                    <div className={styles['closet-category-container']}>
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'all' && styles['category-button-active']}`}
+                            onClick={() => {
+                                setFilteredGallery(galleryData);
+                                setSelectedCategory('all');
+                            }}>
+                                All
+                        </button>
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'top' && styles['category-button-active']}`}
+                            onClick={() => galleryFilter('top', galleryData)}>
+                                Tops
+                        </button>
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'bottom' && styles['category-button-active']}`}
+                            onClick={() => galleryFilter('bottom', galleryData)}>
+                                Bottoms
+                        </button>
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'shoe' && styles['category-button-active']}`}
+                            onClick={() => galleryFilter('shoe', galleryData)}>
+                                Shoes
+                        </button>
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'accessory' && styles['category-button-active']}`}
+                            onClick={() => galleryFilter('accessory', galleryData)}>
+                                Accessories
+                        </button>                  
+                    </div>
+                    <button className={styles['closet-select-button']}>
+                        <PiCursorClickFill className={styles['select-icon']} />
+                        <span className={styles.spacer} />
+                        Select
                     </button>
-					<button
-                        className={`${styles['closet-category-button']} ${selectedCategory === 'all' && styles['category-button-active']}`}
-                        onClick={() => {
-                            setFilteredGallery(galleryData);
-                            setSelectedCategory('all');
-                        }}>
-						    All
-					</button>
-					<button
-                        className={`${styles['closet-category-button']} ${selectedCategory === 'top' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('top', galleryData)}>
-						    Top
-					</button>
-					<button
-                        className={`${styles['closet-category-button']} ${selectedCategory === 'bottom' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('bottom', galleryData)}>
-						    Bottom
-					</button>
-					<button
-                        className={`${styles['closet-category-button']} ${selectedCategory === 'shoe' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('shoe', galleryData)}>
-						    Shoes
-					</button>
-					<button
-                        className={`${styles['closet-category-button']} ${selectedCategory === 'accessory' && styles['category-button-active']}`}
-                        onClick={() => galleryFilter('accessory', galleryData)}>
-						    Accessories
-					</button>
 				</div>
                 <div>
                     <div className={styles['closet-gallery-container']}>
@@ -262,6 +280,9 @@ const Closet = () => {
                         )}
                     </div>
                 </div>
+                <button className={styles['closet-add-button']} onClick={onOpen}>
+                    <IoMdAdd color="white" size={32} />
+                </button>
             </div>
             <AlertDialogComponent />
         </main>

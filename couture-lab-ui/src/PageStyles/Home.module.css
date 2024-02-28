@@ -41,7 +41,7 @@
 
 .greendress-container {
     display: flex;
-    gap: 1em;
+    gap: 0.5vw;
     color: #ffffff;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .greendress-text {
-    font-size: 4.5vw;
+    font-size: 5vw;
     margin-top: 2.5em;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .changeway-text {
-    font-size: 3em;
+    font-size: 3vw;
     padding: 0 0 1em 0;
 }
 
@@ -70,7 +70,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
-    margin: 0 2em 0 2em;    
+    margin: 0 2em 0 2em;
 }
 
 .wardrobe-card {
@@ -78,7 +78,7 @@
     background-color: #141414;
     text-align: center;
     align-items: center;
-    width: 42em;
+    width: 42vw;
     padding: 0 0 2em 0;
 }
 
@@ -161,5 +161,16 @@
     .wardrobe-header, .wardrobe-desc {
         font-size: 1.5em;
     }
+}
 
+@media only screen and (max-width: 1000px) {
+    .greendress-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .greendress-text {
+        margin-top: 0;
+    }
 }

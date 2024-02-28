@@ -7,33 +7,71 @@
     font-size: 3em;
 }
 
+.closet-options {
+    display: flex;
+    justify-content: space-between;
+    margin: 1vw;
+}
+
+.closet-category-container {
+    display: flex;
+}
+
 .closet-category-button {
-    margin: 0.5em;
-    padding: 1em 2em 1em 2em;
+    font-size: 1.2em;
+    margin: 0.9em;
+    padding: 0.4em 2em 0.4em 2em;
+    transition: all 0.3s;
+
+    /* Increase this as per requirement */
+    border-bottom-style: solid;
+    border-bottom-width: 0.15vw;
+    border-color: transparent;
+}
+
+.closet-select-button {
+    display: flex;
+    align-items: center;
+    margin: 0.5vw;
+    padding: 0 2vw 0 2vw;
     background-color: #cccccc;
     font-size: 1.2em;
-    border-radius: 0.4em;
+    border-radius: 0.4vw;
     transition: all 0.3s;
 }
 
-.closet-category-button:hover {
+.closet-select-button:hover {
     background-color: black;
     color: white;
+}
+
+.select-icon {
+    transform: scale(125%);
+    padding-bottom: 0.5vh;
 }
 
 .category-button-active {
-    background-color: black;
-    color: white;
+    border-color: black;
+}
+
+.gallery-item {
+    cursor: pointer;
 }
 
 .clothes-image {
-    width: 20em;
-    height: 20em;
+    width: 23vw;
+    height: 51vh;
     background-color: white;
     object-fit: contain;
-    padding: 2em;
+    padding: 1em;
     border-radius: 1em;
     margin-bottom: 1em;
+    transition: all 0.2s;
+}
+
+.clothes-image:hover {
+    transform: scale(103%);
+    box-shadow: 0 0.5em 1.5em 0 rgba(0,0,0,0.75);
 }
 
 .preview-image-container {
@@ -76,7 +114,8 @@
 .closet-gallery-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: 1em;
+    justify-items: center;
+    margin: 1vw;
 }
 
 .closet-dialog-content {
@@ -130,10 +169,28 @@
     color: black;
 }
 
-.closet-add-button {
+.closet-upload-button {
     margin: 1em;
     padding: 0.5em 2em 0.5em 2em;
     background-color: #000000;
     color: #ffffff;
     border-radius: 0.5em;
+}
+
+.closet-add-button {
+    position: fixed;
+    bottom: 1.5vh;
+    right: 1vw;
+    padding: 1.3vw;
+    background-color: black;
+    border-radius: 100%;
+    transition: all 0.3s;
+}
+
+.closet-add-button:hover {
+    transform: scale(105%);
+}
+
+.spacer {
+    width: 0.5vw;
 }

@@ -69,7 +69,7 @@ export default function Home() {
                 <section className={styles['greendress-container']}>
                     <img className={styles['green-dress']} src={GreenDressImage} alt="greendress" loading="lazy" />
                     <h1 className={styles['greendress-text']}>Introducing a location and weather-based
-                    artifical intelligence style expert.</h1>
+                    artificial intelligence style expert.</h1>
                 </section>
             </LoadOnView>
             <LoadOnView>
