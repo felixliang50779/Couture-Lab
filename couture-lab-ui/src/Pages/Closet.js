@@ -16,8 +16,10 @@ import {
 } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { PiCursorClickFill } from "react-icons/pi";
+import { PiCursorClickFill, PiPantsDuotone, PiSneaker } from "react-icons/pi";
 import { IoMdAdd } from "react-icons/io";
+import { IoShirtOutline } from "react-icons/io5";
+import { GiCrystalEarrings } from "react-icons/gi";
 import DashboardNavbar from '../Components/dashboardnavbar';
 import styles from '../PageStyles/Closet.module.css';
 
@@ -247,26 +249,30 @@ const Closet = () => {
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'top' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('top', galleryData)}>
+                                <IoShirtOutline className={styles.icon} />
                                 Tops
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'bottom' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('bottom', galleryData)}>
+                                <PiPantsDuotone className={styles.icon} />
                                 Bottoms
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'shoe' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('shoe', galleryData)}>
+                                <PiSneaker className={styles.icon} />
                                 Shoes
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'accessory' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('accessory', galleryData)}>
+                                <GiCrystalEarrings className={`${styles.icon} ${styles['accessory-icon']}`} />
                                 Accessories
                         </button>                  
                     </div>
                     <button className={styles['closet-select-button']}>
-                        <PiCursorClickFill className={styles['select-icon']} />
+                        <PiCursorClickFill className={styles.icon} />
                         <span className={styles.spacer} />
                         Select
                     </button>
