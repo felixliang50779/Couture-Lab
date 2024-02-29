@@ -29,7 +29,7 @@
     border-style: solid;
     border-width: 0.15vw;
     border-color: transparent;
-    border-radius: 0.8em;
+    border-radius: 0.6em;
 }
 
 .closet-category-button:hover {
@@ -86,107 +86,11 @@
     box-shadow: 0 0.5em 1.5em 0 rgba(0,0,0,0.75);
 }
 
-.preview-image-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.preview-image {
-    width: 40em;
-    height: 15em;
-    object-fit: contain;
-}
-
-.preview-image-overlay {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .5s ease;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 1em;
-    opacity: 0;
-    position: absolute;
-    font-family: "MarkPro";
-    color: white;
-    font-size: 1em;
-    top: 33%;
-    left: 50%;
-    width: 92%;
-    height: 47%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.preview-image-overlay:hover {
-    opacity: 1;
-    cursor: pointer;
-}
-
 .closet-gallery-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
     margin: 1vw;
-}
-
-.closet-dialog-content {
-    text-align: center;
-}
-
-.closet-upload-input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3em 1.5em;
-    font-family: "MarkPro";
-    transition: all 0.3s ease-in-out;
-    border: 0.1em black dashed;
-}
-
-.closet-upload-input:hover {
-    cursor: pointer;
-    transform: scale(102%);
-}
-
-.closet-input-header {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.closet-upload-disabled {
-    display: none !important;
-}
-
-.closet-input-caption {
-    font-weight: bold;
-    font-size: 0.8em;
-}
-
-.closet-dialog-user-interaction {
-    display: flex;
-    flex-direction: column;
-}
-
-.closet-dialog-label {
-    font-weight: bold;
-    margin: 1em 0 0.5em 0;
-}
-
-.closet-input-name {
-    border-radius: 0.2em;
-}
-
-.closet-input-name::placeholder {
-    color: black;
-}
-
-.closet-upload-button {
-    margin: 1em;
-    padding: 0.5em 2em 0.5em 2em;
-    background-color: #000000;
-    color: #ffffff;
-    border-radius: 0.5em;
 }
 
 .closet-add-button {

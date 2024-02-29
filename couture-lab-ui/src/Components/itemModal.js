@@ -1,0 +1,98 @@
+// Utility-related modules
+import { deleteObject, ref } from 'firebase/storage';
+import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+
+// UI-related modules
+import {
+    AlertDialog, AlertDialogBody, AlertDialogHeader, AlertDialogContent, 
+	AlertDialogOverlay, AlertDialogCloseButton, Progress
+} from '@chakra-ui/react';
+import { toast } from 'react-toastify';
+import styles from '../PageStyles/Modal.module.css';
+
+export default function ItemModal({ onClose, isOpen, deletingStatus, setDeletingStatus, selectedItem, selectedCategory, setGalleryData, setFilteredGallery }) {
+
+    const handleClose = () => {
+        setDeletingStatus(false);
+        onClose();
+    }
+
+    const handleDelete = async () => {
+        const storageRef = ref(storage, selectedItem.storageName);
+
+        setDeletingStatus(true);
+
+        try {
+            await deleteObject(storageRef);
+        }
+        catch (e) {
+            toast("An Error Occurred!" + e);
+            handleClose();
+            return;
+        }
+
+        toast("Item deleted successfully!");
+        handleClose();
+
+        const itemsRef = doc(db, 'virtual-closet', 'items');
+
+        const deletedItem = 
+        {
+            category: selectedItem.category,
+            storageName: selectedItem.storageName,
+            displayName: selectedItem.displayName,
+            url: selectedItem.url
+        };
+
+        let updateObj = {};
+        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove(deletedItem);
+
+        await updateDoc(itemsRef, updateObj);
+
+        setGalleryData(prevState => {
+            return prevState.filter(item => item.storageName !== deletedItem.storageName);
+        });
+
+        if ((deletedItem.category === selectedCategory) || (selectedCategory === "all")) {
+            setFilteredGallery(prevState => {
+                return prevState.filter(item => item.storageName !== deletedItem.storageName);
+            });
+        }
+    }
+
+    return (
+        <AlertDialog
+            motionPreset='slideInBottom'
+            onClose={onClose}
+            closeOnEsc={false}
+            closeOnOverlayClick={!deletingStatus}
+            isOpen={isOpen}
+            isCentered
+        >
+            <AlertDialogOverlay /> 
+            <AlertDialogContent className={styles['closet-dialog-content']}>
+                <AlertDialogHeader>
+                    {selectedItem.displayName}
+                </AlertDialogHeader>
+                <AlertDialogCloseButton className={`${deletingStatus && styles['closet-upload-disabled']}`}/>
+                <AlertDialogBody>
+                    { deletingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
+                    <img
+                        className={styles['preview-image']}
+                        src={selectedItem.url}
+                        alt='selectedItem' loading='lazy' />
+                    }
+                    <p className={styles['closet-delete-category']}>
+                        Category: {selectedItem?.category?.charAt(0).toUpperCase() + selectedItem?.category?.slice(1)}
+                    </p>
+                    <button
+                        className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
+                        onClick={handleDelete}>
+                            Delete Item
+                    </button>
+                </AlertDialogBody>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+}
