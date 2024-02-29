@@ -52,6 +52,11 @@
     color: white;
 }
 
+.select-button-active {
+    background-color: black;
+    color: white;
+}
+
 .icon {
     transform: scale(125%);
     margin-right: 0.7vw;
@@ -64,26 +69,50 @@
 
 .category-button-active {
     border-color: black;
+    background-color: black;
+    color: white;
 }
 
 .gallery-item {
     cursor: pointer;
+    z-index: 0;
+    background-color: white;
+    border-radius: 1em;
+    transition: all 0.2s;
+}
+
+.gallery-item:hover {
+    transform: scale(103%);
+    box-shadow: 0 0.5em 1.5em 0 rgba(0,0,0,0.75);
+}
+
+.checkbox {
+    opacity: 0;
+    position: relative;
+    top: 1.5vh;
+    left: 20.5vw;
+    z-index: 1;
+    max-width: 0.5vw;
+    padding: 0.7vw;
+    border-style: solid;
+    border-color: black;
+    border-width: 0.15vw;
+    border-radius: 50%;
+}
+
+.checkbox-visible {
+    opacity: 1;
 }
 
 .clothes-image {
     width: 23vw;
-    height: 51vh;
+    height: 45vh;
     background-color: white;
     object-fit: contain;
     padding: 1em;
     border-radius: 1em;
     margin-bottom: 1em;
     transition: all 0.2s;
-}
-
-.clothes-image:hover {
-    transform: scale(103%);
-    box-shadow: 0 0.5em 1.5em 0 rgba(0,0,0,0.75);
 }
 
 .closet-gallery-container {
@@ -105,6 +134,10 @@
 
 .closet-add-button:hover {
     transform: scale(105%);
+}
+
+.add-button-disabled {
+    display: none;
 }
 
 .spacer {

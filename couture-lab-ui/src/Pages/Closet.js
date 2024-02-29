@@ -23,8 +23,10 @@ const Closet = () => {
 	const [clothesPicture, setClothesPicture] = useState();
     const [galleryData, setGalleryData] = useState([]);
     const [filteredGallery, setFilteredGallery] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
+    const [selectMode, setSelectMode] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
     
     const uploadName = useRef('');
@@ -52,9 +54,32 @@ const Closet = () => {
         loadCloset();
     }, []);
 
+    const handleToggleSelect = () => {
+        setSelectMode(prevState => {
+            if (prevState) {
+                setSelectedItems([]);
+            }
+            return !prevState;
+        });
+    }
+
     const handleItemClick = item => {
-        selectedItem.current = item;
-        onItemModalOpen();
+        if (!selectMode) {
+            selectedItem.current = item;
+            onItemModalOpen();
+        }
+        else {
+            if (selectedItems.includes(item.storageName)) {
+                setSelectedItems(prevState => {
+                    return prevState.filter(name => name !== item.storageName);
+                });
+            }
+            else {
+                setSelectedItems(prevState => {
+                    return [...prevState, item.storageName];
+                });
+            }
+        }
     }
 
     const galleryFilter = (category, galleryData) => {
@@ -65,6 +90,7 @@ const Closet = () => {
 
     const GalleryItem = ({ item }) => (
         <div className={styles['gallery-item']} onClick={() => handleItemClick(item)}>
+            <div className={`${styles.checkbox} ${selectMode && styles['checkbox-visible']}`} />
             <img
                 className={styles['clothes-image']}
                 src={item.url}
@@ -113,10 +139,13 @@ const Closet = () => {
                                 Accessories
                         </button>                  
                     </div>
-                    <button className={styles['closet-select-button']}>
-                        <PiCursorClickFill className={styles.icon} />
-                        <span className={styles.spacer} />
-                        Select
+                    <button
+                        className={
+                            `${styles['closet-select-button']} ${selectMode && styles['select-button-active']}`}
+                        onClick={handleToggleSelect}>
+                            <PiCursorClickFill className={styles.icon} />
+                            <span className={styles.spacer} />
+                            Select
                     </button>
 				</div>
                 <div>
@@ -128,8 +157,10 @@ const Closet = () => {
                         )}
                     </div>
                 </div>
-                <button className={styles['closet-add-button']} onClick={onUploadModalOpen}>
-                    <IoMdAdd color="white" size={32} />
+                <button
+                    className={`${styles['closet-add-button']} ${selectMode && styles['add-button-disabled']}`}
+                    onClick={onUploadModalOpen}>
+                        <IoMdAdd color="white" size={32} />
                 </button>
             </div>
             <UploadModal
