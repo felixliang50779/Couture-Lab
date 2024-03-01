@@ -75,7 +75,7 @@ const UploadModal = ({ isOpen, onClose, clothesPicture, setClothesPicture, uploa
             await uploadBytes(storageRef, processedPicture);
         }
         catch (e) {
-            toast("Error - connection failure or file type invalid");
+            toast(`Error - ${e}`);
             handleClose();
             return;
         }

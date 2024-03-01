@@ -11,6 +11,7 @@ import {
 import { toast } from 'react-toastify';
 import styles from '../PageStyles/Modal.module.css';
 
+
 export default function ItemModal({ onClose, isOpen, deletingStatus, setDeletingStatus, selectedItem, selectedCategory, setGalleryData, setFilteredGallery }) {
 
     const handleClose = () => {

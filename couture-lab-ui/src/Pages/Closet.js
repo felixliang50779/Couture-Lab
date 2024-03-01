@@ -1,6 +1,8 @@
 // Utility-related modules
 import { useState, useEffect, useRef } from 'react';
-import { collection, query, documentId, where, getDocs
+import
+{
+    collection, query, documentId, where, getDocs
 } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
 
@@ -10,15 +12,19 @@ import { PiCursorClickFill, PiPantsDuotone, PiSneaker } from "react-icons/pi";
 import { IoMdAdd } from "react-icons/io";
 import { IoShirtOutline } from "react-icons/io5";
 import { GiCrystalEarrings } from "react-icons/gi";
+import { toast } from 'react-toastify';
 import DashboardNavbar from '../Components/dashboardnavbar';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
+import DeleteModal from '../Components/deleteModal';
+import Sheet from 'react-modal-sheet';
 import styles from '../PageStyles/Closet.module.css';
 
 
 const Closet = () => {
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
+    const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
 
 	const [clothesPicture, setClothesPicture] = useState();
     const [galleryData, setGalleryData] = useState([]);
@@ -26,6 +32,7 @@ const Closet = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
+    const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
     
@@ -55,7 +62,14 @@ const Closet = () => {
     }, []);
 
     const handleToggleSelect = () => {
+        // Resetting all the checkboxes
+        // when select mode is toggled
+        for (const item of galleryData) {
+            window[item.storageName] = false;
+        }
+
         setSelectMode(prevState => {
+            console.log(prevState);
             if (prevState) {
                 setSelectedItems([]);
             }
@@ -64,21 +78,22 @@ const Closet = () => {
     }
 
     const handleItemClick = item => {
-        if (!selectMode) {
-            selectedItem.current = item;
-            onItemModalOpen();
+        selectedItem.current = item;
+        onItemModalOpen();
+    }
+
+    const handleItemSelect = item => {
+        if (selectedItems.filter(currItem => currItem.storageName === item.storageName).length) {
+            window[item.storageName] = false;
+            setSelectedItems(prevState => {
+                return prevState.filter(currItem => currItem.storageName !== item.storageName);
+            });
         }
         else {
-            if (selectedItems.includes(item.storageName)) {
-                setSelectedItems(prevState => {
-                    return prevState.filter(name => name !== item.storageName);
-                });
-            }
-            else {
-                setSelectedItems(prevState => {
-                    return [...prevState, item.storageName];
-                });
-            }
+            window[item.storageName] = true;
+            setSelectedItems(prevState => {
+                return [...prevState, item];
+            });
         }
     }
 
@@ -89,14 +104,24 @@ const Closet = () => {
     };
 
     const GalleryItem = ({ item }) => (
-        <div className={styles['gallery-item']} onClick={() => handleItemClick(item)}>
-            <div className={`${styles.checkbox} ${selectMode && styles['checkbox-visible']}`} />
-            <img
-                className={styles['clothes-image']}
-                src={item.url}
-                alt={item.displayName}
-                loading="lazy" />
-        </div>
+        <label className={styles['item-label']} onClick={!selectMode ? () => handleItemClick(item) : undefined}>
+            <input
+                type="checkbox" 
+                disabled={!selectMode}
+                checked={window[item.storageName]}
+                onChange={() => {
+                    handleItemSelect(item);
+                }}
+                className={`${styles.checkbox} ${selectMode && styles['checkbox-visible']}`} />
+            <div className={styles['gallery-item']}>
+                <img
+                    className={styles['clothes-image']}
+                    src={item.url}
+                    alt={item.displayName}
+                    loading="lazy" />
+            </div>
+        </label>
+
     );
 
     return (
@@ -184,6 +209,43 @@ const Closet = () => {
                 selectedCategory={selectedCategory}
                 setGalleryData={setGalleryData}
                 setFilteredGallery={setFilteredGallery} />
+            <DeleteModal
+                isOpen={deleteModalOpen}
+                onClose={onDeleteModalClose}
+                deletingStatus={multiDeleteStatus}
+                setDeletingStatus={setMultiDeleteStatus}
+                selectedItems={selectedItems}
+                setGalleryData={setGalleryData}
+                setFilteredGallery={setFilteredGallery}
+                handleToggleSelect={handleToggleSelect} />
+            <Sheet
+                isOpen={selectMode}
+                disableScrollLocking={true}
+                onClose={handleToggleSelect}
+                disableDrag={true}
+                snapPoints={[100]}>
+                    <Sheet.Container>
+                        <Sheet.Content className={styles['sheet-modal-container']}>
+                            <p className={styles['sheet-modal-content']}>
+                                <p className={styles['sheet-modal-label']}>
+                                    {`${selectedItems.length} ${selectedItems.length === 1 ? 'item' : 'items'} selected`}
+                                </p>
+                                <button
+                                    className={styles['sheet-modal-button']}
+                                    onClick={() => {
+                                        if (!selectedItems.length) {
+                                            toast("Please select at least one item!");
+                                            return;
+                                        }
+                                        onDeleteModalOpen();
+                                    }} >
+                                        Delete Selected
+                                </button>
+                            </p>
+                        </Sheet.Content>
+                    </Sheet.Container>
+                    <Sheet.Backdrop />
+                </Sheet>
         </main>
     );
 };
