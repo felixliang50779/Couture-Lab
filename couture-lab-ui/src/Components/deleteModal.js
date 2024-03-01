@@ -22,6 +22,8 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
     const handleDelete = async () => {
         setDeletingStatus(true);
 
+        handleToggleSelect();
+
         const storageDeletionPromises = [];
         for (const item of selectedItems) {
             const storageRef = ref(storage, item.storageName);
@@ -62,8 +64,6 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
 
         await Promise.all(databaseDeletionPromises);
 
-        handleToggleSelect();
-
         const storageNames = selectedItems.map(item => item.storageName);
 
         setGalleryData(prevState => {
@@ -81,7 +81,7 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
             motionPreset='slideInBottom'
             onClose={onClose}
             closeOnEsc={false}
-            closeOnOverlayClick={!deletingStatus}
+            closeOnOverlayClick={false}
             isOpen={isOpen}
             isCentered
         >

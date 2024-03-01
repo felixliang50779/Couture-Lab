@@ -232,6 +232,7 @@ const Closet = () => {
                                 </p>
                                 <button
                                     className={styles['sheet-modal-button']}
+                                    disabled={deleteModalOpen}
                                     onClick={() => {
                                         if (!selectedItems.length) {
                                             toast("Please select at least one item!");
