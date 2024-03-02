@@ -13,6 +13,7 @@ import Contact from './Pages/Contact'
 import VerifyEmail from './Pages/VerifyEmail';
 import NotFound from './Pages/NotFound';
 import BasicInfo from './Pages/BasicInfo';
+import Profile from './Pages/Profile';
 
 import { AuthProvider } from './Utilities/authcontext';
 import PrivateRoute from './Utilities/PrivateRoute';
@@ -39,6 +40,7 @@ function App() {
             <Route path='/contact' element={<Contact />} />
             <Route path='/verifyemail' element={<PrivateRoute><VerifyEmail /></PrivateRoute>} />
             <Route path='/basicinfo' element={<PrivateRoute><BasicInfo /></PrivateRoute>} />
+            <Route path='/profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path='*' element={<NotFound />}/>
           </Routes>
         </AuthProvider>
