@@ -1,0 +1,57 @@
+.profile-main-container {
+    font-family: "MarkPro";
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    grid-gap: 3.125em;
+    margin: 2.5em 5em 2.5em 5em;
+    height: 50vh;
+}
+
+.profile-userinfo-card, .profile-styling-card {
+    border: 0.15em solid #818589;
+    border-radius: 1em;
+}
+
+.profile-userinfo-card {
+    max-height: 10.5em;
+}
+
+.profile-userinfo-card-inner {
+    display: flex;
+    font-size: 1em;
+}
+
+.profile-userimg {
+    width: 8em;
+    border: 0.2em solid #bababa;
+    border-radius: 50%;
+    margin: 1em;
+}
+
+.profile-userinfo-text {
+    margin: 1em 0 0 0;
+    font-size: 1.2em;
+}
+
+.profile-stylingbutton, .profile-updatebutton {
+    color: #ffffff;
+    padding: 0.5em 1em;
+    border-radius: 0.75em;
+    width: 95%;
+}
+
+.profile-stylingbutton {
+    background-color: #000000;
+    margin: 1em 0 1em 1em;
+    width: 95%;
+}
+
+.profile-updatebutton {
+    background-color: #808080;
+    margin: 0 0 1em 1em;
+    width: 95%;
+}
+
+.profile-styling-card-inner {
+    margin: 1em 3em 1em 3em;
+}

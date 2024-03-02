@@ -19,12 +19,23 @@
     font-weight: bold;
 }
 
+.basicinfo-backto {
+    /* Inline-block needed because of margin collapse */
+    display: inline-block;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 1.2em;
+    margin: 2em 0 0 0;
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 0.5em;
+}
+
 .form-basicinfo {
     display: flex;
     flex-direction: column;
 }
 
-.form-input, .form-select {
+.form-input {
     width: 20em;
     border-radius: 0.7em;
     border: 0.1em black solid;
