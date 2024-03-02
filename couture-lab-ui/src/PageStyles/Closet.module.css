@@ -152,6 +152,7 @@
 
 .sheet-modal-content {
     display: flex;
+    font-size: 0.8em;
     justify-content: space-between;
     margin: 1vw;
 }
@@ -164,7 +165,6 @@
     display: flex;
     align-items: center;
     background-color: white;
-    font-size: 0.9em;
     font-weight: bold;
     padding: 0.8vw;
     border-radius: 0.5em;

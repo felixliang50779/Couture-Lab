@@ -223,7 +223,7 @@ const Closet = () => {
                 disableScrollLocking={true}
                 onClose={handleToggleSelect}
                 disableDrag={true}
-                snapPoints={[100]}>
+                snapPoints={[90]}>
                     <Sheet.Container>
                         <Sheet.Content className={styles['sheet-modal-container']}>
                             <p className={styles['sheet-modal-content']}>

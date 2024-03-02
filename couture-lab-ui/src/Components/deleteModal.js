@@ -81,7 +81,7 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
             motionPreset='slideInBottom'
             onClose={onClose}
             closeOnEsc={false}
-            closeOnOverlayClick={false}
+            closeOnOverlayClick={!deletingStatus}
             isOpen={isOpen}
             isCentered
         >
