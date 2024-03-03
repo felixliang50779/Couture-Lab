@@ -26,6 +26,7 @@ export default function DashboardNavBar() {
     return (
         <nav id="dashboard-navbar" className={styles['dashboard-navbar']}>
             <a href="/">CoutureLab</a>
+            <a href="/dashboard">Dashboard</a>
             <div className={styles['dashboard-navbar-dropdown']} ref={dropdownRef}>
                 <button onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <svg className={styles['dashboard-navbar-usericon']} 

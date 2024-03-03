@@ -31,7 +31,7 @@ const SignUp = () => {
         return () => unsubscribe();
     }, [navigate]);
 
-    const handleRegister = async (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
 
         // Creates user in Firebase
@@ -53,7 +53,7 @@ const SignUp = () => {
                     <h1>You are already signed in</h1>
                 ) : (
                     <div className={styles['signin-input-container']}>
-                        <form className={styles['signin-form']} onSubmit={handleRegister}>
+                        <form className={styles['signin-form']} onSubmit={handleSignUp}>
                             <h2 className={styles['form-title']}>Username</h2>
                             <input
                                 className={styles['form-input']}

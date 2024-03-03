@@ -1,13 +1,17 @@
+// Utility-related modules
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';  
 import { doc, updateDoc, collection, query, where, documentId, getDocs } from 'firebase/firestore';
-import { toast } from 'react-toastify';
-import { Progress } from '@chakra-ui/react';
-
+import { updateProfile } from 'firebase/auth';
 import FormSelect from '../Components/formselect';
 import { db, FirebaseAuth } from '../Utilities/firebase';
 
+// UI-related modules
+import { toast } from 'react-toastify';
+import { Progress } from '@chakra-ui/react';
+
+// Styling
 import styles from '../PageStyles/BasicInfo.module.css';
 
 
@@ -66,6 +70,11 @@ export default function BasicInfo() {
         let updateObj = {}
         updateObj[FirebaseAuth.currentUser.uid] = formData;
 
+        // Update Firebase display name
+        updateProfile(FirebaseAuth.currentUser, {
+            displayName: formData.name
+        });
+
         updateDoc(questionnaireRef, updateObj);
     }
  
@@ -122,15 +131,6 @@ export default function BasicInfo() {
                                 {errors.name && 
                                     <p className={styles['form-errormsg']}>
                                         {errors.name.message}
-                                    </p>
-                                }
-                                <label>Username</label>
-                                <input placeholder='@' required type='text' className={styles['form-input']} 
-                                    {...register('username', { required: 'Username required' })}
-                                />
-                                {errors.username && 
-                                    <p className={styles['form-errormsg']}>
-                                        {errors.username.message}
                                     </p>
                                 }
                                 <FormSelect name="Gender" options={options.gender} register={register} 

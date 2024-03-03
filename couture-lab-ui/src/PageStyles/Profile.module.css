@@ -1,10 +1,14 @@
+.profile-container {
+    /* Dealing with collapse */
+    height: 130vh;
+}
+
 .profile-main-container {
     font-family: "MarkPro";
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     grid-gap: 3.125em;
     margin: 2.5em 5em 2.5em 5em;
-    height: 50vh;
 }
 
 .profile-userinfo-card, .profile-styling-card {
@@ -13,7 +17,7 @@
 }
 
 .profile-userinfo-card {
-    max-height: 10.5em;
+    max-height: 13.5em;
 }
 
 .profile-userinfo-card-inner {
@@ -38,6 +42,7 @@
     padding: 0.5em 1em;
     border-radius: 0.75em;
     width: 95%;
+    transition: all 0.3s;
 }
 
 .profile-stylingbutton {
@@ -52,6 +57,20 @@
     width: 95%;
 }
 
+.profile-stylingbutton:hover, .profile-updatebutton:hover, .profile-deleteaccount:hover {
+    transform: scale(105%);
+}
+
 .profile-styling-card-inner {
     margin: 1em 3em 1em 3em;
+}
+
+.profile-deleteaccount {
+    background-color: #ff5050;
+    margin: 0 1em 0 1.4em;
+    padding: 0.5em 1em 0.5em 1em;
+    display: block;
+    border-radius: 0.75em;
+    transition: all 0.3s;
+    width: 92%;
 }
