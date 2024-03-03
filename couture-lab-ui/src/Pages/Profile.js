@@ -16,7 +16,7 @@ import DashboardNavBar from '../Components/dashboardnavbar';
 // Styling
 import styles from '../PageStyles/Profile.module.css';
 
-
+// Temporary for collapse and options, will have to refactor to reduce duplicate code
 const options = {
     gender: ['Male', 'Female'],
     ageGroup: ['Under 18', '18 to 25', '26 to 35', '36 to 45', '46 to 55', 'Over 55'],
@@ -141,6 +141,7 @@ export default function Profile() {
     const currentUsername = currentUser.displayName;
     const currentUserEmail = currentUser.email;
 
+    // Displays user styling preferences on profile
     const displayUserStylingPreferences = async () => {
         const querySnapshot = await getDocs(collection(db, "virtual-closet"));
         querySnapshot.forEach((doc) => {
@@ -177,6 +178,8 @@ export default function Profile() {
                     />
                 </div>
                 <div className={styles['profile-styling-card']}>
+                    {/* Have to change selects so it displays current user preference. Maybe make it only update 
+                    the changed select option if it's possible */}
                     <div className={styles['profile-styling-card-inner']}>
                         <h1>Styling Preferences</h1>
                         <h2>Current Styling Preferences</h2>
