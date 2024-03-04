@@ -72,7 +72,7 @@ function CollapseForm({ setUserStylingPreferences }) {
                     <div className={styles['form-basicinfo']}>
                         <h1>Basic Information</h1>
                         <FormSelect name="Gender" options={options.gender} register={register} 
-                            errors={errors} placeholder="Select gender" 
+                            errors={errors} placeholder="Select gender"
                         />
                         <label>Your age group helps us tailor suggestions more appropriately</label>
                         <FormSelect name="Age group" options={options.ageGroup} register={register} 
@@ -147,7 +147,6 @@ export default function Profile() {
         const querySnapshot = await getDocs(questionnaires);
         querySnapshot.forEach((doc) => {
             if (doc.data()[FirebaseAuth.currentUser.uid]) {
-                console.log(doc.data()[FirebaseAuth.currentUser.uid]);
                 setUserStylingPreferences(doc.data()[FirebaseAuth.currentUser.uid]);
                 return;
             }
@@ -166,7 +165,7 @@ export default function Profile() {
                     <div className={styles['profile-userinfo-card-inner']}>
                         <img className={styles['profile-userimg']} src='https://eu.ui-avatars.com/api/?name=wss&size=300' alt='ProfilePic' loading='lazy' />
                         <div className={styles['profile-userinfo-text']}>
-                            <p>{currentUsername}</p>
+                            <p>@{currentUsername}</p>
                             <p>{currentUserEmail}</p>
                         </div>
                     </div>  
@@ -184,7 +183,7 @@ export default function Profile() {
                     <div className={styles['profile-styling-card-inner']}>
                         <h1>Styling Preferences</h1>
                         <h2>Current Styling Preferences</h2>
-                        <p>Gender: {userStylingPreferences["Gender"]}</p>
+                        <p>Gender: {userStylingPreferences["Gender"]}</p> 
                         <p>Age Group: {userStylingPreferences["Age group"]}</p>
                         <p>Preferred Style: {userStylingPreferences["Preferred style"]}</p>
                         <p>Hair Color: {userStylingPreferences["Hair color"]}</p>

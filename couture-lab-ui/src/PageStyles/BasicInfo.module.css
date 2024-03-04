@@ -30,6 +30,10 @@
     border-radius: 0.5em;
 }
 
+.basicinfo-backto:hover {
+    background-color: #4c4c4c;
+}
+
 .form-basicinfo {
     display: flex;
     flex-direction: column;
