@@ -74,3 +74,8 @@
     transition: all 0.3s;
     width: 92%;
 }
+
+.form-basicinfo {
+    display: flex;
+    flex-direction: column;
+}

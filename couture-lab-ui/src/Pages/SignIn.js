@@ -10,8 +10,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
+
     const navigate = useNavigate();
 
+    // Checks if user is currentlysigned in or not
     const [userSignedIn, setUserSignedIn] = useState(false);
 
     const [email, setEmail] = useState('');
@@ -112,11 +114,8 @@ const SignIn = () => {
                     </div>
                 )}
             </div>
-    
-        </div>
-        
+        </div>  
     );
 };
-
 
 export default SignIn;

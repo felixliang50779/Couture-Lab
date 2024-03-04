@@ -28,3 +28,14 @@
     padding: 1em;
     font-size: 3em;
 }
+
+.contact-form-submit {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 0.5em;
+}
+
+.contact-form-submit:hover {
+    background-color: #353839;
+}

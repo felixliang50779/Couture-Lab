@@ -1,9 +1,15 @@
+// UI-related modules
+import { toast } from 'react-toastify';
 import Navbar from '../Components/navbar';
 import Footer from '../Components/footer';
 
 import styles from '../PageStyles/Contact.module.css';
 
 export default function Contact() {
+    const submitContactMessage = () => {
+        toast.success('Message submitted');
+    }
+
     return (
         <div className={styles["contact-container"]}>
             <Navbar />
@@ -28,6 +34,7 @@ export default function Contact() {
                     <h1>MESSAGE</h1>
                     <textarea placeholder='YOUR MESSAGE HERE' name='message'></textarea>
                 </div>
+                <button onClick={submitContactMessage} className={styles['contact-form-submit']}>Submit</button>
             </div>
             <Footer />
         </div>

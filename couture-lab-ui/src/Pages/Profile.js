@@ -1,7 +1,7 @@
 // Utility-related modules
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, documentId, getDocs } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import FormSelect from '../Components/formselect';
 import { db, FirebaseAuth } from '../Utilities/firebase';
@@ -78,15 +78,13 @@ function CollapseForm({ setUserStylingPreferences }) {
                         <FormSelect name="Age group" options={options.ageGroup} register={register} 
                             errors={errors} placeholder="Select age group" 
                         />
-                    </div>
-                    <div className={styles['form-basicinfo']}>
                         <h1>Fashion Preferences</h1>
                         <label>Which style best describes your everyday fashion?</label>
                         <FormSelect name="Preferred style" options={options.preferredStyle} register={register} 
                             errors={errors} placeholder="Preferred Style" 
                         />
                         <h1>Personal Characteristics</h1>
-                        <h2>These questions help the AI suggest colors that complement your look.</h2>
+                        <h2>These questions help the AI suggest colors that complement your look</h2>
                         <FormSelect name="Hair color" options={options.hairColor} register={register} 
                             errors={errors} placeholder="Hair Color" 
                         />
@@ -107,8 +105,6 @@ function CollapseForm({ setUserStylingPreferences }) {
                         <FormSelect name="Experiment level" options={options.experimentLevel} register={register} 
                             errors={errors} placeholder="Experiment Level" 
                         />
-                    </div>
-                    <div className={styles['form-basicinfo']}>
                         <h1>Shopping and Wardrobe Preferences</h1>
                         <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
                         <FormSelect name="Budget" options={options.budget} register={register} 
@@ -143,7 +139,12 @@ export default function Profile() {
 
     // Displays user styling preferences on profile
     const displayUserStylingPreferences = async () => {
-        const querySnapshot = await getDocs(collection(db, "virtual-closet"));
+        const closetRef = collection(db, "virtual-closet");
+
+        const questionnaires = query(closetRef,
+            where(documentId(), "==", "questionnaires"));
+
+        const querySnapshot = await getDocs(questionnaires);
         querySnapshot.forEach((doc) => {
             if (doc.data()[FirebaseAuth.currentUser.uid]) {
                 console.log(doc.data()[FirebaseAuth.currentUser.uid]);
