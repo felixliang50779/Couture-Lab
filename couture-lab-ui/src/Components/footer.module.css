@@ -20,17 +20,17 @@
 }
 
 .footer-date {
-    font-family: "Linotype";
+    font-family: "Helvetica";
 }
 
-.footerLinks {
+.footer-links {
     list-style: none; 
     display: flex; 
     gap: 2em;
     color: #ffffff;
-    font-family: "ApercuReg";
+    font-family: "Helvetica";
 }
 
-.footerLinks:hover {
+.footer-links:hover {
     color: #ffffff;
 }

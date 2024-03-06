@@ -22,3 +22,13 @@
     font-family: "Linotype";
     src: url('./Assets/Fonts/Linotype-Didot-Bold.otf');
 }   
+
+@font-face {
+    font-family: "Inter";
+    src: url('./Assets/Fonts/Inter-Regular.ttf');
+}  
+
+@font-face {
+    font-family: "Helvetica";
+    src: url('./Assets/Fonts/HelveticaNowMTTextRegular.woff');
+}  

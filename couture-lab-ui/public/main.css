@@ -12,6 +12,5 @@ html, body {
     padding: 0;
     max-width: 100vw;
     max-height: 100vh;
-    background-color: #e2e2e2e2 !important;
     scroll-behavior: smooth !important;
 }
