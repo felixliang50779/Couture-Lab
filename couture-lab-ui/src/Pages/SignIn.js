@@ -44,6 +44,7 @@ const SignIn = () => {
             
         } catch (error) {
             console.log(error);
+            toast.error('Failed to sign in.')
         }
     };
     
@@ -80,10 +81,10 @@ const SignIn = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                <input type="submit" />
+                                <input className={styles['signin-submit']} type="submit" />
                             </form>
                             <div className={styles['signin-register']}>
-                                <h2>Not Registered Yet?  </h2>
+                                <h2>Not Registered Yet?</h2>
                                 <Link className={styles['signin-register-link']} to="/signup">
                                     Register
                                 </Link>

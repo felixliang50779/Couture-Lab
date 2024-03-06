@@ -4,7 +4,7 @@
 }
 
 .profile-main-container {
-    font-family: "MarkPro";
+    font-family: "Helvetica";
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     grid-gap: 3.125em;
@@ -78,4 +78,8 @@
 .form-basicinfo {
     display: flex;
     flex-direction: column;
+}
+
+.form-header {
+    margin-top: 1em;
 }

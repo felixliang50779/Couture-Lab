@@ -1,12 +1,13 @@
+// Utility-related modules
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-
-import NavBar from '../Components/navbar.js';
-
 import { FirebaseAuth} from '../Utilities/firebase.js';
 
+import { toast } from 'react-toastify';
+
 import styles from '../PageStyles/SignIn.module.css';
+
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -40,70 +41,53 @@ const SignUp = () => {
             await sendEmailVerification(FirebaseAuth.currentUser);
         } catch (error) {
             console.log(error);
+            toast.error('Failed to sign up.')
         }
     };
 
     return (
         <div className={styles['signin-container']}>
-            <NavBar />
-            <div className={styles['signin-text-container']}>
-                <h1>Register</h1>
-                <h2>Create your account 😊</h2>
-                { userSignedIn ? (
-                    <h1>You are already signed in</h1>
-                ) : (
-                    <div className={styles['signin-input-container']}>
-                        <form className={styles['signin-form']} onSubmit={handleSignUp}>
-                            <h2 className={styles['form-title']}>Username</h2>
-                            <input
-                                className={styles['form-input']}
-                                type="text"
-                                name="email"
-                                placeholder="E.u. lebronjames"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <h2 className={styles['form-title']}>Password</h2>
-                            <input
-                                className={styles['form-input']}
-                                type="password"
-                                name="password"
-                                placeholder="Enter Your Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <input type="submit" />
-                        </form>
-                        <div className={styles['signin-register']}>
-                            <h2>Already Registered? </h2>
-                            <Link className={styles['signin-register-link']} to="/signin">
-                                &nbsp;Login
-                            </Link>
-                            <svg
-                                width="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                                <g
-                                    id="SVGRepo_tracerCarrier"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                ></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path
-                                        d="M7 17L17 7M17 7H8M17 7V16"
-                                        stroke="#0000FF"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    ></path>
-                                </g>
-                            </svg>
-                        </div>
+            <div className={styles['signin-card']}>
+                <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+                <div className={styles['signin-content']}>
+                    <div className={styles['signin-content-text']}>
+                        <h1 className={styles['signin-header']}>Sign up</h1>
+                        <h2 className={styles['signin-welcomeback']}>Create account</h2>
                     </div>
-                )}
+                    { userSignedIn ? (
+                        <h1>You are already signed in</h1>
+                    ) : (
+                        <div className={styles['signin-input-container']}>
+                            <form className={styles['signin-form']} onSubmit={handleSignUp}>
+                                <h2 className={styles['form-title']}>Email</h2>
+                                <input
+                                    className={styles['form-input']}
+                                    type="text"
+                                    name="email"
+                                    placeholder="E.u. lebronjames"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <h2 className={styles['form-title']}>Password</h2>
+                                <input
+                                    className={styles['form-input']}
+                                    type="password"
+                                    name="password"
+                                    placeholder="Enter Your Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <input className={styles['signin-submit']} type="submit" />
+                            </form>
+                            <div className={styles['signin-register']}>
+                                <h2>Already Registered?</h2>
+                                <Link className={styles['signin-register-link']} to="/signin">
+                                    Login
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

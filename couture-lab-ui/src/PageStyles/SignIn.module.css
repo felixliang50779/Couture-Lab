@@ -50,6 +50,23 @@
 
 .form-input {
     color: #000000;
+    border: 0.1em solid #b2b2b2;
+    border-radius: 0.5em;
+}
+
+.form-input[type="text"], .form-input[type='password'] {
+    padding: 0.2em 0 0.2em 0.5em;
+}
+
+.signin-submit {
+    border-radius: 1.5em;
+    margin: 0.5em 0 0 0;
+    padding: 0.2em 0 0.2em 0;
+}
+
+.signin-submit:hover {
+    background-color: #d3d3d3;
+    cursor: pointer;
 }
 
 .signin-register {
