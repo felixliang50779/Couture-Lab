@@ -1,14 +1,41 @@
 .signin-container {
-    font-family: "FuturaMaxi";
-    display: flex;
-    flex-direction: column;
-    color: #ffffff;
-    background-color: #000000;
+    padding: 10em 0 0 0;
+    background-image: linear-gradient(to right, #dfc7fe, #68b7ff);
     height: 100vh;
 }
 
-.signin-text-container {
-    padding: 13em 0 0 0;
+.couturelab-logo {
+    display: block;
+    font-family: "Linotype";
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.signin-card {
+    padding: 2em 1em 2em 1em;
+    margin: 0 10em 0 10em;
+    background-color: #ffffff;
+    border: 0.1em solid #000000;
+    border-radius: 1.5em;
+    font-family: 'Helvetica';
+}
+
+.signin-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 1em 0 0 0;
+}
+
+.signin-content-text {
+    margin: 0 0 0 1em;
+}
+
+.signin-header {
+    font-size: 2.25em;
+}
+
+.signin-welcomeback {
+    font-size: 1.5em;
 }
 
 .signin-form {
@@ -27,10 +54,15 @@
 
 .signin-register {
     display: flex;
+    gap: 0.2em;
 }
 
 .signin-register-link {
     color: #0000FF;
+}
+
+.signin-register-link:hover {
+    text-decoration: underline;
 }
 
 .signin-text-container {
