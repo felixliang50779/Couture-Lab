@@ -26,7 +26,6 @@ export default function DashboardNavBar() {
     return (
         <nav id="dashboard-navbar" className={styles['dashboard-navbar']}>
             <a href="/">CoutureLab</a>
-            <a href="/dashboard">Dashboard</a>
             <div className={styles['dashboard-navbar-dropdown']} ref={dropdownRef}>
                 <button onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <svg className={styles['dashboard-navbar-usericon']} 
@@ -45,7 +44,6 @@ export default function DashboardNavBar() {
                             <li>
                                 <a className={styles['dashboard-navbar-a']} href='/profile'>Profile</a>
                             </li>
-                            <hr className={styles['dashboard-navbar-divider']}/>
                             <li>
                                 <button className={styles['dashboard-navbar-a']} onClick={logoutUser}>Sign Out</button>
                             </li>
