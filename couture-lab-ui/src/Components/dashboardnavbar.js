@@ -3,6 +3,7 @@ import { AuthContext } from '../Utilities/authcontext';
 
 import styles from './dashboardnavbar.module.css';
 
+
 export default function DashboardNavBar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -25,7 +26,8 @@ export default function DashboardNavBar() {
 
     return (
         <nav id="dashboard-navbar" className={styles['dashboard-navbar']}>
-            <a href="/">CoutureLab</a>
+            <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+            <a href="/dashboard">Dashboard</a>
             <div className={styles['dashboard-navbar-dropdown']} ref={dropdownRef}>
                 <button onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <svg className={styles['dashboard-navbar-usericon']} 

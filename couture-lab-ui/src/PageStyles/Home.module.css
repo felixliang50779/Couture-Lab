@@ -1,9 +1,7 @@
 .content-container {
     display: flex;
     flex-direction: column;
-    font-family: "ApercuReg";
     transition: 0.5s;
-    background-color: #000000;
     overflow-x: hidden;
 }
 
@@ -12,102 +10,68 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    font-family: "Linotype";
-    color: #ffffff;
-    padding-top: 10em;
+    background-image: linear-gradient(#ffffff, #f2e9ff);
+    padding: 10em 5em 8em 5em;
+    color: #000000;
+    font-family: 'Helvetica';
 }
 
 .intro-header {
     font-size: 5em;
-    padding: 0 0 0.5em 0;
+    font-weight: 700;
 }
 
-.intro-img {
-    width: 70em;
+.intro-description {
+    font-size: 1.75em;
+}
+
+.getstarted-link {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 0.5em;
+    margin: 2em 0 0 0;
+    transition: 0.9s ease-out;
+}
+
+.getstarted-link:hover {
+    background-color: #ffffff;
+    color: #000000; 
 }
 
 .whatweare-container {
-    display: grid;
-    padding: 6em 4em 9em 4em;
-    justify-items: center;
+    padding: 6em;
     text-align: center;
-    color: #ffffff;
-}
-
-.whatweare-text {
-    padding-top: 0.8em;
-    font-size: 4.5vw;
-}
-
-.greendress-container {
+    font-family: 'Helvetica';
+    font-size: 1.5em;
     display: flex;
-    gap: 0.5vw;
-    color: #ffffff;
 }
 
-.green-dress {
-    width: 45em;
-    padding: 3em;
+.dashboardview-container, .closetview-container, .chatbotview-container {
+    display: flex;
+    padding: 9em 12em 9em 12em;
+    gap: 3em;
+    font-family: 'Helvetica';
 }
 
-.greendress-text {
-    font-size: 5vw;
-    margin-top: 2.5em;
+.dashboardview-container, .chatbotview-container {
+    background-color: #f6f6f6;
 }
 
-.changeway-container {
-    color: #ffffff;
-    padding: 4em;
-    text-align: center;
+.dashboardview-header, .closetview-header, .chatbotview-header {
+    font-size: 2.5em;
+    font-weight: 600;
 }
 
-.changeway-text {
-    font-size: 3vw;
-    padding: 0 0 1em 0;
+.dashboardview-description, .closetview-description, .chatbotview-description {
+    margin: 1.5em 0 0 0;
+    font-size: 1.4em;
 }
 
-.wardrobe-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    margin: 0 2em 0 2em;
-}
-
-.wardrobe-card {
-    color: #ffffff;
-    background-color: #141414;
-    text-align: center;
-    align-items: center;
-    width: 42vw;
-    padding: 0 0 2em 0;
-}
-
-.wardrobe-img {
-    height: 28em;
-}
-
-.wardrobe-header {
-    font-size: 2em;
-    padding: 1em 0 0.5em 0;
-}
-
-.wardrobe-desc {
-    font-family: "MarkPro";
-    font-size: 1.6em;
-    padding: 0.4em 0.5em 1.5em 0.5em;
-}
-
-.outfit-container {
-    padding: 0 2em 15em 2em;
-    text-align: center;
-}
-
-.outfit-header {
-    font-size: 5em;
-}
-
-.outfit-text {
-    font-size: 2.75em;
+.dashboardview-img, .closetview-img, .chatbotview-img {
+    width: 48em;
+    border-radius: 0.5em;
+    border: 0.1em solid #000000;
 }
 
 .last-page {
@@ -115,62 +79,36 @@
     justify-content: center;
     text-align: center;
     padding: 8em 0 5em 0;
-    color: #ffffff;
 }
 
-.last-page-link {
-    font-size: 10em;
-    font-weight: bold;
+.lastview-container {
+    margin: 8em 5em 8em 5em;
+    text-align: center;
+    font-family: 'Helvetica';
 }
 
-.last-page-link:hover {
-    text-decoration: underline; 
+.lastview-header {
+    font-size: 2.5em;
+    font-weight: 600;
 }
 
-.last-page-title {
-    font-size: 3em;
+.lastview-link {
+    display: inline-block;
+    margin: 1.5em 0 0 0;
+    padding: 0.5em 1em 0.5em 1em;
+    font-size: 1.5em;
+    background-image: linear-gradient(to right, #f2e9ff, #a4d3ff);
+    border-radius: 1.5em;
 }
 
-.footer-divider {
-    border: 0.01em solid #ffffff;
-    width: 90%;
-    margin: auto;
+.lastview-link:hover {
+    background-image: linear-gradient(to right, #e3d0ff, #68b7ff);
 }
 
 @media only screen and (max-width : 770px) {
-    .green-dress {
-        order: 1;
-    }
-    .greendress-text {
-        margin: 2vw;
-        order: 2;
-    }
-    .content-container, .whatweare-container, .greendress-container, .wardrobe-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1vh;
-    }
-    .intro-img, .green-dress, .wardrobe-card {
-        width: 100%;
-    }
-    .intro-header, .whatweare-text, .changeway-text, .outfit-header, .last-page-link, .last-page-title {
-        font-size: 3em;
-    }
-    .wardrobe-header, .wardrobe-desc {
-        font-size: 1.5em;
-    }
+    /* fredson implement this */
 }
 
 @media only screen and (max-width: 1000px) {
-    .greendress-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .greendress-text {
-        margin-top: 0;
-    }
+    /* fredbear implement this */
 }

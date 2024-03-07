@@ -140,15 +140,15 @@ export default function BasicInfo() {
                                 <FormSelect name="Age group" options={options.ageGroup} register={register} 
                                     errors={errors} placeholder="Select age group" 
                                 />
-                            </div>
-                        )}
-                        {formStep === 1 && (
-                            <div className={styles['form-basicinfo']}>
                                 <h1>Fashion Preferences</h1>
                                 <label>Which style best describes your everyday fashion?</label>
                                 <FormSelect name="Preferred style" options={options.preferredStyle} register={register} 
                                     errors={errors} placeholder="Preferred Style" 
                                 />
+                            </div>
+                        )}
+                        {formStep === 1 && (
+                            <div className={styles['form-basicinfo']}>
                                 <h1>Personal Characteristics</h1>
                                 <h2>These questions help the AI suggest colors that complement your look.</h2>
                                 <FormSelect name="Hair color" options={options.hairColor} register={register} 
@@ -200,7 +200,6 @@ export default function BasicInfo() {
                         <div className={styles['basicinfo-navbuttons']}>
                             {renderFormButton()}
                         </div>
-                        <pre>{JSON.stringify(watch(), null, 2)}</pre>
                     </div>
                 )}
             </div>

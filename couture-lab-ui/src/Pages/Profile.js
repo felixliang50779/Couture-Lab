@@ -70,20 +70,20 @@ function CollapseForm({ setUserStylingPreferences }) {
             <Collapse in={isOpen} animateOpacity>
                 <form>
                     <div className={styles['form-basicinfo']}>
-                        <h1>Basic Information</h1>
+                        <h1 className={styles['form-header']}>Basic Information</h1>
                         <FormSelect name="Gender" options={options.gender} register={register} 
-                            errors={errors} placeholder="Select gender" 
+                            errors={errors} placeholder="Select gender"
                         />
                         <label>Your age group helps us tailor suggestions more appropriately</label>
                         <FormSelect name="Age group" options={options.ageGroup} register={register} 
                             errors={errors} placeholder="Select age group" 
                         />
-                        <h1>Fashion Preferences</h1>
+                        <h1 className={styles['form-header']}>Fashion Preferences</h1>
                         <label>Which style best describes your everyday fashion?</label>
                         <FormSelect name="Preferred style" options={options.preferredStyle} register={register} 
                             errors={errors} placeholder="Preferred Style" 
                         />
-                        <h1>Personal Characteristics</h1>
+                        <h1 className={styles['form-header']}>Personal Characteristics</h1>
                         <h2>These questions help the AI suggest colors that complement your look</h2>
                         <FormSelect name="Hair color" options={options.hairColor} register={register} 
                             errors={errors} placeholder="Hair Color" 
@@ -96,7 +96,7 @@ function CollapseForm({ setUserStylingPreferences }) {
                         <FormSelect name="Eye color" options={options.eyeColor} register={register} 
                             errors={errors} placeholder="Eye Color" 
                         />
-                        <h1>Body type and Comfort</h1>
+                        <h1 className={styles['form-header']}>Body type and Comfort</h1>
                         <label>Identifying your body type helps us suggest the most flattering outfits</label>
                         <FormSelect name="Body type" options={options.bodyType} register={register} 
                             errors={errors} placeholder="Body Type" 
@@ -105,7 +105,7 @@ function CollapseForm({ setUserStylingPreferences }) {
                         <FormSelect name="Experiment level" options={options.experimentLevel} register={register} 
                             errors={errors} placeholder="Experiment Level" 
                         />
-                        <h1>Shopping and Wardrobe Preferences</h1>
+                        <h1 className={styles['form-header']}>Shopping and Wardrobe Preferences</h1>
                         <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
                         <FormSelect name="Budget" options={options.budget} register={register} 
                             errors={errors} placeholder="Budget" />
@@ -113,7 +113,7 @@ function CollapseForm({ setUserStylingPreferences }) {
                         <FormSelect name="Sustainability" options={options.sustainabilityImportance} register={register} 
                             errors={errors} placeholder="Sustainability Importance" 
                         />
-                        <h1>Events and Occasions</h1>
+                        <h1 className={styles['form-header']}>Events and Occasions</h1>
                         <label>What types of events do you dress for most often?</label>
                         <FormSelect name="Frequent events" options={options.frequentEvents} register={register} 
                             errors={errors} placeholder="Frequent Events" 
@@ -147,7 +147,6 @@ export default function Profile() {
         const querySnapshot = await getDocs(questionnaires);
         querySnapshot.forEach((doc) => {
             if (doc.data()[FirebaseAuth.currentUser.uid]) {
-                console.log(doc.data()[FirebaseAuth.currentUser.uid]);
                 setUserStylingPreferences(doc.data()[FirebaseAuth.currentUser.uid]);
                 return;
             }
@@ -166,7 +165,7 @@ export default function Profile() {
                     <div className={styles['profile-userinfo-card-inner']}>
                         <img className={styles['profile-userimg']} src='https://eu.ui-avatars.com/api/?name=wss&size=300' alt='ProfilePic' loading='lazy' />
                         <div className={styles['profile-userinfo-text']}>
-                            <p>{currentUsername}</p>
+                            <p>@{currentUsername}</p>
                             <p>{currentUserEmail}</p>
                         </div>
                     </div>  
@@ -184,7 +183,7 @@ export default function Profile() {
                     <div className={styles['profile-styling-card-inner']}>
                         <h1>Styling Preferences</h1>
                         <h2>Current Styling Preferences</h2>
-                        <p>Gender: {userStylingPreferences["Gender"]}</p>
+                        <p>Gender: {userStylingPreferences["Gender"]}</p> 
                         <p>Age Group: {userStylingPreferences["Age group"]}</p>
                         <p>Preferred Style: {userStylingPreferences["Preferred style"]}</p>
                         <p>Hair Color: {userStylingPreferences["Hair color"]}</p>

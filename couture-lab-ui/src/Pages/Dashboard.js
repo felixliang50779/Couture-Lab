@@ -103,7 +103,7 @@ export default function Dashboard() {
                             animate={{y: 0, opacity: 1, scale: 1}}
                             transition={{duration: 0.3, ease: "anticipate"}}>
                                 <div className={styles['virtual-closet']}>
-                                    <Link to="/Closet">
+                                    <Link to="/closet">
                                         <img 
                                             className={styles['virtual-closet-img']}
                                             src={VirtualClosetImage}
