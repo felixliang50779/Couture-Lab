@@ -52,7 +52,7 @@ export default function Home() {
             <LoadOnView>
                 <section className={styles['whatweare-container']}>
                     <h1>
-                        couturelab seeks to create personalized recommendations through artificial intelligence, 
+                        <span style={{ fontFamily: "MarkPro" }}>couturelab</span> seeks to create personalized recommendations through artificial intelligence, 
                         all to help <u>you</u> look and feel your best.
                     </h1>
                 </section>

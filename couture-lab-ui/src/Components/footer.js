@@ -9,7 +9,7 @@ export default function Footer() {
                     &copy; {new Date().getFullYear()} <span className={styles['couturelab-logo']}>couturelab</span>
                 </p>
                 <ul className={styles['footer-links']}>
-                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
                 </ul>
             </div>
         </footer>
