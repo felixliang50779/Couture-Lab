@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { FirebaseAuth } from '../Utilities/firebase.js';
+import { AuthContext } from '../Utilities/authcontext.js';
 
 import styles from '../PageStyles/SignIn.module.css';
 import { toast } from 'react-toastify';
@@ -11,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const SignIn = () => {
 
     const navigate = useNavigate();
+
+    const { currentUser } = useContext(AuthContext);
 
     // Checks if user is currentlysigned in or not
     const [userSignedIn, setUserSignedIn] = useState(false);
@@ -47,6 +50,10 @@ const SignIn = () => {
             toast.error('Failed to sign in.')
         }
     };
+
+    if (currentUser) {
+        navigate('/dashboard');
+    }
     
     return (
         
