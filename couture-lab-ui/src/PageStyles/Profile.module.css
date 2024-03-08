@@ -1,6 +1,7 @@
 .profile-container {
     /* Dealing with collapse */
     height: 130vh;
+    min-width: 545px;
 }
 
 .profile-main-container {
@@ -67,7 +68,7 @@
 
 .profile-deleteaccount {
     background-color: #ff5050;
-    margin: 0 1em 0 1.4em;
+    margin: 0 1em 1em 1.4em;
     padding: 0.5em 1em 0.5em 1em;
     display: block;
     border-radius: 0.75em;
@@ -82,4 +83,12 @@
 
 .form-header {
     margin-top: 1em;
+}
+
+@media only screen and (max-width : 1200px) {
+    /* fredson implement this */
+    .profile-main-container {
+        display: flex;
+        flex-direction: column;
+    }
 }

@@ -1,5 +1,4 @@
 .footer-container {
-    font-family: "FuturaMaxi";
     color: #ffffff;
     background-color: #000000;
     width: 100%;
@@ -21,6 +20,10 @@
 
 .footer-date {
     font-family: "Helvetica";
+}
+
+.couturelab-logo {
+    font-family: "Linotype";
 }
 
 .footer-links {

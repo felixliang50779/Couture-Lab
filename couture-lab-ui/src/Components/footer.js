@@ -5,9 +5,10 @@ export default function Footer() {
         <footer className={styles['footer-container']}>
             <div className={styles['footer-title']}>couturelab</div>
             <div className={styles['footer-content']}>
-                <p className={styles['footer-date']}>&copy; {new Date().getFullYear()} couturelab</p>
+                <p className={styles['footer-date']}>
+                    &copy; {new Date().getFullYear()} <span className={styles['couturelab-logo']}>couturelab</span>
+                </p>
                 <ul className={styles['footer-links']}>
-                    <li><a href="/about">About</a></li>
                     <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>

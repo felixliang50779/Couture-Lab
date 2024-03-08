@@ -1,3 +1,6 @@
+// Utility-related modules 
+import { useState } from 'react';
+
 // UI-related modules
 import { toast } from 'react-toastify';
 import Navbar from '../Components/navbar';
@@ -5,9 +8,33 @@ import Footer from '../Components/footer';
 
 import styles from '../PageStyles/Contact.module.css';
 
+
 export default function Contact() {
-    const submitContactMessage = () => {
-        toast.success('Message submitted');
+    const [submitted, setSubmitted] = useState(false);
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const { name, email, message } = formData;
+
+    const isFormValid = name && email && message;
+
+    const submitContactMessage = (event) => {
+        event.preventDefault();
+        // send email to dxiong372@gmail.com using firebase using name, email, and message in the form
+        toast.success('Message submitted.');
+        setSubmitted(true);
     }
 
     return (
@@ -25,16 +52,26 @@ export default function Contact() {
                 </section>
             </div>
             <div className={styles['contact-form-container']}>
-                <h1 className={styles['contact-form-header']}>contact</h1>
-                <div className={styles['contact-form-holder']}>
-                    <h1>FULL NAME</h1>
-                    <input placeholder='YOUR NAME' type='text' name='fullname'></input>
-                    <h1>EMAIL</h1>
-                    <input placeholder='YOUR EMAIL' type='text' name='email'></input>
-                    <h1>MESSAGE</h1>
-                    <textarea placeholder='YOUR MESSAGE HERE' name='message'></textarea>
-                </div>
-                <button onClick={submitContactMessage} className={styles['contact-form-submit']}>Submit</button>
+                <h1 className={styles['contact-form-header']}>Contact</h1>
+                {!submitted ? (
+                    <form className={styles['form-container']}>
+                        <label className={styles['form-input-label']}>Full Name</label>
+                        <input className={styles['form-input']} placeholder='Your Name' type='text' name='name' value={name} onChange={handleChange}></input>
+                        <label className={styles['form-input-label']}>Email</label>
+                        <input className={styles['form-input']} placeholder='Your Email' type='email' name='email' value={email} onChange={handleChange}></input>
+                        <label className={styles['form-input-label']}>Message</label>
+                        <textarea className={styles['form-input']} placeholder='Your Message Here' name='message' value={message} onChange={handleChange}></textarea>
+                        <button 
+                            onClick={submitContactMessage} 
+                            className={`${styles['contact-form-submit']} ${!isFormValid && styles['contact-form-disabled']}`} 
+                            disabled={!isFormValid}
+                        >
+                            Submit
+                        </button>
+                    </form>
+                ) : (
+                    <h1>Message Submitted Successfully!</h1>
+                )}
             </div>
             <Footer />
         </div>

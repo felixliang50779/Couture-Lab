@@ -1,7 +1,3 @@
-.contact-container {
-    font-family: "FuturaMaxi";
-}
-
 .contact-intro-container {
     color: #ffffff;
     background-color: #000000;
@@ -9,10 +5,15 @@
     grid-template-columns: 3fr 1fr;
     padding: 6em 4em 3em 4em;
     font-size: 1.5em;
+    font-family: 'FuturaMaxi';
 }
 
 .contact-header {
     font-size: 4em;
+}
+
+.contact-info-container {
+    font-family: 'Helvetica';
 }
 
 .contact-info:hover {
@@ -21,12 +22,40 @@
 
 .contact-form-container {
     background-color: #ffffff;
-    padding: 3em;
+    padding: 3em 0 5em 10em;
+    font-family: 'Helvetica';
 }
 
 .contact-form-header {
-    padding: 1em;
     font-size: 3em;
+}
+
+.form-input-label {
+    margin-top: 0.7em;
+    font-size: 1.2em;
+
+}
+
+.form-input {
+    border: 1px solid rgba(153, 170, 181, 0.3);
+    padding: 0.4em;
+    border-radius: 0.3em;
+    width: 40em;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 5px #9ecaed;   
+}
+
+.contact-form-holder {
+    margin: 0 0 0 9em;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-form-submit {
@@ -34,8 +63,16 @@
     color: #ffffff;
     padding: 0.5em 1em 0.5em 1em;
     border-radius: 0.5em;
+    margin-top: 1em;
+    width: 12em;
 }
 
 .contact-form-submit:hover {
     background-color: #353839;
+    cursor: pointer;
+}
+
+.contact-form-disabled, .contact-form-disabled:hover {
+    background-color: gray;
+    cursor: default;
 }

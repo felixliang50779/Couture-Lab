@@ -3,6 +3,7 @@
     flex-direction: column;
     transition: 0.5s;
     overflow-x: hidden;
+    min-width: 630px;
 }
 
 .intro-container {
@@ -31,6 +32,7 @@
     padding: 0.5em 1em 0.5em 1em;
     border-radius: 0.5em;
     margin: 2em 0 0 0;
+    font-size: 1.3em;
     transition: 0.9s ease-out;
 }
 
@@ -70,6 +72,7 @@
 
 .dashboardview-img, .closetview-img, .chatbotview-img {
     width: 48em;
+    min-width: 30em;
     border-radius: 0.5em;
     border: 0.1em solid #000000;
 }
@@ -105,10 +108,12 @@
     background-image: linear-gradient(to right, #e3d0ff, #68b7ff);
 }
 
-@media only screen and (max-width : 770px) {
+@media only screen and (max-width : 850px) {
     /* fredson implement this */
-}
-
-@media only screen and (max-width: 1000px) {
-    /* fredbear implement this */
+    .dashboardview-container, .closetview-container, .chatbotview-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 9em 4em 9em 4em;
+    }
 }

@@ -8,7 +8,6 @@ import Calendar from './Pages/Calendar';
 import Recommend from './Pages/Recommend';
 import SignIn from './Pages/SignIn';
 import SignUp from './Pages/SignUp';
-import About from './Pages/About';
 import Contact from './Pages/Contact'
 import VerifyEmail from './Pages/VerifyEmail';
 import NotFound from './Pages/NotFound';
@@ -36,7 +35,6 @@ function App() {
             <Route path='/closet' element={<PrivateRoute><Closet /></PrivateRoute>} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/recommend' element={<Recommend />} />
-            <Route path='/about' element={<About />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/verifyemail' element={<PrivateRoute><VerifyEmail /></PrivateRoute>} />
             <Route path='/basicinfo' element={<PrivateRoute><BasicInfo /></PrivateRoute>} />
