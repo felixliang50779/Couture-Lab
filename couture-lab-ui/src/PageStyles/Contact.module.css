@@ -1,6 +1,5 @@
 .contact-intro-container {
-    color: #ffffff;
-    background-color: #000000;
+    background-image: linear-gradient(to right, #dfc7fe, #a4d3ff);
     display: grid;
     grid-template-columns: 3fr 1fr;
     padding: 6em 4em 3em 4em;
