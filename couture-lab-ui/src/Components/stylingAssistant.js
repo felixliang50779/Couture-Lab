@@ -140,7 +140,7 @@ export default function StylingAssistant() {
                         className={styles['chatbot-container']}
                         onSubmit={handleQuery}>
                             <Input
-                                width="96%"
+                                width="96.5%"
                                 minHeight="8vh"
                                 value={chatInput}
                                 variant="filled"

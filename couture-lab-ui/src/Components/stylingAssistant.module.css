@@ -17,7 +17,7 @@
     font-size: 1.8em;
     z-index: 3;
     top: 45%;
-    right: 0.7%;
+    right: 0.4%;
 }
 
 .sidebar-hidden {
@@ -32,7 +32,7 @@
     border-width: 0.1em;
     box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     flex-direction: column;
-    max-width: 96%;
+    max-width: 96.5%;
     height: 83vh;
     padding: 0.5em;
     margin-bottom: 1.3em;

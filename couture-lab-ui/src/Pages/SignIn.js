@@ -42,7 +42,7 @@ const SignIn = () => {
             const userCredential = await signInWithEmailAndPassword(FirebaseAuth, email, password);
             const user = userCredential.user;
             console.log(user);
-            navigate("/dashboard");
+            navigate("/closet");
             toast.success('Successfully signed in!');
             
         } catch (error) {
@@ -52,7 +52,7 @@ const SignIn = () => {
     };
 
     if (currentUser) {
-        navigate('/dashboard');
+        navigate('/closet');
     }
     
     return (
