@@ -99,8 +99,7 @@ export default function StylingAssistant() {
                     opacity: collapsed ? 0 : 1,
                     position: "fixed",
                     fontFamily: "MarkPro",
-                    height: "100vh",
-                    margin: "1vw",
+                    height: "100%",
                     zIndex: 2
                 }}>
                     <ScrollToBottom 
@@ -140,7 +139,7 @@ export default function StylingAssistant() {
                         className={styles['chatbot-container']}
                         onSubmit={handleQuery}>
                             <Input
-                                width="96.5%"
+                                width="97%"
                                 minHeight="8vh"
                                 value={chatInput}
                                 variant="filled"

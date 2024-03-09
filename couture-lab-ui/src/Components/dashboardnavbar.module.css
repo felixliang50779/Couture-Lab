@@ -36,6 +36,7 @@
 }
 
 .dashboard-navbar-a {
+    font-size: 1.3vw;
     padding: 0.5vw;
     transition: all 0.3s;
 }

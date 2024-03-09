@@ -17,7 +17,7 @@
     font-size: 1.8em;
     z-index: 3;
     top: 45%;
-    right: 0.4%;
+    right: 0.6%;
 }
 
 .sidebar-hidden {
@@ -32,11 +32,10 @@
     border-width: 0.1em;
     box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     flex-direction: column;
-    max-width: 96.5%;
+    max-width: 96%;
     height: 83vh;
     padding: 0.5em;
-    margin-bottom: 1.3em;
-    margin-right: 0;
+    margin: 1.2vw 0 3vh 1vw;
     overflow: auto;
 }
 
@@ -65,6 +64,7 @@
 .chatbot-container {
     display: flex;
     align-items: center;
+    margin: 1vh 0 0 1vw;
 }
 
 .query-button {
