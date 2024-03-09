@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 
-import DashboardImage from '../Assets/Images/dashboard.png';
+import DashboardImage from '../Assets/Images/closet.png';
 import ClosetImage from '../Assets/Images/closet.png';
 import ChatbotImage from '../Assets/Images/chatbot.png'
 
@@ -46,7 +46,7 @@ export default function Home() {
                 <section className={styles['intro-container']}>
                     <StaggeredTextAnimation text="Revolutionizing Fashion." />
                     <h1 className={styles['intro-description']}>Experience the Future of Styling</h1>
-                    <a href='/dashboard' className={styles['getstarted-link']}>Get Started</a>
+                    <a href='/closet' className={styles['getstarted-link']}>Get Started</a>
                 </section>
             </LoadOnView>
             <LoadOnView>
@@ -93,7 +93,7 @@ export default function Home() {
             <LoadOnView>
                 <div id='lastPageDesc' className={styles['lastview-container']}>
                     <h1 className={styles['lastview-header']}>What are you waiting for?</h1>
-                    <a className={styles['lastview-link']} href='/dashboard'>Start Styling</a>
+                    <a className={styles['lastview-link']} href='/closet'>Start Styling</a>
                 </div>
             </LoadOnView>
             <Footer />

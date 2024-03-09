@@ -1,5 +1,10 @@
+.page-main {
+    display: flex;
+}
+
 .closet-container {
-    font-family: "FuturaMaxi";
+    font-family: "MarkPro";
+    min-width: 100vw;
 }
 
 .closet-title {

@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 
 import Home from './Pages/Home';
-import Dashboard from './Pages/Dashboard';
 import Closet from './Pages/Closet';
 import Calendar from './Pages/Calendar';
 import Recommend from './Pages/Recommend';
@@ -31,7 +30,6 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
-            <Route path='/dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
             <Route path='/closet' element={<PrivateRoute><Closet /></PrivateRoute>} />
             <Route path='/calendar' element={<Calendar />} />
             <Route path='/recommend' element={<Recommend />} />

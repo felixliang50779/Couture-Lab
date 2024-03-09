@@ -14,6 +14,7 @@ import { IoShirtOutline } from "react-icons/io5";
 import { GiCrystalEarrings } from "react-icons/gi";
 import { toast } from 'react-toastify';
 import DashboardNavbar from '../Components/dashboardnavbar';
+import StylingAssistant from '../Components/stylingAssistant';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
@@ -125,7 +126,8 @@ const Closet = () => {
     );
 
     return (
-        <main>
+        <main className={styles['page-main']}>
+            <StylingAssistant />
             <div className={styles['closet-container']}>
                 <DashboardNavbar />
                 <h1 className={styles['closet-title']}>My Closet</h1>
