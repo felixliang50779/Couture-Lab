@@ -197,7 +197,9 @@ const Closet = () => {
                         {filteredGallery.length > 0 ? (
                             filteredGallery.map(item => <GalleryItem key={item.storageName} item={item} />)
                         ) : (
-                            <p>No items found for this category.</p>
+                            <p className={styles['closet-gallery-empty']}>
+                                No items found for this category.
+                            </p>
                         )}
                     </div>
                 </div>

@@ -134,6 +134,10 @@
     margin: 1.5vw;
 }
 
+.closet-gallery-empty {
+    margin-right: 2.2vw;
+}
+
 .closet-add-button {
     position: fixed;
     bottom: 1.5vh;
