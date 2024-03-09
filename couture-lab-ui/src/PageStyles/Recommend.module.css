@@ -1,52 +1,6 @@
-.recommend-main {
-    display: flex;
-    padding: 10em;
-}
-
-.selected-item {
+.construction-msg {
+    padding: 4.5em;
     text-align: center;
-    border: 0.1em solid #000000;
-}
-
-.selecteditem-img {
-    width: 30em;
-}
-
-.selected-header {
-    padding: 0.5em;
-}
-
-.selected-price {
-    padding: 0 0 1em 0;
-}
-
-.selected-viewdetails {
-    padding: 0.3em;
-    color: #ffffff;
-    background-color: #000000;
-}
-
-.recommend-text {
-    padding: 1em;
-}
-
-.recommend-header {
-    padding: 1em;
-    background-color: #d3d3d3;
-    text-align: center;
-    border-radius: 0.3em;
-}
-
-.suggestions {
-    display: flex;
-    text-align: center;
-}
-
-.stylewith {
-    padding: 1em;
-}
-
-.placeholder-box {
-    padding: 10em;
-    border: 0.1em solid #000000;
+    font-family: 'Helvetica';
+    font-size: 3em;
 }

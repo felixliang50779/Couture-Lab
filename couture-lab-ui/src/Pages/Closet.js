@@ -18,6 +18,7 @@ import StylingAssistant from '../Components/stylingAssistant';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
+import MergeModal from '../Components/mergeModal';
 import Sheet from 'react-modal-sheet';
 
 import styles from '../PageStyles/Closet.module.css';
@@ -27,6 +28,7 @@ const Closet = () => {
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
+    const { isOpen: mergeModalOpen, onOpen: onMergeModalOpen, onClose: onMergeModalClose } = useDisclosure();
 
 	const [clothesPicture, setClothesPicture] = useState();
     const [galleryData, setGalleryData] = useState([]);
@@ -35,6 +37,8 @@ const Closet = () => {
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
+    const [mergeStatus, setMergeStatus] = useState(false);
+    const [multiMergeStatus, setMultiMergeStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
     
@@ -118,13 +122,15 @@ const Closet = () => {
                 onChange={() => {
                     handleItemSelect(item);
                 }}
-                className={`${styles.checkbox} ${selectMode && styles['checkbox-visible']}`} />
+                className={`${styles.checkbox} ${selectMode && styles['checkbox-visible']}`} 
+            />
             <div className={styles['gallery-item']}>
                 <img
                     className={styles['clothes-image']}
                     src={item.url}
                     alt={item.displayName}
-                    loading="lazy" />
+                    loading="lazy" 
+                />
             </div>
         </label>
 
@@ -212,7 +218,8 @@ const Closet = () => {
                 uploadCategory={uploadCategory}
                 setGalleryData={setGalleryData}
                 selectedCategory={selectedCategory}
-                setFilteredGallery={setFilteredGallery} />
+                setFilteredGallery={setFilteredGallery} 
+            />
             <ItemModal
                 isOpen={itemModalOpen}
                 onClose={onItemModalClose}
@@ -221,7 +228,8 @@ const Closet = () => {
                 selectedItem={selectedItem.current}
                 selectedCategory={selectedCategory}
                 setGalleryData={setGalleryData}
-                setFilteredGallery={setFilteredGallery} />
+                setFilteredGallery={setFilteredGallery} 
+            />
             <DeleteModal
                 isOpen={deleteModalOpen}
                 onClose={onDeleteModalClose}
@@ -230,14 +238,25 @@ const Closet = () => {
                 selectedItems={selectedItems}
                 setGalleryData={setGalleryData}
                 setFilteredGallery={setFilteredGallery}
-                handleToggleSelect={handleToggleSelect} />
+                handleToggleSelect={handleToggleSelect} 
+            />
+            <MergeModal
+                isOpen={mergeModalOpen}
+                onClose={onMergeModalClose}
+                deletingStatus={multiMergeStatus}
+                setDeletingStatus={setMultiMergeStatus}
+                selectedItems={selectedItems}
+                setGalleryData={setGalleryData}
+                setFilteredGallery={setFilteredGallery}
+                handleToggleSelect={handleToggleSelect} 
+            />
             <Sheet
                 ref={sheetRef}
                 isOpen={selectMode}
                 disableScrollLocking={true}
                 onClose={handleToggleSelect}
                 disableDrag={false}
-                snapPoints={[110, 0]}
+                snapPoints={[90, 0]}
                 onSnap={snapIndex =>
                     console.log('> Current snap point index:', snapIndex)
                 }
@@ -253,18 +272,34 @@ const Closet = () => {
                                 <p className={styles['sheet-modal-label']}>
                                     {`${selectedItems.length} ${selectedItems.length === 1 ? 'item' : 'items'} selected`}
                                 </p>
-                                <button
-                                    className={styles['sheet-modal-button']}
-                                    disabled={deleteModalOpen}
-                                    onClick={() => {
-                                        if (!selectedItems.length) {
-                                            toast("Please select at least one item!");
-                                            return;
-                                        }
-                                        onDeleteModalOpen();
-                                    }} >
+                                <div className={styles['sheet-modal-button-container']}>
+                                    <button
+                                        className={styles['sheet-modal-create-oufit']}
+                                        disabled={mergeModalOpen}
+                                        onClick={() => {
+                                            if (!selectedItems.length) {
+                                                toast("Please select at least one item!");
+                                                return;
+                                            }
+                                            onMergeModalOpen();
+                                        }} 
+                                    >
+                                        Merge Selected
+                                    </button>
+                                    <button
+                                        className={styles['sheet-modal-button']}
+                                        disabled={deleteModalOpen}
+                                        onClick={() => {
+                                            if (!selectedItems.length) {
+                                                toast("Please select at least one item!");
+                                                return;
+                                            }
+                                            onDeleteModalOpen();
+                                        }} 
+                                    >
                                         Delete Selected
-                                </button>
+                                    </button>
+                                </div>
                             </p>
                         </Sheet.Content>
                     </Sheet.Container>
