@@ -2,10 +2,8 @@
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
-    background-color: #000000;
-    color: #ffffff;
     font-family: 'Helvetica';
-    font-size: 1.2em;
+    font-size: 1.4em;
     margin: 0;
     padding: 1em 2em 0.5em 2em;
     top: 0;
@@ -14,7 +12,7 @@
 }
 
 .couturelab-logo {
-    font-family: 'Linotype';
+    font-family: 'MarkPro';
 }
 
 .dashboard-navbar-usericon {
@@ -28,7 +26,7 @@
     background-color: #ededed;
     color: #000000;
     margin: 0.3em 0.3em 0 0;
-    padding: 0.7em;
+    padding: 0.5em;
     right: 0;
     border-radius: 0.5em;
 }
