@@ -167,6 +167,7 @@ const UploadModal = ({ isOpen, onClose, clothesPicture, setClothesPicture, uploa
                                 <option value='bottom'>Bottom</option>
                                 <option value='shoe'>Shoe</option>
                                 <option value='accessory'>Accessory</option>
+                                <option value='outfit'>Outfit</option>
                         </Select>
                     </div>
                     <button

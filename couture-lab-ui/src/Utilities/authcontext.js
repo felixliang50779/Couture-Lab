@@ -7,12 +7,14 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
+    const [pending, setPending] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         FirebaseAuth.onAuthStateChanged((user) => {
             setCurrentUser(user);
+            setPending(false);
         });
     }, []);
 
@@ -25,6 +27,14 @@ export const AuthProvider = ({ children }) => {
     let contextData = {
         currentUser: currentUser,
         logoutUser: logoutUser,
+    }
+
+    if (pending) {
+        return (
+            <>
+                Loading...
+            </>
+        );
     }
 
     return (

@@ -9,9 +9,9 @@ import { db, FirebaseAuth } from '../Utilities/firebase';
 // UI-related modules
 import { useDisclosure } from '@chakra-ui/react';
 import { PiCursorClickFill, PiPantsDuotone, PiSneaker } from "react-icons/pi";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoIosArrowDown } from "react-icons/io";
 import { IoShirtOutline } from "react-icons/io5";
-import { GiCrystalEarrings } from "react-icons/gi";
+import { GiCrystalEarrings, GiClothes } from "react-icons/gi";
 import { toast } from 'react-toastify';
 import DashboardNavbar from '../Components/dashboardnavbar';
 import StylingAssistant from '../Components/stylingAssistant';
@@ -19,6 +19,7 @@ import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
 import Sheet from 'react-modal-sheet';
+
 import styles from '../PageStyles/Closet.module.css';
 
 
@@ -40,6 +41,10 @@ const Closet = () => {
     const uploadName = useRef('');
     const uploadCategory = useRef({});
     const selectedItem = useRef({});
+    
+    // Sheets snap
+    const sheetRef = useRef();
+    const snapTo = (i) => sheetRef.current?.snapTo(i);
 
     const loadCloset = async () => {
         const closetRef = collection(db, "virtual-closet");
@@ -164,7 +169,13 @@ const Closet = () => {
                             onClick={() => galleryFilter('accessory', galleryData)}>
                                 <GiCrystalEarrings className={`${styles.icon} ${styles['accessory-icon']}`} />
                                 Accessories
-                        </button>                  
+                        </button>        
+                        <button
+                            className={`${styles['closet-category-button']} ${selectedCategory === 'outfit' && styles['category-button-active']}`}
+                            onClick={() => galleryFilter('outfit', galleryData)}>
+                                <GiClothes className={`${styles.icon} ${styles['accessory-icon']}`} />
+                                Outfits
+                        </button>                 
                     </div>
                     <button
                         className={
@@ -173,7 +184,7 @@ const Closet = () => {
                             <PiCursorClickFill className={styles.icon} />
                             <span className={styles.spacer} />
                             Select
-                    </button>
+                    </button>   
 				</div>
                 <div>
                     <div className={styles['closet-gallery-container']}>
@@ -221,12 +232,22 @@ const Closet = () => {
                 setFilteredGallery={setFilteredGallery}
                 handleToggleSelect={handleToggleSelect} />
             <Sheet
+                ref={sheetRef}
                 isOpen={selectMode}
                 disableScrollLocking={true}
                 onClose={handleToggleSelect}
-                disableDrag={true}
-                snapPoints={[90]}>
+                disableDrag={false}
+                snapPoints={[110, 0]}
+                onSnap={snapIndex =>
+                    console.log('> Current snap point index:', snapIndex)
+                }
+            >
                     <Sheet.Container>
+                        <Sheet.Header className={styles['sheet-modal-header']}>
+                            <button onClick={() => snapTo(1)}>
+                                <IoIosArrowDown className={styles['down-arrow']} color="white" size={32}  />
+                            </button>
+                        </Sheet.Header>
                         <Sheet.Content className={styles['sheet-modal-container']}>
                             <p className={styles['sheet-modal-content']}>
                                 <p className={styles['sheet-modal-label']}>

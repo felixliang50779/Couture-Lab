@@ -155,6 +155,16 @@
     color: white;
 }
 
+.sheet-modal-header {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+}
+
+.down-arrow:hover {
+    opacity: 60%;
+}
+
 .sheet-modal-content {
     display: flex;
     font-size: 0.8em;
