@@ -79,6 +79,33 @@
     margin: 1em 0 0.5em 0;
 }
 
+.closet-dialog-divider-container {
+    display: flex;
+    gap: 0.5em;
+}
+
+.closet-dialog-divider {
+    border: 0.1em solid lightgray;
+    border-radius: 1em;
+    margin-top: 1em;
+    width: 13em;
+}
+
+.closet-dialog-divider-text {
+    color: lightgray;
+    font-size: 1.2em;
+}
+
+.closet-dialog-create-outfit {
+    color: #0000ff;
+    font-size: 1.2em;
+}
+
+.closet-dialog-create-outfit:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .closet-input-name {
     border-radius: 0.2em;
 }
