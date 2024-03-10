@@ -128,10 +128,35 @@
     font-size: 1.2em;
 }
 
-.closet-delete-button {
+.closet-delete-button, .closet-merge-button {
     margin: 1em;
     padding: 1em 8em 1em 8em;
-    background-color: #e82222;
     color: #ffffff;
     border-radius: 0.5em;
+}
+
+.closet-delete-button {
+    background-color: #e82222;
+}
+
+.closet-delete-button:hover {
+    background-color: #b91b1b;
+}
+
+.closet-merge-button {
+    background-color: #a9a9a9;
+}
+
+.closet-merge-button:hover {
+    background-color: #787878;
+}
+
+.closet-dialog-outfit-name {
+    display: block;
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+.closet-input-name-outfit {
+    
 }

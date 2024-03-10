@@ -180,11 +180,10 @@ const UploadModal = ({ isOpen, onClose, clothesPicture, setClothesPicture, uploa
                         <div className={styles['closet-dialog-user-interaction']}>
                             <label className={styles['closet-dialog-label']}>Display Name</label>
                             <Input
-                                type="text"
-                                focusBorderColor='black'
                                 className={styles['closet-input-name']}
                                 placeholder="Set the item name"
-                                onChange={e => uploadName.current = e.target.value} />
+                                onChange={e => uploadName.current = e.target.value} 
+                            />
                             <label className={styles['closet-dialog-label']}>Select Category</label>
                             <Select
                                 placeholder='Choose a category for your item'
