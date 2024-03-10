@@ -25,7 +25,7 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    content: "Get Started";
+    content: "Sign in";
     background-image: linear-gradient(to right, #e66465, #9198e5);
     border-radius: 0.5em;
     transition: all 0.4s ease-in-out;
@@ -37,5 +37,5 @@
 }
 
 .navbar-signin:hover::after {
-    opacity: 0.8;
+    opacity: 1;
 }

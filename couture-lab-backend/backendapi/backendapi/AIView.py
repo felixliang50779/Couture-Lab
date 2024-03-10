@@ -311,8 +311,9 @@ def send_stylist_response(user_query, user_questionnaire):
     Call the following functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
-    3. 'get_clothing_data' whenever making a specific style recommendation - recommend items
-    specifically for the {gender} gender.
+    3. 'get_clothing_data' whenever making a specific style recommendation. When determining
+    items to call the function with, keep in mind the user is someone who has an implicit
+    preferred style of {preferred_style}
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always extract product links and images.
