@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
     let contextData = {
         currentUser: currentUser,
-        logoutUser: logoutUser,
+        logoutUser: logoutUser
     }
 
     if (pending) {

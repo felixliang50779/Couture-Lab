@@ -1,16 +1,17 @@
-import { useState } from "react";
+// UI-related modules
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Sidebar } from "react-pro-sidebar";
+import styles from './stylingAssistant.module.css';
+import 'react-dots-loader/index.css';
 
+// Utility modules
+import { displayUserStylingPreferences } from "../Pages/Profile";
 import parse from "html-react-parser";
 import ScrollToBottom from "react-scroll-to-bottom";
 import Loader from "react-dots-loader";
 import Linkify from "linkify-react";
-
-import 'react-dots-loader/index.css';
-
-import styles from './stylingAssistant.module.css';
 
 export default function StylingAssistant() {
     const [collapsed, setCollapsed] = useState(true);
@@ -18,6 +19,14 @@ export default function StylingAssistant() {
     const [queryLog, setQueryLog] = useState([]);
     const [responseLog, setResponseLog] = useState([]);
 
+    const questionnaireRef = useRef({});
+
+    useEffect(() => {
+        async function fetchData() {
+            questionnaireRef.current = await displayUserStylingPreferences();
+        }
+        fetchData();
+    });
     
     const toggleCollapse = () => {
         setCollapsed(prevState => {
@@ -45,7 +54,7 @@ export default function StylingAssistant() {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify({"text": userInput})
+            body: JSON.stringify({"text": userInput, "questionnaire": questionnaireRef.current})
         });
 
         // Here we start prepping for the streaming response
@@ -103,8 +112,7 @@ export default function StylingAssistant() {
                     zIndex: 2
                 }}>
                     <ScrollToBottom 
-                        className={styles['answer-log']}
-                        tabIndex="0">
+                        className={styles['answer-log']}>
                         {queryLog.length !== 0 ? queryLog.map((query, index) => {
                             return (
                                 <div key={index}>

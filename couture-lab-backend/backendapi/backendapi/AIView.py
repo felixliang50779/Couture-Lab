@@ -246,7 +246,7 @@ async def process_functions(messages, tools):
         return messages
 
 # Generate response based on user query
-def send_stylist_response(user_query):
+def send_stylist_response(user_query, user_questionnaire):
 
     # Providing descriptions of all
     # available functions for the stylist to call
@@ -304,14 +304,15 @@ def send_stylist_response(user_query):
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    Use knowledge of current fashion trends and product data to better influence
-    your recommendations. When asked for an outfit, provide a complete set of items,
-    including tops, hats, bottoms, and accessories. Always provide pictures for items.
+    Use knowledge of current fashion trends and product data to better influence your recommendations. 
+    When asked for an outfit, provide a complete set of items, including tops, hats, bottoms,
+    and accessories. Always provide pictures for items.
 
     Call the following functions in one go - do not expect follow-up opportunities:
     1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
     2. 'get_weather_data' whenever you need weather conditions of a specific location
-    3. 'get_clothing_data' whenever making a specific style recommendation.
+    3. 'get_clothing_data' whenever making a specific style recommendation - recommend items
+    specifically for the {gender} gender.
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always extract product links and images.
@@ -320,7 +321,17 @@ def send_stylist_response(user_query):
     for fashion-related accessories or items.
 
     Address the user as "you".
-    '''
+    '''.format(age = user_questionnaire['Age group'], 
+    body_type = user_questionnaire['Body type'],
+    budget = user_questionnaire['Budget'],
+    experiment_level = user_questionnaire['Experiment level'],
+    eye_color = user_questionnaire['Eye color'],
+    frequent_events = user_questionnaire['Frequent events'],
+    gender = user_questionnaire['Gender'],
+    hair_color = user_questionnaire['Hair color'],
+    preferred_style = user_questionnaire['Preferred style'],
+    skin_tone = user_questionnaire['Skin tone'],
+    sustainability = user_questionnaire['Sustainability'])
 
     messages = [
         {"role": "system", "content": system_message},
@@ -369,9 +380,11 @@ class LangServeHandle(APIView):
         try:
             serializer = AISerializer(data = request.data)
             serializer.is_valid(raise_exception=True)
-            text = serializer.validated_data['text']
+            query = serializer.validated_data['text']
+            questionnaire = request.data['questionnaire']
 
-            return StreamingHttpResponse(send_stylist_response(text), content_type="text/event-stream")
+            return StreamingHttpResponse(
+                send_stylist_response(query, questionnaire), content_type="text/event-stream")
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

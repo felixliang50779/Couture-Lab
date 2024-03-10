@@ -31,6 +31,25 @@ const options = {
     frequentEvents: ['Work', 'Casual Outings', 'Formal Events', 'Fitness', 'Travel', 'Other'],
 };
 
+// Displays user styling preferences on profile
+export const displayUserStylingPreferences = async () => {
+    const closetRef = collection(db, "virtual-closet");
+
+    const questionnaires = query(closetRef,
+        where(documentId(), "==", "questionnaires"));
+
+    let questionnaireData = {};
+
+    const querySnapshot = await getDocs(questionnaires);
+    querySnapshot.forEach((doc) => {
+        if (doc.data()[FirebaseAuth.currentUser.uid]) {
+            questionnaireData = doc.data()[FirebaseAuth.currentUser.uid];
+        }
+    });
+
+    return questionnaireData;
+}
+
 function CollapseForm({ setUserStylingPreferences }) {
 
     const { 
@@ -137,24 +156,12 @@ export default function Profile() {
     const currentUsername = currentUser.displayName;
     const currentUserEmail = currentUser.email;
 
-    // Displays user styling preferences on profile
-    const displayUserStylingPreferences = async () => {
-        const closetRef = collection(db, "virtual-closet");
-
-        const questionnaires = query(closetRef,
-            where(documentId(), "==", "questionnaires"));
-
-        const querySnapshot = await getDocs(questionnaires);
-        querySnapshot.forEach((doc) => {
-            if (doc.data()[FirebaseAuth.currentUser.uid]) {
-                setUserStylingPreferences(doc.data()[FirebaseAuth.currentUser.uid]);
-                return;
-            }
-        });
-    }
-
     useEffect(() => {
-        displayUserStylingPreferences();
+        async function fetchData() {
+            const userData = await displayUserStylingPreferences();
+            setUserStylingPreferences(userData);
+        }
+        fetchData();
     }, []);
 
     return (
