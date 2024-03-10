@@ -1,13 +1,13 @@
 // UI-related modules
 import {
     AlertDialog, AlertDialogBody, AlertDialogHeader, AlertDialogContent, 
-	AlertDialogOverlay, AlertDialogCloseButton, Progress
+	AlertDialogOverlay, AlertDialogCloseButton, Progress, Input
 } from '@chakra-ui/react';
 
 import styles from '../PageStyles/Modal.module.css';
 
 
-export default function MergeModal({ isOpen, onClose, deletingStatus, setDeletingStatus, selectedItems, setGalleryData, setFilteredGallery, handleToggleSelect }) {
+export default function OutfitModal({ isOpen, onClose, deletingStatus, setDeletingStatus, selectedItems, setGalleryData, setFilteredGallery, handleToggleSelect }) {
     return (
         <AlertDialog
             motionPreset='slideInBottom'
@@ -26,9 +26,13 @@ export default function MergeModal({ isOpen, onClose, deletingStatus, setDeletin
                 <AlertDialogCloseButton className={`${deletingStatus && styles['closet-upload-disabled']}`}/>
                 <AlertDialogBody>
                     <h1>
-                        {`Create outfit from ${selectedItems.length} ${selectedItems.length === 1 ? "item?" : "items?"}`}
+                        {`Create a outfit from ${selectedItems.length} ${selectedItems.length === 1 ? "item?" : "items?"}`}
                     </h1>
-                    <h1>Merge Picture</h1>
+                    <label className={styles['closet-dialog-outfit-name']}>Outfit Name</label>
+                    <Input 
+                        className={styles['closet-input-name-outfit']}
+                        placeholder="Set the outfit name"
+                    />
                     { deletingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
                     <button 
                         className={styles['closet-merge-button']}

@@ -18,7 +18,7 @@ import StylingAssistant from '../Components/stylingAssistant';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
-import MergeModal from '../Components/mergeModal';
+import OutfitModal from '../Components/outfitModal';
 import Sheet from 'react-modal-sheet';
 
 import styles from '../PageStyles/Closet.module.css';
@@ -28,7 +28,7 @@ const Closet = () => {
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
-    const { isOpen: mergeModalOpen, onOpen: onMergeModalOpen, onClose: onMergeModalClose } = useDisclosure();
+    const { isOpen: OutfitModalOpen, onOpen: onOutfitModalOpen, onClose: onOutfitModalClose } = useDisclosure();
 
 	const [clothesPicture, setClothesPicture] = useState();
     const [galleryData, setGalleryData] = useState([]);
@@ -37,8 +37,7 @@ const Closet = () => {
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
-    const [mergeStatus, setMergeStatus] = useState(false);
-    const [multiMergeStatus, setMultiMergeStatus] = useState(false);
+    const [multiOutfitStatus, setMultiOutfitStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
     
@@ -242,11 +241,11 @@ const Closet = () => {
                 setFilteredGallery={setFilteredGallery}
                 handleToggleSelect={handleToggleSelect} 
             />
-            <MergeModal
-                isOpen={mergeModalOpen}
-                onClose={onMergeModalClose}
-                deletingStatus={multiMergeStatus}
-                setDeletingStatus={setMultiMergeStatus}
+            <OutfitModal
+                isOpen={OutfitModalOpen}
+                onClose={onOutfitModalClose}
+                deletingStatus={multiOutfitStatus}
+                setDeletingStatus={setMultiOutfitStatus}
                 selectedItems={selectedItems}
                 setGalleryData={setGalleryData}
                 setFilteredGallery={setFilteredGallery}
@@ -277,16 +276,16 @@ const Closet = () => {
                                 <div className={styles['sheet-modal-button-container']}>
                                     <button
                                         className={styles['sheet-modal-create-oufit']}
-                                        disabled={mergeModalOpen}
+                                        disabled={OutfitModalOpen}
                                         onClick={() => {
                                             if (!selectedItems.length) {
                                                 toast("Please select at least one item!");
                                                 return;
                                             }
-                                            onMergeModalOpen();
+                                            onOutfitModalOpen();
                                         }} 
                                     >
-                                        Merge Selected
+                                        Create Outfit
                                     </button>
                                     <button
                                         className={styles['sheet-modal-button']}

@@ -1,4 +1,8 @@
+import { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
+import { AuthContext } from '../Utilities/authcontext';
 
 import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
@@ -39,6 +43,18 @@ const StaggeredTextAnimation = (text) => {
 };
 
 export default function Home() {
+
+    const navigate = useNavigate();
+
+    const { currentUser } = useContext(AuthContext);
+    
+    // If user is signed in, redirects to closet
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/closet');
+        }
+    })
+
     return (
         <div className={styles['content-container']}>
             <NavBar />  
