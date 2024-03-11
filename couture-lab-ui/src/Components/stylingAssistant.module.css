@@ -26,13 +26,13 @@
 
 .answer-log {
     display: flex;
+    flex-direction: column;
     border-style: solid;
     border-color: gray;
     border-radius: 1em;
     border-width: 0.1em;
     box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    flex-direction: column;
-    max-width: 96%;
+    width: 96%;
     height: 83vh;
     padding: 0.5em;
     margin: 1.2vw 0 3vh 1vw;

@@ -9,7 +9,7 @@ import 'react-dots-loader/index.css';
 // Utility modules
 import { displayUserStylingPreferences } from "../Pages/Profile";
 import parse from "html-react-parser";
-import ScrollToBottom from "react-scroll-to-bottom";
+import { AutoScrollContainer } from "react-auto-scroll-container";
 import Loader from "react-dots-loader";
 import Linkify from "linkify-react";
 
@@ -111,7 +111,8 @@ export default function StylingAssistant() {
                     height: "100%",
                     zIndex: 2
                 }}>
-                    <ScrollToBottom 
+                    <AutoScrollContainer
+                        percentageThreshold={100}
                         className={styles['answer-log']}>
                         {queryLog.length !== 0 ? queryLog.map((query, index) => {
                             return (
@@ -142,7 +143,7 @@ export default function StylingAssistant() {
                         <p className={styles['starter-text']}>
                             Ask me anything to get started!
                         </p>}
-                    </ScrollToBottom>
+                    </AutoScrollContainer>
                     <form
                         className={styles['chatbot-container']}
                         onSubmit={handleQuery}>
