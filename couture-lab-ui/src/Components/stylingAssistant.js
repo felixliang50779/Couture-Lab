@@ -141,7 +141,7 @@ export default function StylingAssistant() {
                             )
                         }) : 
                         <p className={styles['starter-text']}>
-                            Ask me anything to get started!
+                            Ask me anything fashion-related!
                         </p>}
                     </AutoScrollContainer>
                     <form

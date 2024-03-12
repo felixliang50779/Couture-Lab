@@ -83,11 +83,23 @@ async def get_local_weather(session):
 async def get_clothing_item(
     item,
     session,
+    gender,
     country="US"
 ):
     url = "https://real-time-product-search.p.rapidapi.com/search"
 
-    querystring = {"q":item,"country":country,"language":"en"}
+    if gender == "Male":
+        querystring = \
+            {
+                "q": "men's {}".format(item),
+                "country": country
+            }
+    else:
+        querystring = \
+            {
+                "q": "women's {}".format(item),
+                "country": country
+            }
 
     headers = {
         "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
@@ -108,7 +120,6 @@ async def get_clothing_item(
                 del product_recommendations[product_index]["product_reviews_page_url"]
                 del product_recommendations[product_index]["product_num_reviews"]
                 del product_recommendations[product_index]["product_num_offers"]
-                del product_recommendations[product_index]["typical_price_range"]
                 del product_recommendations[product_index]["offer"]
 
             return product_recommendations
@@ -119,6 +130,7 @@ async def get_clothing_item(
 async def get_clothing_data(
     clothing_items,
     session,
+    gender,
     country="US",
     sort_by=None,
     max_price=None,
@@ -130,7 +142,7 @@ async def get_clothing_data(
         
         for item in item_list:
             product_promises.append(asyncio.ensure_future(get_clothing_item(
-                item, session, country)))
+                item, session, gender, country)))
 
         for promise in asyncio.as_completed(product_promises, timeout=60):
             response = await promise
@@ -178,7 +190,7 @@ async def get_weather_data(location, session):
             return json.dumps(response_dict)
 
 # Asynchronous function for the styling assistant to process any function calls concurrently
-async def process_functions(messages, tools):
+async def process_functions(messages, tools, user_gender):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
@@ -212,6 +224,8 @@ async def process_functions(messages, tools):
 
                     if function_name == "get_clothing_data":
                         fetched_products = True
+
+                        function_args["gender"] = user_gender
 
                         user_country_code = await get_country_code(session)
 
@@ -255,13 +269,13 @@ def send_stylist_response(user_query, user_questionnaire):
             "type": "function",
             "function": {
                 "name": "get_clothing_data",
-                "description": "Get specific clothing item recommendations",
+                "description": "Get product data for one or more clothing items",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "clothing_items": {
                             "type": "string",
-                            "description": "The name of a single clothing item, e.g. 't-shirt'."
+                            "description": "The name of an item, e.g. 't-shirt', or multiple, e.g. 't-shirt, jeans'"
                         }
                     },
                     "required": ["clothing_items"]
@@ -272,7 +286,7 @@ def send_stylist_response(user_query, user_questionnaire):
             "type": "function",
             "function": {
                 "name": "get_local_weather",
-                "description": "Get real-time weather data of local area",
+                "description": "Get local weather",
                 "parameters": {
                     "type": "object",
                     "properties": {},
@@ -284,7 +298,7 @@ def send_stylist_response(user_query, user_questionnaire):
             "type": "function",
             "function": {
                 "name": "get_weather_data",
-                "description": "Get real-time weather data of a given location",
+                "description": "Get weather at a given location",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -304,16 +318,16 @@ def send_stylist_response(user_query, user_questionnaire):
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    Use knowledge of current fashion trends and product data to better influence your recommendations. 
-    When asked for an outfit, provide a complete set of items, including tops, hats, bottoms,
-    and accessories. Always provide pictures for items.
+    When asked for an outfit, provide a matching set of items, including tops,
+    hats, bottoms, and accessories. Provide pictures for items. 
 
     Call the following functions in one go - do not expect follow-up opportunities:
-    1. 'get_local_weather' whenever you specifically need weather conditions of the user's local area
-    2. 'get_weather_data' whenever you need weather conditions of a specific location
+    1. 'get_local_weather' whenever you need the weather of the user's local area.
+    2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
+    local area.
     3. 'get_clothing_data' whenever making a specific style recommendation. When determining
     items to call the function with, keep in mind the user is someone who has an implicit
-    preferred style of {preferred_style}
+    preferred style of {preferred_style}.
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always extract product links and images.
@@ -328,7 +342,6 @@ def send_stylist_response(user_query, user_questionnaire):
     experiment_level = user_questionnaire['Experiment level'],
     eye_color = user_questionnaire['Eye color'],
     frequent_events = user_questionnaire['Frequent events'],
-    gender = user_questionnaire['Gender'],
     hair_color = user_questionnaire['Hair color'],
     preferred_style = user_questionnaire['Preferred style'],
     skin_tone = user_questionnaire['Skin tone'],
@@ -342,7 +355,7 @@ def send_stylist_response(user_query, user_questionnaire):
     # Initial response that we can stream
     # a reply from if no function calls are required
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-3.5-turbo-0125",
         messages=messages,
         tools=tools,
         tool_choice="auto",
@@ -361,10 +374,10 @@ def send_stylist_response(user_query, user_questionnaire):
 
     # Alternatively, if functions are required...
     if functions_required:
-        messages = asyncio.run(process_functions(messages, tools))
+        messages = asyncio.run(process_functions(messages, tools, user_questionnaire['Gender']))
 
         refined_response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+            model="gpt-3.5-turbo-0125",
             messages=messages,
             stream=True
         )
@@ -374,6 +387,7 @@ def send_stylist_response(user_query, user_questionnaire):
                 yield chunk.choices[0].delta.content
 
 class LangServeHandle(APIView):
+
     def get(self, request):
         return Response("test")
 
