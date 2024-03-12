@@ -9,7 +9,7 @@ import { db, FirebaseAuth } from '../Utilities/firebase';
 
 // UI-related modules
 import { toast } from 'react-toastify';
-import { Progress } from '@chakra-ui/react';
+import { Spinner } from '@chakra-ui/react';
 
 // Styling
 import styles from '../PageStyles/BasicInfo.module.css';
@@ -112,11 +112,11 @@ export default function BasicInfo() {
             <div className={styles['basicinfo-form-container']}>
                 <h1 className={styles['basicinfo-header']}>Sign Up</h1>
                 { loadingStatus ? (
-                    <Progress isIndeterminate size='xs' colorScheme="teal" />
+                    <Spinner size='lg' /> 
                 ) : userAlreadyAnswered ? (
                     <div>
-                        <h1>Form was already been answered!</h1>
-                        <a href='/dashboard' className={styles['basicinfo-backto']}>Back to Dashboard</a>
+                        <h1 className={styles['basicinfo-alreadyanswered']}>Form was already been answered!</h1>
+                        <a href='/closet' className={styles['basicinfo-backto']}>Back to Dashboard</a>
                     </div>
                 ) : (
                     <div>

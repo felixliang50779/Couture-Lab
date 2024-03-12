@@ -66,6 +66,17 @@
     margin: 1em 3em 1em 3em;
 }
 
+.profile-styling-card-header {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.profile-styling-card-current{
+    font-size: 1.2em;
+    text-decoration: underline;
+    margin-bottom: 0.5em;
+}
+
 .profile-deleteaccount {
     background-color: #ff5050;
     margin: 0 1em 1em 1.4em;

@@ -10,6 +10,7 @@ import DeleteAccountModal from '../Components/deleteaccount';
 // UI-related modules
 import { useDisclosure, Collapse } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
+import { Spinner } from '@chakra-ui/react'
 
 import DashboardNavBar from '../Components/dashboardnavbar';
 
@@ -55,7 +56,7 @@ function CollapseForm({ setUserStylingPreferences }) {
     const { 
         watch, 
         register, 
-        formState: { errors } 
+        formState: { errors, isValid } 
     } = useForm({ mode: "all" });
 
     const saveUserInfo = () => {
@@ -66,6 +67,11 @@ function CollapseForm({ setUserStylingPreferences }) {
         updateObj[FirebaseAuth.currentUser.uid] = formData;
 
         try {
+            if (!isValid) {
+                toast.error("Form not complete, fill out all fields");
+                return;
+            }
+
             // Update Firebase display name
             updateProfile(FirebaseAuth.currentUser, {
                 displayName: formData.name
@@ -139,13 +145,19 @@ function CollapseForm({ setUserStylingPreferences }) {
                         />
                     </div>
                 </form>
-                <button className={styles['profile-updatebutton']} onClick={saveUserInfo}>Update Profile</button>
+                <button 
+                    className={styles['profile-updatebutton']}
+                    onClick={saveUserInfo}
+                >
+                    Update Profile
+                </button>
             </Collapse>
         </>
       )
 }
 
 export default function Profile() {
+    const [loadingStylingPreferences, setLoadingStylingPreferences] = useState(true);
     // Stores user styling preferences data for displaying
     const [userStylingPreferences, setUserStylingPreferences] = useState({});
     // Manages opening and closing of delete account dialog
@@ -160,6 +172,7 @@ export default function Profile() {
         async function fetchData() {
             const userData = await displayUserStylingPreferences();
             setUserStylingPreferences(userData);
+            setLoadingStylingPreferences(false);
         }
         fetchData();
     }, []);
@@ -185,24 +198,30 @@ export default function Profile() {
                     />
                 </div>
                 <div className={styles['profile-styling-card']}>
-                    {/* Have to change selects so it displays current user preference. Maybe make it only update 
-                    the changed select option if it's possible */}
-                    <div className={styles['profile-styling-card-inner']}>
-                        <h1>Styling Preferences</h1>
-                        <h2>Current Styling Preferences</h2>
-                        <p>Gender: {userStylingPreferences["Gender"]}</p> 
-                        <p>Age Group: {userStylingPreferences["Age group"]}</p>
-                        <p>Preferred Style: {userStylingPreferences["Preferred style"]}</p>
-                        <p>Hair Color: {userStylingPreferences["Hair color"]}</p>
-                        <p>Skin Tone: {userStylingPreferences["Skin tone"]}</p>
-                        <p>Eye Color: {userStylingPreferences["Eye color"]}</p>
-                        <p>Body Type: {userStylingPreferences["Body type"]}</p>
-                        <p>Experimental Level: {userStylingPreferences["Experiment level"]}</p>
-                        <p>Budget: {userStylingPreferences["Budget"]}</p>
-                        <p>Sustainability Importance: {userStylingPreferences["Sustainability"]}</p>
-                        <p>Frequent Events: {userStylingPreferences["Frequent events"]}</p>
-                        <CollapseForm setUserStylingPreferences={setUserStylingPreferences} />
-                    </div>
+                    { loadingStylingPreferences ? (
+                        <div className={styles['profile-styling-card-inner']}>
+                            <Spinner size='lg' /> 
+                        </div>
+                    ) : (
+                        <div className={styles['profile-styling-card-inner']}>
+                            <h1 className={styles['profile-styling-card-header']}>Styling Preferences</h1>
+                            <h2 className={styles['profile-styling-card-current']}>Current Styling Preferences</h2>
+                            <section className={styles['profile-styling-card-current-preferences']}>
+                                <p>Gender: {userStylingPreferences["Gender"]}</p> 
+                                <p>Age Group: {userStylingPreferences["Age group"]}</p>
+                                <p>Preferred Style: {userStylingPreferences["Preferred style"]}</p>
+                                <p>Hair Color: {userStylingPreferences["Hair color"]}</p>
+                                <p>Skin Tone: {userStylingPreferences["Skin tone"]}</p>
+                                <p>Eye Color: {userStylingPreferences["Eye color"]}</p>
+                                <p>Body Type: {userStylingPreferences["Body type"]}</p>
+                                <p>Experimental Level: {userStylingPreferences["Experiment level"]}</p>
+                                <p>Budget: {userStylingPreferences["Budget"]}</p>
+                                <p>Sustainability Importance: {userStylingPreferences["Sustainability"]}</p>
+                                <p>Frequent Events: {userStylingPreferences["Frequent events"]}</p>
+                            </section>
+                            <CollapseForm setUserStylingPreferences={setUserStylingPreferences} />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

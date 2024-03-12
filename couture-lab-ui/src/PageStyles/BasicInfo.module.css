@@ -19,6 +19,10 @@
     font-weight: bold;
 }
 
+.basicinfo-alreadyanswered {
+    font-size: 1.5em;
+}
+
 .basicinfo-backto {
     /* Inline-block needed because of margin collapse */
     display: inline-block;

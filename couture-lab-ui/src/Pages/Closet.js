@@ -7,7 +7,7 @@ import
 import { db, FirebaseAuth } from '../Utilities/firebase';
 
 // UI-related modules
-import { useDisclosure } from '@chakra-ui/react';
+import { useDisclosure, Spinner } from '@chakra-ui/react';
 import { PiCursorClickFill, PiPantsDuotone, PiSneaker } from "react-icons/pi";
 import { IoMdAdd, IoIosArrowDown } from "react-icons/io";
 import { IoShirtOutline } from "react-icons/io5";
@@ -40,6 +40,8 @@ const Closet = () => {
     const [multiOutfitStatus, setMultiOutfitStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('all');
+
+    const [loadingGallery, setLoadingGallery] = useState(true);
     
     const uploadName = useRef('');
     const uploadCategory = useRef({});
@@ -62,6 +64,7 @@ const Closet = () => {
             if (userItems !== undefined) {
                 setGalleryData(userItems);
                 setFilteredGallery(userItems);
+                setLoadingGallery(false);
             }
         });
     }
@@ -193,7 +196,9 @@ const Closet = () => {
 				</div>
                 <div>
                     <div className={styles['closet-gallery-container']}>
-                        {filteredGallery.length > 0 ? (
+                        { loadingGallery ? (
+                            <Spinner size='lg' /> 
+                        ) : filteredGallery.length > 0 ? (
                             filteredGallery.map(item => <GalleryItem key={item.storageName} item={item} />)
                         ) : (
                             <p className={styles['closet-gallery-empty']}>
