@@ -84,22 +84,34 @@ async def get_clothing_item(
     item,
     session,
     gender,
+    budget,
     country="US"
 ):
     url = "https://real-time-product-search.p.rapidapi.com/search"
 
     if gender == "Male":
+        other_filters = "1020288|1020289"
+    else:
+        other_filters = "1020288|1020290"
+
+    if budget == "Low":
+        max_price = 50
+    elif budget == "Medium":
+        max_price = 200
+
+    if (budget == "Low") or (budget == "Medium"):
         querystring = \
             {
                 "q": "men's {}".format(item),
-                "other_filters": "1020288|1020289",
+                "other_filters": other_filters,
+                "max_price": max_price,
                 "country": country
             }
     else:
         querystring = \
             {
-                "q": "women's {}".format(item),
-                "other_filters": "1020288|1020290",
+                "q": "men's {}".format(item),
+                "other_filters": other_filters,
                 "country": country
             }
 
@@ -112,7 +124,7 @@ async def get_clothing_item(
         if response.status == 200:
             product_dict = await response.json()
 
-            product_recommendations = sample(product_dict['data'], 3)
+            product_recommendations = sample(product_dict['data'], 2)
 
             for product_index in range(len(product_recommendations)):
                 del product_recommendations[product_index]["product_id"]
@@ -133,10 +145,8 @@ async def get_clothing_data(
     clothing_items,
     session,
     gender,
-    country="US",
-    sort_by=None,
-    max_price=None,
-    brand=None
+    budget,
+    country="US"
     ):
         item_list = clothing_items.split(", ")
 
@@ -144,7 +154,7 @@ async def get_clothing_data(
         
         for item in item_list:
             product_promises.append(asyncio.ensure_future(get_clothing_item(
-                item, session, gender, country)))
+                item, session, gender, budget, country)))
 
         for promise in asyncio.as_completed(product_promises, timeout=60):
             response = await promise
@@ -192,7 +202,7 @@ async def get_weather_data(location, session):
             return json.dumps(response_dict)
 
 # Asynchronous function for the styling assistant to process any function calls concurrently
-async def process_functions(messages, tools, user_gender):
+async def process_functions(messages, tools, user_gender, user_budget):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
@@ -228,6 +238,7 @@ async def process_functions(messages, tools, user_gender):
                         fetched_products = True
 
                         function_args["gender"] = user_gender
+                        function_args["budget"] = user_budget
 
                         user_country_code = await get_country_code(session)
 
@@ -378,7 +389,8 @@ def send_stylist_response(user_query, user_questionnaire):
 
     # Alternatively, if functions are required...
     if functions_required:
-        messages = asyncio.run(process_functions(messages, tools, user_questionnaire['Gender']))
+        messages = asyncio.run(process_functions(
+            messages, tools, user_questionnaire['Gender'], user_questionnaire['Budget']))
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
