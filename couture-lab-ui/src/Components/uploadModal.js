@@ -1,5 +1,4 @@
 // Utility-related modules
-import { useState } from 'react';
 import { uploadBytes, ref } from 'firebase/storage';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,7 +15,7 @@ import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import styles from '../PageStyles/Modal.module.css';
 
-const UploadModal = ({ 
+const UploadModal = ({
     isOpen, 
     onClose, 
     clothesPicture, 
@@ -29,9 +28,6 @@ const UploadModal = ({
     selectedCategory, 
     setFilteredGallery 
 }) => {
-    const [isCreatingOutfit, setIsCreatingOutfit] = useState(false);
-    const [isUploadingOutfitItems, setIsUploadingOutfitItems] = useState(false);
-    const [numberOfItems, setNumberOfItems] = useState('');
 
     const handleClose = () => {
         setClothesPicture(null);
@@ -124,40 +120,6 @@ const UploadModal = ({
         }
     }
 
-    const setNumberOfItemsInOutfit = () => {
-        if (!uploadName.current) {
-            toast.error("No name for outfit item");
-        }
-        else if (numberOfItems < 1) {
-            toast.error("Number of items is less than 1");
-        }
-        else if (numberOfItems > 8) {
-            toast.error("Number of items is more than 8");
-        }
-        else {
-            // Switches to uploading outfit items
-            setIsUploadingOutfitItems(true);
-            setIsCreatingOutfit(false);
-        }
-    }
-
-    const backToOutfit = () => {
-        // Switches to setting outfit name and number of items
-        setIsUploadingOutfitItems(false);
-        setIsCreatingOutfit(true);
-        // Resets number of items and name of outfit
-        setNumberOfItems(null);
-        uploadName.current = '';
-    }
-
-    const switchToCreateOutfit = () => {
-        setIsCreatingOutfit(true);
-    }
-
-    const switchToUploadItem = () => {
-        setIsCreatingOutfit(false);
-    }
-
 
     return (
         <AlertDialog
@@ -171,155 +133,60 @@ const UploadModal = ({
             <AlertDialogOverlay /> 
             <AlertDialogContent className={styles['closet-dialog-content']}>
                 <AlertDialogHeader>
-                    {isCreatingOutfit ? 'Create Outfit' : isUploadingOutfitItems ? 'New Outfit Item' : 'New Item'}
+                    New Item
                 </AlertDialogHeader>
                 <AlertDialogCloseButton className={`${uploadingStatus && styles['closet-upload-disabled']}`}/>
-                { isCreatingOutfit ? (
-                    <AlertDialogBody>
-                        <div className={styles['closet-dialog-user-interaction']}>
-                            <label className={styles['closet-dialog-label']}>Outfit Name</label>
-                            <Input
-                                className={styles['closet-input-name']}
-                                placeholder="Set the item name"
-                                onChange={e => uploadName.current = e.target.value} 
-                            />
-                            <label className={styles['closet-dialog-label']}>Number of Items</label>
-                            <Input
-                                type="number"
-                                className={styles['closet-input-name']}
-                                placeholder="Set number of items in outfit (up to 10)"
-                                onChange={e => setNumberOfItems(e.target.value)}
-                            />
-                            <div className={styles['closet-dialog-divider-container']}>
-                                <hr className={styles['closet-dialog-divider']} />
-                                <h1 className={styles['closet-dialog-divider-text']}>Or</h1>
-                                <hr className={styles['closet-dialog-divider']} />
+                <AlertDialogBody>
+                    <label>
+                        <input type='file' hidden accept=".jpg,.png"
+                            onChange={(e) => setClothesPicture(e.target.files[0])}
+                        />
+                        { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
+                        clothesPicture ?
+                        <div className={styles['preview-image-container']}>
+                            <img
+                                className={styles['preview-image']}
+                                src={URL.createObjectURL(clothesPicture)}
+                                alt='clothesPic' loading='lazy' />
+                            <div className={styles['preview-image-overlay']}>
+                                Change Image
                             </div>
-                            <p className={styles['closet-dialog-create-outfit']} onClick={switchToUploadItem}>Upload Item</p>
-                        </div>
-                        <button
-                            className={`${styles['closet-upload-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
-                            onClick={setNumberOfItemsInOutfit}>
-                                Set Number of Items
-                        </button>
-                    </AlertDialogBody>
-                ) : isUploadingOutfitItems ? (
-                    <AlertDialogBody>
-                        <label>
-                            <input type='file' hidden accept=".jpg,.png"
-                                onChange={(e) => setClothesPicture(e.target.files[0])}
-                            />
-                            { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
-                            clothesPicture ?
-                            <div className={styles['preview-image-container']}>
-                                <img
-                                    className={styles['preview-image']}
-                                    src={URL.createObjectURL(clothesPicture)}
-                                    alt='clothesPic' loading='lazy' />
-                                <div className={styles['preview-image-overlay']}>
-                                    Change Image
-                                </div>
-                            </div> :
-                            <div className={styles['closet-upload-input']}>
-                                <AiOutlineCloudUpload size={40} />
-                                <p className={styles['closet-input-header']}>
-                                    Upload Your Picture of the Item
-                                </p>
-                                <p className={styles['closet-input-caption']}>
-                                    Accepts .jpg or .png
-                                </p>
-                            </div> }
-                        </label>
-                        <div className={styles['closet-dialog-user-interaction']}>
-                            <label className={styles['closet-dialog-label']}>Display Name</label>
-                            <Input
-                                className={styles['closet-input-name']}
-                                placeholder="Set the item name"
-                                onChange={e => uploadName.current = e.target.value} 
-                            />
-                            <label className={styles['closet-dialog-label']}>Select Category</label>
-                            <Select
-                                placeholder='Choose a category for your item'
-                                focusBorderColor='black'
-                                ref={uploadCategory} 
-                            >
-                                    <option value='top'>Top</option>
-                                    <option value='bottom'>Bottom</option>
-                                    <option value='shoe'>Shoe</option>
-                                    <option value='accessory'>Accessory</option>
-                            </Select>
-                        </div>
-                        <button 
-                            className={styles['closet-upload-button']}
-                            onClick={backToOutfit}
+                        </div> :
+                        <div className={styles['closet-upload-input']}>
+                            <AiOutlineCloudUpload size={40} />
+                            <p className={styles['closet-input-header']}>
+                                Upload Your Picture of the Item
+                            </p>
+                            <p className={styles['closet-input-caption']}>
+                                Accepts .jpg or .png
+                            </p>
+                        </div> }
+                    </label>
+                    <div className={styles['closet-dialog-user-interaction']}>
+                        <label className={styles['closet-dialog-label']}>Display Name</label>
+                        <Input
+                            className={styles['closet-input-name']}
+                            placeholder="Set the item name"
+                            onChange={e => uploadName.current = e.target.value} 
+                        />
+                        <label className={styles['closet-dialog-label']}>Select Category</label>
+                        <Select
+                            placeholder='Choose a category for your item'
+                            focusBorderColor='black'
+                            ref={uploadCategory} 
                         >
-                            Back
-                        </button>
-                        <button
-                            className={`${styles['closet-upload-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
-                            onClick={handleAdd}>
-                                Add
-                        </button>
-                    </AlertDialogBody>
-                ) : (
-                    <AlertDialogBody>
-                        <label>
-                            <input type='file' hidden accept=".jpg,.png"
-                                onChange={(e) => setClothesPicture(e.target.files[0])}
-                            />
-                            { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
-                            clothesPicture ?
-                            <div className={styles['preview-image-container']}>
-                                <img
-                                    className={styles['preview-image']}
-                                    src={URL.createObjectURL(clothesPicture)}
-                                    alt='clothesPic' loading='lazy' />
-                                <div className={styles['preview-image-overlay']}>
-                                    Change Image
-                                </div>
-                            </div> :
-                            <div className={styles['closet-upload-input']}>
-                                <AiOutlineCloudUpload size={40} />
-                                <p className={styles['closet-input-header']}>
-                                    Upload Your Picture of the Item
-                                </p>
-                                <p className={styles['closet-input-caption']}>
-                                    Accepts .jpg or .png
-                                </p>
-                            </div> }
-                        </label>
-                        <div className={styles['closet-dialog-user-interaction']}>
-                            <label className={styles['closet-dialog-label']}>Display Name</label>
-                            <Input
-                                className={styles['closet-input-name']}
-                                placeholder="Set the item name"
-                                onChange={e => uploadName.current = e.target.value} 
-                            />
-                            <label className={styles['closet-dialog-label']}>Select Category</label>
-                            <Select
-                                placeholder='Choose a category for your item'
-                                focusBorderColor='black'
-                                ref={uploadCategory} 
-                            >
-                                    <option value='top'>Top</option>
-                                    <option value='bottom'>Bottom</option>
-                                    <option value='shoe'>Shoe</option>
-                                    <option value='accessory'>Accessory</option>
-                            </Select>
-                            <div className={styles['closet-dialog-divider-container']}>
-                                <hr className={styles['closet-dialog-divider']} />
-                                <h1 className={styles['closet-dialog-divider-text']} >Or</h1>
-                                <hr className={styles['closet-dialog-divider']} />
-                            </div>
-                            <p className={styles['closet-dialog-create-outfit']} onClick={switchToCreateOutfit}>Create Outfit</p>
-                        </div>
-                        <button
-                            className={`${styles['closet-upload-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
-                            onClick={handleAdd}>
-                                Add
-                        </button>
-                    </AlertDialogBody>
-                )}
+                                <option value='top'>Top</option>
+                                <option value='bottom'>Bottom</option>
+                                <option value='shoe'>Shoe</option>
+                                <option value='accessory'>Accessory</option>
+                        </Select>
+                    </div>
+                    <button
+                        className={`${styles['closet-upload-button']} ${uploadingStatus && styles['closet-upload-disabled']}`}
+                        onClick={handleAdd}>
+                            Add
+                    </button>
+                </AlertDialogBody>
             </AlertDialogContent>
         </AlertDialog>
     );

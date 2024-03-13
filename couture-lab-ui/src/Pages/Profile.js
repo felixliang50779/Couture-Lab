@@ -8,9 +8,8 @@ import { db, FirebaseAuth } from '../Utilities/firebase';
 import DeleteAccountModal from '../Components/deleteaccount';
 
 // UI-related modules
-import { useDisclosure, Collapse } from '@chakra-ui/react';
+import { useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
-import { Spinner } from '@chakra-ui/react'
 
 import DashboardNavBar from '../Components/dashboardnavbar';
 
