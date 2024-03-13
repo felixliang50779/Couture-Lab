@@ -17,13 +17,22 @@
     font-family: 'Helvetica';
 }
 
+.tsparticles {
+    position: absolute;
+    width: 100%;
+    height: 35em;
+    top: 5em;
+}
+
 .intro-header {
+    z-index: 1;
     font-size: 5em;
     font-weight: 700;
 }
 
 .intro-description {
     font-size: 1.75em;
+    z-index: 1;
 }
 
 .getstarted-link {

@@ -1,6 +1,8 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
 
 import { AuthContext } from '../Utilities/authcontext';
 
@@ -10,6 +12,8 @@ import Footer from '../Components/footer';
 import DashboardImage from '../Assets/Images/closet.png';
 import ClosetImage from '../Assets/Images/closet.png';
 import ChatbotImage from '../Assets/Images/chatbot.png'
+
+
 
 import styles from '../PageStyles/Home.module.css';
 
@@ -53,11 +57,113 @@ export default function Home() {
         if (currentUser) {
             navigate('/closet');
         }
-    })
+    });
+
+    const [init, setInit] = useState(false);
+
+    // this should be run only once per application lifetime
+    useEffect(() => {
+      initParticlesEngine(async (engine) => {
+        // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        //await loadAll(engine);
+        //await loadFull(engine);
+        await loadSlim(engine);
+        //await loadBasic(engine);
+      }).then(() => {
+        setInit(true);
+      });
+    }, []);
+  
+    const particlesLoaded = (container) => {
+      console.log(container);
+    };
+  
+    const options = useMemo(
+      () => ({
+        fullScreen: {
+            enable: false
+        },
+        fpsLimit: 120,
+        interactivity: {
+          events: {
+            onClick: {
+              enable: true,
+              mode: "push",
+            },
+            onHover: {
+              enable: true,
+              mode: "repulse",
+            },
+          },
+          modes: {
+            push: {
+              quantity: 4,
+            },
+            repulse: {
+              distance: 200,
+              duration: 0.4,
+            },
+          },
+        },
+        particles: {
+          color: {
+            value: "#000000",
+          },
+          links: {
+            color: "#000000",
+            distance: 150,
+            enable: true,
+            opacity: 0.5,
+            width: 1,
+          },
+          move: {
+            direction: "spin",
+            enable: true,
+            outModes: {
+              default: "bounce",
+            },
+            random: false,
+            speed: 6,
+            straight: false,
+          },
+          number: {
+            density: {
+              enable: true,
+            },
+            value: 80,
+          },
+          opacity: {
+            value: 0.5,
+          },
+          shape: {
+            type: "triangle"
+          },
+          size: {
+            value: { min: 3, max: 5 },
+          },
+          rotate: {
+            direction: "clockwise",
+            animation: {
+                enable: true,
+                speed: 75,
+                sync: false
+            }
+          }
+        },
+        detectRetina: true,
+      }),
+      [],
+    );
 
     return (
         <div className={styles['content-container']}>
-            <NavBar />  
+            <NavBar />
+            {init ? <Particles
+                    className={styles.tsparticles}
+                    particlesLoaded={particlesLoaded}
+                    options={options} /> : <></>}
             <LoadOnView>
                 <section className={styles['intro-container']}>
                     <StaggeredTextAnimation text="Revolutionizing Fashion." />
