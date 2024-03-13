@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { FirebaseAuth } from '../Utilities/firebase.js';
 import { AuthContext } from '../Utilities/authcontext.js';
@@ -58,7 +58,9 @@ const SignIn = () => {
         
         <div className={styles['signin-container']}>
             <div className={styles['signin-card']}>
-                <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+                <div className={styles['card-header']}>
+                    <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+                </div>
                 <div className={styles['signin-content']}>
                     <div className={styles['signin-content-text']}>
                         <h1 className={styles['signin-header']}>Sign in</h1>
@@ -91,9 +93,11 @@ const SignIn = () => {
                             </form>
                             <div className={styles['signin-register']}>
                                 <h2>Not Registered Yet?</h2>
-                                <Link className={styles['signin-register-link']} to="/signup">
-                                    Register
-                                </Link>
+                                <i>
+                                    <a className={styles['signin-register-link']} href="/signup">
+                                        Register
+                                    </a>
+                                </i>
                             </div>
                         </div>
                     )}

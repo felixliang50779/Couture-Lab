@@ -62,7 +62,7 @@ export default function StylingAssistant() {
         const decoder = new TextDecoder();
         const loopRunner = true;
         const imgLabel = /!\[.*?\]/g;
-        const imgLink = /(\(https?:\/\/encrypted-tbn.*=CAE\))/g;
+        const imgLink = /(\(https?:\/\/encrypted-tbn.*\))/g;
 
         let stylistResponse = "";
         

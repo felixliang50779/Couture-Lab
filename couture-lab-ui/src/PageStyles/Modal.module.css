@@ -56,7 +56,7 @@
 
 .closet-upload-input:hover {
     cursor: pointer;
-    transform: scale(102%);
+    transform: scale(101%);
 }
 
 .closet-input-header {
@@ -124,7 +124,7 @@
 
 .closet-delete-category {
     font-weight: bold;
-    margin: 1em 0 0.5em 0;
+    margin: 1em 0 0.5em 1em;
     font-size: 1.2em;
 }
 

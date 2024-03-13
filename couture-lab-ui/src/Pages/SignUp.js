@@ -1,6 +1,6 @@
 // Utility-related modules
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { FirebaseAuth} from '../Utilities/firebase.js';
 
@@ -48,7 +48,9 @@ const SignUp = () => {
     return (
         <div className={styles['signin-container']}>
             <div className={styles['signin-card']}>
-                <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+                <div className={styles['card-header']}>
+                    <a className={styles['couturelab-logo']} href='/'>couturelab</a>
+                </div>
                 <div className={styles['signin-content']}>
                     <div className={styles['signin-content-text']}>
                         <h1 className={styles['signin-header']}>Sign up</h1>
@@ -81,9 +83,11 @@ const SignUp = () => {
                             </form>
                             <div className={styles['signin-register']}>
                                 <h2>Already Registered?</h2>
-                                <Link className={styles['signin-register-link']} to="/signin">
-                                    Login
-                                </Link>
+                                <i>
+                                    <a className={styles['signin-register-link']} href="/signin">
+                                        Login
+                                    </a>
+                                </i>
                             </div>
                         </div>
                     )}

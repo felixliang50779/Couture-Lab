@@ -178,28 +178,38 @@ async def get_weather_data(location, session):
     }
 
     async with session.get(url, params=querystring, headers=headers) as response:
-        location_dict = await response.json()
+        if response.status == 200:
+            location_dict = await response.json()
 
-        location_id = location_dict[0]["place_id"]
+            if not len(location_dict):
+                return "Error: Invalid location"
 
-        url = "https://ai-weather-by-meteosource.p.rapidapi.com/current"
+            location_id = location_dict[0]["place_id"]
 
-        querystring = {"place_id": location_id,"timezone":"auto","language":"en","units":"metric"}
+            url = "https://ai-weather-by-meteosource.p.rapidapi.com/current"
 
-        headers = {
-            "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
-            "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
-        }
+            querystring = {"place_id": location_id,"timezone":"auto","language":"en","units":"metric"}
 
-        async with session.get(url, params=querystring, headers=headers) as response:
-            weather_dict = await response.json()
+            headers = {
+                "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+                "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
+            }
 
-            temperature_in_celsius, wind_chill, wind_speed_in_meters_per_second, precipitation_in_cm = weather_dict["current"]["temperature"], weather_dict["current"]["wind_chill"], weather_dict["current"]["wind"]["speed"], weather_dict["current"]["precipitation"]["total"]
+            async with session.get(url, params=querystring, headers=headers) as response:
 
-            response_dict = {"temperature_in_celsius": temperature_in_celsius, "wind_chill": 
-            wind_chill, "wind_speed_in_meters_per_second": wind_speed_in_meters_per_second, "precipitation_in_cm": precipitation_in_cm}
+                if response.status == 200:
+                    weather_dict = await response.json()
 
-            return json.dumps(response_dict)
+                    temperature_in_celsius, wind_chill, wind_speed_in_meters_per_second, precipitation_in_cm = weather_dict["current"]["temperature"], weather_dict["current"]["wind_chill"], weather_dict["current"]["wind"]["speed"], weather_dict["current"]["precipitation"]["total"]
+
+                    response_dict = {"temperature_in_celsius": temperature_in_celsius, "wind_chill": 
+                    wind_chill, "wind_speed_in_meters_per_second": wind_speed_in_meters_per_second, "precipitation_in_cm": precipitation_in_cm}
+
+                    return json.dumps(response_dict)
+                
+                return f"Error: Unable to fetch weather data. Status code: {response.status}"
+        
+        return f"Error: Unable to fetch geolocation data. Status code: {response.status}"
 
 # Asynchronous function for the styling assistant to process any function calls concurrently
 async def process_functions(messages, tools, user_gender, user_budget):

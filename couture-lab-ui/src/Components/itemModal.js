@@ -77,7 +77,7 @@ export default function ItemModal({ onClose, isOpen, deletingStatus, setDeleting
                     {selectedItem.displayName}
                 </AlertDialogHeader>
                 <AlertDialogCloseButton className={`${deletingStatus && styles['closet-upload-disabled']}`}/>
-                <AlertDialogBody>
+                <AlertDialogBody display="flex" flexDirection="column" alignItems="start">
                     { deletingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
                     <img
                         className={styles['preview-image']}
@@ -86,6 +86,9 @@ export default function ItemModal({ onClose, isOpen, deletingStatus, setDeleting
                     }
                     <p className={styles['closet-delete-category']}>
                         Category: {selectedItem?.category?.charAt(0).toUpperCase() + selectedItem?.category?.slice(1)}
+                    </p>
+                    <p className={styles['closet-delete-category']}>
+                        Used In: 0 Outfits
                     </p>
                     <button
                         className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}

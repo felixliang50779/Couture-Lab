@@ -1,6 +1,6 @@
 .profile-container {
     /* Dealing with collapse */
-    height: 130vh;
+    height: 100vh;
     min-width: 545px;
 }
 
@@ -48,18 +48,22 @@
 
 .profile-stylingbutton {
     background-color: #000000;
-    margin: 1em 0 1em 1em;
+    margin: 1em 0 1em 0;
     width: 95%;
 }
 
 .profile-updatebutton {
     background-color: #808080;
-    margin: 1em 0 1em 1em;
+    margin: 1em 0 1em 0;
     width: 95%;
 }
 
-.profile-stylingbutton:hover, .profile-updatebutton:hover, .profile-deleteaccount:hover {
+.profile-stylingbutton:hover, .profile-deleteaccount:hover {
     transform: scale(105%);
+}
+
+.profile-updatebutton:hover {
+    background-color: black;
 }
 
 .profile-styling-card-inner {

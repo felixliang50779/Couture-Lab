@@ -3,7 +3,7 @@
     border-radius: 0.7em;
     border: 0.1em black solid;
     padding: 0.4em;
-    margin: 0.5em 0 0 0;
+    margin: 0.5em 0 0.5em 0;
 }
 
 .form-select:hover {

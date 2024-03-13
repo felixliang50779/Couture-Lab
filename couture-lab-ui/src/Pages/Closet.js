@@ -270,7 +270,7 @@ const Closet = () => {
                     <Sheet.Container>
                         <Sheet.Header className={styles['sheet-modal-header']}>
                             <button onClick={() => snapTo(1)}>
-                                <IoIosArrowDown className={styles['down-arrow']} color="white" size={32}  />
+                                <IoIosArrowDown className={styles['down-arrow']} color="white" size={25}  />
                             </button>
                         </Sheet.Header>
                         <Sheet.Content className={styles['sheet-modal-container']}>
