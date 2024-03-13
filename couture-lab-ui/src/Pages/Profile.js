@@ -1,35 +1,18 @@
 // Utility-related modules
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { doc, updateDoc, collection, query, where, documentId, getDocs } from 'firebase/firestore';
-import { updateProfile } from 'firebase/auth';
-import FormSelect from '../Components/formselect';
+import { collection, query, where, documentId, getDocs } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
 import DeleteAccountModal from '../Components/deleteaccount';
+import CollapseForm from '../Components/collapse';
+import { useNavigate } from 'react-router-dom';
 
 // UI-related modules
-import { useDisclosure, Collapse, Spinner } from '@chakra-ui/react';
-import { toast } from 'react-toastify';
+import { useDisclosure, Spinner } from '@chakra-ui/react';
 
 import DashboardNavBar from '../Components/dashboardnavbar';
 
 // Styling
 import styles from '../PageStyles/Profile.module.css';
-
-// Temporary for collapse and options, will have to refactor to reduce duplicate code
-const options = {
-    gender: ['Male', 'Female'],
-    ageGroup: ['Under 18', '18 to 25', '26 to 35', '36 to 45', '46 to 55', 'Over 55'],
-    preferredStyle: ['Casual', 'Formal', 'Business', 'Sporty', 'Bohemian', 'Vintage', 'Preppy', 'Other'],
-    hairColor: ['Black', 'Brown', 'Blonde', 'Red', 'Grey', 'White', 'Other'],
-    skinTone: ['Very Fair', 'Fair', 'Medium', 'Olive', 'Brown', 'Dark Brown', 'Other'],
-    eyeColor: ['Brown', 'Blue', 'Green', 'Hazel', 'Grey', 'Other'],
-    bodyType: ['Hourglass', 'Triangle', 'Inverted Triangle', 'Rectangle', 'Round', 'Other'],
-    experimentLevel: ['Not Comfortable', 'Somewhat Comfortable', 'Very Comfortable'],
-    budget: ['Low', 'Medium', 'High'],
-    sustainabilityImportance: ['Not Important', 'Somewhat Important', 'Very Important'],
-    frequentEvents: ['Work', 'Casual Outings', 'Formal Events', 'Fitness', 'Travel', 'Other'],
-};
 
 // Displays user styling preferences on profile
 export const displayUserStylingPreferences = async () => {
@@ -50,112 +33,9 @@ export const displayUserStylingPreferences = async () => {
     return questionnaireData;
 }
 
-function CollapseForm({ setUserStylingPreferences }) {
-
-    const { 
-        watch, 
-        register, 
-        formState: { errors, isValid } 
-    } = useForm({ mode: "all" });
-
-    const saveUserInfo = () => {
-        const formData = watch(); // Get the current form data
-        const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
-        
-        let updateObj = {}
-        updateObj[FirebaseAuth.currentUser.uid] = formData;
-
-        try {
-            if (!isValid) {
-                toast.error("Form not complete, fill out all fields");
-                return;
-            }
-
-            // Update Firebase display name
-            updateProfile(FirebaseAuth.currentUser, {
-                displayName: formData.name
-            });
-
-            updateDoc(questionnaireRef, updateObj);
-            toast.success("Updated styling preferences");
-
-            // Update the display styling preferences with new preferences data
-            setUserStylingPreferences(formData); 
-        } catch (error) {
-            toast.error("Failed to update styling preferences");
-        }
-    }
-
-    const { isOpen, onToggle } = useDisclosure();
-
-    return (
-        <>
-            <button onClick={onToggle} className={styles['profile-stylingbutton']}>Edit Styling Preferences</button>
-            <Collapse in={isOpen} animateOpacity>
-                <form>
-                    <div className={styles['form-basicinfo']}>
-                        <h1 className={styles['form-header']}>Basic Information</h1>
-                        <FormSelect name="Gender" options={options.gender} register={register} 
-                            errors={errors} placeholder="Select gender"
-                        />
-                        <label>Your age group helps us tailor suggestions more appropriately</label>
-                        <FormSelect name="Age group" options={options.ageGroup} register={register} 
-                            errors={errors} placeholder="Select age group" 
-                        />
-                        <h1 className={styles['form-header']}>Fashion Preferences</h1>
-                        <label>Which style best describes your everyday fashion?</label>
-                        <FormSelect name="Preferred style" options={options.preferredStyle} register={register} 
-                            errors={errors} placeholder="Preferred Style" 
-                        />
-                        <h1 className={styles['form-header']}>Personal Characteristics</h1>
-                        <h2>These questions help the AI suggest colors that complement your look</h2>
-                        <FormSelect name="Hair color" options={options.hairColor} register={register} 
-                            errors={errors} placeholder="Hair Color" 
-                        />
-                        <label>What's your skin tone?</label>
-                        <FormSelect name="Skin tone" options={options.skinTone} register={register} 
-                            errors={errors} placeholder="Skin Tone" 
-                        />
-                        <label>What's your eye color?</label>
-                        <FormSelect name="Eye color" options={options.eyeColor} register={register} 
-                            errors={errors} placeholder="Eye Color" 
-                        />
-                        <h1 className={styles['form-header']}>Body type and Comfort</h1>
-                        <label>Identifying your body type helps us suggest the most flattering outfits</label>
-                        <FormSelect name="Body type" options={options.bodyType} register={register} 
-                            errors={errors} placeholder="Body Type" 
-                        />
-                        <label>How open are you to trying new fashion styles?</label>
-                        <FormSelect name="Experiment level" options={options.experimentLevel} register={register} 
-                            errors={errors} placeholder="Experiment Level" 
-                        />
-                        <h1 className={styles['form-header']}>Shopping and Wardrobe Preferences</h1>
-                        <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
-                        <FormSelect name="Budget" options={options.budget} register={register} 
-                            errors={errors} placeholder="Budget" />
-                        <label>How important is sustainability in fashion to you?</label>
-                        <FormSelect name="Sustainability" options={options.sustainabilityImportance} register={register} 
-                            errors={errors} placeholder="Sustainability Importance" 
-                        />
-                        <h1 className={styles['form-header']}>Events and Occasions</h1>
-                        <label>What types of events do you dress for most often?</label>
-                        <FormSelect name="Frequent events" options={options.frequentEvents} register={register} 
-                            errors={errors} placeholder="Frequent Events" 
-                        />
-                    </div>
-                </form>
-                <button 
-                    className={styles['profile-updatebutton']}
-                    onClick={saveUserInfo}
-                >
-                    Update Profile
-                </button>
-            </Collapse>
-        </>
-      )
-}
-
 export default function Profile() {
+    const navigate = useNavigate();
+
     const [loadingStylingPreferences, setLoadingStylingPreferences] = useState(true);
     // Stores user styling preferences data for displaying
     const [userStylingPreferences, setUserStylingPreferences] = useState({});
@@ -170,11 +50,16 @@ export default function Profile() {
     useEffect(() => {
         async function fetchData() {
             const userData = await displayUserStylingPreferences();
+            // Checks if user did not answer questionaire, redirects to questionaire
+            if (Object.keys(userData).length === 0) {
+                navigate('/basicinfo');
+                return;
+            }
             setUserStylingPreferences(userData);
             setLoadingStylingPreferences(false);
         }
         fetchData();
-    }, []);
+    }, [navigate]);
 
     return (
         <div className={styles['profile-container']}>
@@ -218,7 +103,9 @@ export default function Profile() {
                                 <p>Sustainability Importance: {userStylingPreferences["Sustainability"]}</p>
                                 <p>Frequent Events: {userStylingPreferences["Frequent events"]}</p>
                             </section>
-                            <CollapseForm setUserStylingPreferences={setUserStylingPreferences} />
+                            <CollapseForm u
+                                userStylingPreferences={userStylingPreferences}
+                                setUserStylingPreferences={setUserStylingPreferences} />
                         </div>
                     )}
                 </div>
