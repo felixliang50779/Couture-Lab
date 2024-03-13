@@ -92,12 +92,14 @@ async def get_clothing_item(
         querystring = \
             {
                 "q": "men's {}".format(item),
+                "other_filters": "1020288|1020289",
                 "country": country
             }
     else:
         querystring = \
             {
                 "q": "women's {}".format(item),
+                "other_filters": "1020288|1020290",
                 "country": country
             }
 
@@ -318,7 +320,7 @@ def send_stylist_response(user_query, user_questionnaire):
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    When asked for an outfit, provide a matching set of items, including tops,
+    When asked for an outfit, provide a complete color matching set of items, including tops,
     hats, bottoms, and accessories. Provide pictures for items. 
 
     Call the following functions in one go - do not expect follow-up opportunities:
@@ -327,7 +329,10 @@ def send_stylist_response(user_query, user_questionnaire):
     local area.
     3. 'get_clothing_data' whenever making a specific style recommendation. When determining
     items to call the function with, keep in mind the user is someone who has an implicit
-    preferred style of {preferred_style}.
+    preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
+    with experimenting, has an eye color of {eye_color}, dresses most often for
+    {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
+    and views sustainability as {sustainability} when it comes to shopping for clothes. 
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always extract product links and images.
@@ -338,7 +343,6 @@ def send_stylist_response(user_query, user_questionnaire):
     Address the user as "you".
     '''.format(age = user_questionnaire['Age group'], 
     body_type = user_questionnaire['Body type'],
-    budget = user_questionnaire['Budget'],
     experiment_level = user_questionnaire['Experiment level'],
     eye_color = user_questionnaire['Eye color'],
     frequent_events = user_questionnaire['Frequent events'],

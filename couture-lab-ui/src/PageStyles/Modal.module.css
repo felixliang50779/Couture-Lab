@@ -136,11 +136,7 @@
 }
 
 .closet-delete-button {
-    background-color: #e82222;
-}
-
-.closet-delete-button:hover {
-    background-color: #b91b1b;
+    background-color: black;
 }
 
 .closet-merge-button {

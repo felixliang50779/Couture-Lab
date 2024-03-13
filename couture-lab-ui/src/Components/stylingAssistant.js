@@ -140,9 +140,9 @@ export default function StylingAssistant() {
                                 </div>
                             )
                         }) : 
-                        <p className={styles['starter-text']}>
+                        <strong className={styles['starter-text']}>
                             Ask me anything fashion-related!
-                        </p>}
+                        </strong>}
                     </AutoScrollContainer>
                     <form
                         className={styles['chatbot-container']}
