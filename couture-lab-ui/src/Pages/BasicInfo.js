@@ -82,7 +82,7 @@ export default function BasicInfo() {
         toast.success('Completed form!');
         saveUserInfo();
         setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/closet');
         }, 1000);
     }
 
@@ -123,7 +123,7 @@ export default function BasicInfo() {
                         <form>
                         {formStep === 0 && (
                             <div className={styles['form-basicinfo']}>
-                                <h1>Basic Information</h1>
+                                <h1 className={styles['form-header']}>Basic Information</h1>
                                 <label>What should we call you?</label>
                                 <input placeholder='Name' required type='text' className={styles['form-input']} 
                                     {...register('name', { required: 'Name required' })} 
@@ -133,60 +133,115 @@ export default function BasicInfo() {
                                         {errors.name.message}
                                     </p>
                                 }
-                                <FormSelect name="Gender" options={options.gender} register={register} 
-                                    errors={errors} placeholder="Select gender" 
+                                <FormSelect 
+                                    name="Gender" 
+                                    defaultSelect=""
+                                    options={options.gender} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Select gender" 
                                 />
                                 <label>Your age group helps us tailor suggestions more appropriately</label>
-                                <FormSelect name="Age group" options={options.ageGroup} register={register} 
-                                    errors={errors} placeholder="Select age group" 
+                                <FormSelect 
+                                    name="Age group" 
+                                    defaultSelect=""
+                                    options={options.ageGroup} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Select age group" 
                                 />
-                                <h1>Fashion Preferences</h1>
+                                <h1 className={styles['form-header']}>Fashion Preferences</h1>
                                 <label>Which style best describes your everyday fashion?</label>
-                                <FormSelect name="Preferred style" options={options.preferredStyle} register={register} 
-                                    errors={errors} placeholder="Preferred Style" 
+                                <FormSelect 
+                                    name="Preferred style" 
+                                    defaultSelect=""
+                                    options={options.preferredStyle} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Preferred Style" 
                                 />
                             </div>
                         )}
                         {formStep === 1 && (
                             <div className={styles['form-basicinfo']}>
-                                <h1>Personal Characteristics</h1>
+                                <h1 className={styles['form-header']}>Personal Characteristics</h1>
                                 <h2>These questions help the AI suggest colors that complement your look.</h2>
-                                <FormSelect name="Hair color" options={options.hairColor} register={register} 
-                                    errors={errors} placeholder="Hair Color" 
+                                <FormSelect 
+                                    name="Hair color" 
+                                    defaultSelect=""
+                                    options={options.hairColor} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Hair Color" 
                                 />
                                 <label>What's your skin tone?</label>
-                                <FormSelect name="Skin tone" options={options.skinTone} register={register} 
-                                    errors={errors} placeholder="Skin Tone" 
+                                <FormSelect 
+                                    name="Skin tone" 
+                                    defaultSelect=""
+                                    options={options.skinTone} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Skin Tone" 
                                 />
                                 <label>What's your eye color?</label>
-                                <FormSelect name="Eye color" options={options.eyeColor} register={register} 
-                                    errors={errors} placeholder="Eye Color" 
+                                <FormSelect 
+                                    name="Eye color" 
+                                    defaultSelect=""
+                                    options={options.eyeColor} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Eye Color" 
                                 />
-                                <h1>Body type and Comfort</h1>
+                                <h1 className={styles['form-header']}>Body type and Comfort</h1>
                                 <label>Identifying your body type helps us suggest the most flattering outfits</label>
-                                <FormSelect name="Body type" options={options.bodyType} register={register} 
-                                    errors={errors} placeholder="Body Type" 
+                                <FormSelect 
+                                    name="Body type" 
+                                    defaultSelect=""
+                                    options={options.bodyType} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Body Type" 
                                 />
                                 <label>How open are you to trying new fashion styles?</label>
-                                <FormSelect name="Experiment level" options={options.experimentLevel} register={register} 
-                                    errors={errors} placeholder="Experiment Level" 
+                                <FormSelect 
+                                    name="Experiment level" 
+                                    defaultSelect=""
+                                    options={options.experimentLevel} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Experiment Level" 
                                 />
                             </div>
                         )}
                         {formStep === 2 && (
                             <div className={styles['form-basicinfo']}>
-                                <h1>Shopping and Wardrobe Preferences</h1>
+                                <h1 className={styles['form-header']}>Shopping and Wardrobe Preferences</h1>
                                 <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
-                                <FormSelect name="Budget" options={options.budget} register={register} 
-                                    errors={errors} placeholder="Budget" />
+                                <FormSelect 
+                                    name="Budget" 
+                                    defaultSelect=""
+                                    options={options.budget} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Budget" />
                                 <label>How important is sustainability in fashion to you?</label>
-                                <FormSelect name="Sustainability" options={options.sustainabilityImportance} register={register} 
-                                    errors={errors} placeholder="Sustainability Importance" 
+                                <FormSelect 
+                                    name="Sustainability" 
+                                    defaultSelect=""
+                                    options={options.sustainabilityImportance} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Sustainability Importance" 
                                 />
-                                <h1>Events and Occasions</h1>
+                                <h1 className={styles['form-header']}>Events and Occasions</h1>
                                 <label>What types of events do you dress for most often?</label>
-                                <FormSelect name="Frequent events" options={options.frequentEvents} register={register} 
-                                    errors={errors} placeholder="Frequent Events" 
+                                <FormSelect 
+                                    name="Frequent events" 
+                                    defaultSelect=""
+                                    options={options.frequentEvents} 
+                                    register={register} 
+                                    errors={errors} 
+                                    placeholder="Frequent Events" 
                                 />
                             </div>
                         )}

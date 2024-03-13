@@ -62,8 +62,12 @@ const Closet = () => {
             const userItems = doc.data()[FirebaseAuth.currentUser.uid];
             
             if (userItems !== undefined) {
+                setLoadingGallery(false);
                 setGalleryData(userItems);
                 setFilteredGallery(userItems);
+            }
+            else if (userItems === undefined) {
+                // Makes the spinner disappear if the user has no items
                 setLoadingGallery(false);
             }
         });

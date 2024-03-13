@@ -43,6 +43,11 @@
     flex-direction: column;
 }
 
+.form-header {
+    font-size: 1.2em;
+    text-decoration: underline;
+}
+
 .form-input {
     width: 20em;
     border-radius: 0.7em;

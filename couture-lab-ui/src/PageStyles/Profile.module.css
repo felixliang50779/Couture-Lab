@@ -81,6 +81,10 @@
     margin-bottom: 0.5em;
 }
 
+.profile-styling-card-current-preferences {
+    font-size: 1.1em;
+}
+
 .profile-deleteaccount {
     background-color: #ff5050;
     margin: 0 1em 1em 1.4em;
@@ -98,6 +102,8 @@
 
 .form-header {
     margin-top: 1em;
+    font-size: 1.1em;
+    text-decoration: underline;
 }
 
 @media only screen and (max-width : 1200px) {
