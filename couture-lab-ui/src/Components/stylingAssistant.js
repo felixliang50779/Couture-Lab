@@ -48,7 +48,10 @@ export default function StylingAssistant() {
 
         setChatInput('');
 
-        const response = await fetch('http://127.0.0.1:8000/langserve/',
+        const devAPI = 'http://127.0.0.1:8000/langserve/';
+        // const prodAPI = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
+
+        const response = await fetch(devAPI,
         {
             headers: {
                 'Content-Type': 'application/json'
