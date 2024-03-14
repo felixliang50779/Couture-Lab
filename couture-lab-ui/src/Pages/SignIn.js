@@ -43,7 +43,6 @@ const SignIn = () => {
             const user = userCredential.user;
             console.log(user);
             navigate("/closet");
-            
         } catch (error) {
             console.log(error);
             toast.error('Failed to sign in.')

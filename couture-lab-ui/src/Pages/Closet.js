@@ -288,7 +288,11 @@ const Closet = () => {
                                         disabled={OutfitModalOpen}
                                         onClick={() => {
                                             if (!selectedItems.length) {
-                                                toast("Please select at least one item!");
+                                                toast.error("Please select at least 1 item!");
+                                                return;
+                                            } 
+                                            else if (selectedItems.length > 8) {
+                                                toast.error("Please select a max of 8 items!");
                                                 return;
                                             }
                                             onOutfitModalOpen();

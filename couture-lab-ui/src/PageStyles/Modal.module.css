@@ -91,20 +91,6 @@
     width: 13em;
 }
 
-.closet-dialog-divider-text {
-    color: lightgray;
-    font-size: 1.2em;
-}
-
-.closet-dialog-create-outfit {
-    color: #0000ff;
-    font-size: 1.2em;
-}
-
-.closet-dialog-create-outfit:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 .closet-input-name {
     border-radius: 0.2em;
@@ -150,5 +136,5 @@
 .closet-dialog-outfit-name {
     display: block;
     font-weight: bold;
-    margin-top: 1em;
+    font-size: 1.2em;
 }
