@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-&t16kb(%2ax4lt)au^mzd=lj$_ju0lenqi_g=alp7##=kiv)*-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Use os.path to construct a relative path
@@ -65,7 +65,6 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -114,9 +113,9 @@ SIMPLE_JWT = {
 }
 
 ROOT_URLCONF = 'backendapi.urls'
-CORS_ALLOW_HEADERS = ['*']
-ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # DEV
+# CORS_ALLOWED_ORIGINS = ["https://couture-lab-backend.web.app"]  # PROD
+CORS_ALLOW_HEADERS = ["content-type"]
 
 TEMPLATES = [
     {
