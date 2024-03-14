@@ -90,8 +90,10 @@ async def get_clothing_item(
     url = "https://real-time-product-search.p.rapidapi.com/search"
 
     if gender == "Male":
+        query = "men's {}".format(item)
         other_filters = "1020288|1020289"
     else:
+        query = "women's {}".format(item)
         other_filters = "1020288|1020290"
 
     if budget == "Low":
@@ -102,7 +104,7 @@ async def get_clothing_item(
     if (budget == "Low") or (budget == "Medium"):
         querystring = \
             {
-                "q": "men's {}".format(item),
+                "q": query,
                 "other_filters": other_filters,
                 "max_price": max_price,
                 "country": country
@@ -110,7 +112,7 @@ async def get_clothing_item(
     else:
         querystring = \
             {
-                "q": "men's {}".format(item),
+                "q": query,
                 "other_filters": other_filters,
                 "country": country
             }
