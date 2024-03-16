@@ -499,7 +499,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         messages = [
             {"role": "system", "content": text_message},
             {"role": "user", 
-            "content": f"Give me some recommendations for these items: {features}"}
+            "content": f"These are the items in the outfit: {features}"}
         ]
 
     # Alternatively, if functions are required...

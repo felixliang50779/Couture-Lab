@@ -107,12 +107,14 @@ export default function ItemModal({
                         </p>
                     </div>
                     <div className={styles['item-modal-buttons']}>
+                        { selectedItem.category !== "outfit" &&
                         <button
                             className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
                             onClick={handleGenerate}
                             >
                                 Generate Outfit
                         </button>
+                        }
                         <button
                             className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
                             onClick={handleDelete}>
