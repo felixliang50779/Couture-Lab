@@ -130,7 +130,10 @@ async def get_clothing_item(
 
             for product_index in range(len(product_recommendations)):
                 del product_recommendations[product_index]["product_id"]
+                del product_recommendations[product_index]["product_rating"]
+                del product_recommendations[product_index]["typical_price_range"]
                 del product_recommendations[product_index]["product_description"]
+                del product_recommendations[product_index]["product_attributes"]
                 del product_recommendations[product_index]["product_offers_page_url"]
                 del product_recommendations[product_index]["product_specs_page_url"]
                 del product_recommendations[product_index]["product_reviews_page_url"]

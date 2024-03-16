@@ -25,11 +25,13 @@ import styles from '../PageStyles/Closet.module.css';
 
 
 const Closet = () => {
+    // Modal controllers
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
     const { isOpen: OutfitModalOpen, onOpen: onOutfitModalOpen, onClose: onOutfitModalClose } = useDisclosure();
 
+    // Gallery states
 	const [clothesPicture, setClothesPicture] = useState();
     const [galleryData, setGalleryData] = useState([]);
     const [filteredGallery, setFilteredGallery] = useState([]);
@@ -39,10 +41,17 @@ const Closet = () => {
     const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
     const [multiOutfitStatus, setMultiOutfitStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
+    const [loadingGallery, setLoadingGallery] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('all');
 
-    const [loadingGallery, setLoadingGallery] = useState(true);
+    // Styling assistant states
+    const [collapsed, setCollapsed] = useState(true);
+    const [chatInput, setChatInput] = useState("");
+    const [queryLog, setQueryLog] = useState([]);
+    const [responseLog, setResponseLog] = useState([]);
     
+    // Refs
+    const questionnaireRef = useRef({});
     const uploadName = useRef('');
     const uploadCategory = useRef({});
     const selectedItem = useRef({});
@@ -50,6 +59,83 @@ const Closet = () => {
     // Sheets snap
     const sheetRef = useRef();
     const snapTo = (i) => sheetRef.current?.snapTo(i);
+
+    const openStylist = () => {
+        setCollapsed(false);
+    }
+
+    const handleQuery = async (event) => {
+        
+        let userInput;
+
+        if (typeof(event) === "object") {
+            event.preventDefault();
+
+            // Catching empty inputs
+            if (!event.target[0].value.trim()) {
+                return;
+            }
+
+            userInput = event.target[0].value.trim();
+        }
+        else {
+            userInput = event;
+        }
+
+        setQueryLog(prevState => [...prevState, userInput]);
+
+        setChatInput('');
+
+        const API = 'http://127.0.0.1:8000/langserve/';
+        // const API = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
+
+        const response = await fetch(API,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({"text": userInput, "questionnaire": questionnaireRef.current})
+        });
+
+        // Here we start prepping for the streaming response
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        const loopRunner = true;
+        const imgLabel = /!\[.*?\]/g;
+        const imgLink = /(\(https?:\/\/encrypted-tbn.*\))/g;
+
+        let stylistResponse = "";
+        
+        responseLog.push("");
+
+        while (loopRunner) {
+            // Here we start reading the stream, until it's done.
+            const { value, done } = await reader.read();
+            if (done) {
+                break;
+            }
+            let decodedChunk = decoder.decode(value, { stream: true });
+
+            const logCopy = responseLog.slice();
+            stylistResponse += decodedChunk;
+
+            stylistResponse = stylistResponse.replaceAll(imgLabel, "");
+            stylistResponse = stylistResponse.replaceAll('**', '');
+
+            const imgUrls = stylistResponse.match(imgLink);
+
+            if (imgUrls) {
+                for (const url of imgUrls) {
+                    const formattedUrl = url.slice(1, -1);
+                    stylistResponse = stylistResponse.replace(`${url}`, `<img src="${formattedUrl}" alt="itemImg"/>`);
+                }
+            }
+            
+            logCopy[logCopy.length - 1] = stylistResponse;
+            setResponseLog(logCopy);
+        }
+    }
 
     const loadCloset = async () => {
         const closetRef = collection(db, "virtual-closet");
@@ -144,7 +230,15 @@ const Closet = () => {
 
     return (
         <main className={styles['page-main']}>
-            <StylingAssistant />
+            <StylingAssistant
+                collapsed={collapsed}
+                chatInput={chatInput}
+                queryLog={queryLog}
+                setCollapsed={setCollapsed} 
+                handleQuery={handleQuery}
+                questionnaireRef={questionnaireRef}
+                responseLog={responseLog}
+                setChatInput={setChatInput} />
             <div className={styles['closet-container']}>
                 <DashboardNavbar />
                 <h1 className={styles['closet-title']}>My Closet</h1>
@@ -238,7 +332,9 @@ const Closet = () => {
                 selectedItem={selectedItem.current}
                 selectedCategory={selectedCategory}
                 setGalleryData={setGalleryData}
-                setFilteredGallery={setFilteredGallery} 
+                setFilteredGallery={setFilteredGallery}
+                handleQuery={handleQuery}
+                openStylist={openStylist}
             />
             <DeleteModal
                 isOpen={deleteModalOpen}

@@ -108,17 +108,28 @@
     border-radius: 0.5em;
 }
 
+.closet-delete-categories {
+    margin: 0em 0 0.5em 0;
+}
+
 .closet-delete-category {
     font-weight: bold;
-    margin: 1em 0 0.5em 1em;
+    margin: 1.5em 1em 0.3em 0.3em;
     font-size: 1.2em;
 }
 
-.closet-delete-button, .closet-merge-button {
+.closet-merge-button {
     margin: 1em;
     padding: 1em 8em 1em 8em;
     color: #ffffff;
     border-radius: 0.5em;
+}
+
+.closet-delete-button {
+    margin: 1em 0.3em 1em 0.3em;
+    color: #ffffff;
+    border-radius: 0.5em;
+    padding: 0.8em 2.3em 0.8em 2.3em;
 }
 
 .closet-delete-button {
@@ -137,4 +148,14 @@
     display: block;
     font-weight: bold;
     font-size: 1.2em;
+}
+
+.item-modal-buttons {
+    display: flex;
+    gap: 0;
+}
+
+.item-modal-content {
+    display: flex;
+    gap: 5.5vw;
 }

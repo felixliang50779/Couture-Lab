@@ -2,6 +2,7 @@
 import { deleteObject, ref } from 'firebase/storage';
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+import debounce from "debounce";
 
 // UI-related modules
 import {
@@ -12,11 +13,24 @@ import { toast } from 'react-toastify';
 import styles from '../PageStyles/Modal.module.css';
 
 
-export default function ItemModal({ onClose, isOpen, deletingStatus, setDeletingStatus, selectedItem, selectedCategory, setGalleryData, setFilteredGallery }) {
+export default function ItemModal({ 
+    onClose, isOpen, deletingStatus, setDeletingStatus, selectedItem,
+    selectedCategory, setGalleryData, setFilteredGallery, openStylist,
+    handleQuery
+}) {
+
+    // Prevent double clicks from querying the assistant twice
+    const handleImageQuery = debounce(handleQuery, 200);
 
     const handleClose = () => {
         setDeletingStatus(false);
         onClose();
+    }
+
+    const handleGenerate = async () => {
+        onClose();
+        openStylist();
+        handleImageQuery(selectedItem.url);
     }
 
     const handleDelete = async () => {
@@ -77,24 +91,34 @@ export default function ItemModal({ onClose, isOpen, deletingStatus, setDeleting
                     {selectedItem.displayName}
                 </AlertDialogHeader>
                 <AlertDialogCloseButton className={`${deletingStatus && styles['closet-upload-disabled']}`}/>
-                <AlertDialogBody display="flex" flexDirection="column" alignItems="start">
+                <AlertDialogBody display="flex" flexDirection="column" alignItems="center">
                     { deletingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
                     <img
                         className={styles['preview-image']}
                         src={selectedItem.url}
                         alt='selectedItem' loading='lazy' />
                     }
-                    <p className={styles['closet-delete-category']}>
-                        Category: {selectedItem?.category?.charAt(0).toUpperCase() + selectedItem?.category?.slice(1)}
-                    </p>
-                    <p className={styles['closet-delete-category']}>
-                        Used In: 0 Outfits
-                    </p>
-                    <button
-                        className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
-                        onClick={handleDelete}>
-                            Delete Item
-                    </button>
+                    <div className={styles['closet-delete-categories']}>
+                        <p className={styles['closet-delete-category']}>
+                            Category: {selectedItem?.category?.charAt(0).toUpperCase() + selectedItem?.category?.slice(1)}
+                        </p>
+                        <p className={styles['closet-delete-category']}>
+                            Used In: 0 Outfits
+                        </p>
+                    </div>
+                    <div className={styles['item-modal-buttons']}>
+                        <button
+                            className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
+                            onClick={handleGenerate}
+                            >
+                                Generate Outfit
+                        </button>
+                        <button
+                            className={`${styles['closet-delete-button']} ${deletingStatus && styles['closet-upload-disabled']}`}
+                            onClick={handleDelete}>
+                                Delete Item
+                        </button>
+                    </div>
                 </AlertDialogBody>
             </AlertDialogContent>
         </AlertDialog>

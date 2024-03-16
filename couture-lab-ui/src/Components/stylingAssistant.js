@@ -1,5 +1,5 @@
 // UI-related modules
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Input } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Sidebar } from "react-pro-sidebar";
@@ -13,13 +13,16 @@ import { AutoScrollContainer } from "react-auto-scroll-container";
 import Loader from "react-dots-loader";
 import Linkify from "linkify-react";
 
-export default function StylingAssistant() {
-    const [collapsed, setCollapsed] = useState(true);
-    const [chatInput, setChatInput] = useState("");
-    const [queryLog, setQueryLog] = useState([]);
-    const [responseLog, setResponseLog] = useState([]);
+export default function StylingAssistant({ 
+            collapsed, chatInput, queryLog, setCollapsed, handleQuery,
+            questionnaireRef, responseLog, setChatInput
+}) {
 
-    const questionnaireRef = useRef({});
+    const toggleCollapse = () => {
+        setCollapsed(prevState => {
+            return !prevState;
+        });
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -27,77 +30,6 @@ export default function StylingAssistant() {
         }
         fetchData();
     });
-    
-    const toggleCollapse = () => {
-        setCollapsed(prevState => {
-            return !prevState;
-        });
-    }
-
-    const handleQuery = async (event) => {
-        event.preventDefault();
-
-        // Catching empty inputs
-        if (!event.target[0].value) {
-            return;
-        }
-
-        const userInput = event.target[0].value;
-
-        setQueryLog(prevState => [...prevState, userInput]);
-
-        setChatInput('');
-
-        const devAPI = 'http://127.0.0.1:8000/langserve/';
-        // const prodAPI = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
-
-        const response = await fetch(devAPI,
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({"text": userInput, "questionnaire": questionnaireRef.current})
-        });
-
-        // Here we start prepping for the streaming response
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        const loopRunner = true;
-        const imgLabel = /!\[.*?\]/g;
-        const imgLink = /(\(https?:\/\/encrypted-tbn.*\))/g;
-
-        let stylistResponse = "";
-        
-        responseLog.push("");
-
-        while (loopRunner) {
-            // Here we start reading the stream, until it's done.
-            const { value, done } = await reader.read();
-            if (done) {
-                break;
-            }
-            let decodedChunk = decoder.decode(value, { stream: true });
-
-            const logCopy = responseLog.slice();
-            stylistResponse += decodedChunk;
-
-            stylistResponse = stylistResponse.replaceAll(imgLabel, "");
-            stylistResponse = stylistResponse.replaceAll('**', '');
-
-            const imgUrls = stylistResponse.match(imgLink);
-
-            if (imgUrls) {
-                for (const url of imgUrls) {
-                    const formattedUrl = url.slice(1, -1);
-                    stylistResponse = stylistResponse.replace(`${url}`, `<img src="${formattedUrl}" alt="itemImg"/>`);
-                }
-            }
-            
-            logCopy[logCopy.length - 1] = stylistResponse;
-            setResponseLog(logCopy);
-        }
-    }
 
     return (
         <div className={styles['sidebar-container']}>

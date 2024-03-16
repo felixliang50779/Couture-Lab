@@ -167,11 +167,12 @@
 
 .sheet-modal-header {
     display: flex;
+    position: absolute;
+    z-index: 1;
+    top: 5%;
     justify-content: center;
     background-color: black;
 }
-
-
 
 .down-arrow:hover {
     opacity: 60%;
@@ -185,22 +186,23 @@
 }
 
 .sheet-modal-label {
-    margin-top: 1.5vh;
+    margin-top: 3.5vh;
     margin-bottom: 3.5vh;
 }
 
 .sheet-modal-button-container {
     display: flex;
+    align-items: center;
     gap: 1em;
 }
 
 .sheet-modal-button, .sheet-modal-create-oufit {
     display: flex;
     align-items: center;
+    z-index: 2;
     background-color: white;
     font-weight: bold;
     padding: 0.8vw;
-    margin-bottom: 3.5vh;
     border-radius: 0.5em;
     max-width: fit-content;
     color: black;
