@@ -380,7 +380,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     image_message = '''
     You are an expert fashion stylist. Draw on all your knowledge to build a complete,
     color matching outfit that includes tops, hats, bottoms, and accessories, based
-    off of the provided image of a clothing item. Your response should simply be a list
+    off of the provided image of a clothing item. Your response should be NOTHING BUT A LIST
     of the recommended items, e.g. "White T-shirt, Blue Jeans, Red Hoodie". 
     
     When determining items for the outfit, keep in mind the user is someone who has an implicit
