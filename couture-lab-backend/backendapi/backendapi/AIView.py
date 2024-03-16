@@ -288,7 +288,7 @@ async def process_functions(messages, tools, user_gender, user_budget):
         return messages
 
 # Generate response based on user query
-def send_stylist_response(user_query, user_questionnaire):
+def send_stylist_response(user_query, user_questionnaire, image_input):
 
     # Providing descriptions of all
     # available functions for the stylist to call
@@ -341,8 +341,7 @@ def send_stylist_response(user_query, user_questionnaire):
         }
     ]
 
-    # High-level instructions for the stylist
-    system_message = '''
+    text_message = '''
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
@@ -377,30 +376,131 @@ def send_stylist_response(user_query, user_questionnaire):
     skin_tone = user_questionnaire['Skin tone'],
     sustainability = user_questionnaire['Sustainability'])
 
-    messages = [
-        {"role": "system", "content": system_message},
-        {"role": "user", "content": user_query}
-    ]
 
-    # Initial response that we can stream
-    # a reply from if no function calls are required
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
-        messages=messages,
-        tools=tools,
-        tool_choice="auto",
-        stream=True
-    )
+    image_message = '''
+    You are an expert fashion stylist. Draw on all your knowledge to build a complete,
+    color matching outfit that includes tops, hats, bottoms, and accessories, based
+    off of the provided image of a clothing item. Your response should simply be a list
+    of the recommended items, e.g. "White T-shirt, Blue Jeans, Red Hoodie". 
+    
+    When determining items for the outfit, keep in mind the user is someone who has an implicit
+    preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
+    with experimenting, has an eye color of {eye_color}, dresses most often for
+    {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
+    and views sustainability as {sustainability} when it comes to shopping for clothes. 
 
-    functions_required = False
+    Only respond to fashion-related images. You can only provide recommendations
+    for fashion-related accessories or items.
 
-    for chunk in response:
-        if chunk.choices[0].delta.tool_calls is not None:
-            functions_required = True
-            break
+    Address the user as "you".
+    '''.format(age = user_questionnaire['Age group'], 
+    body_type = user_questionnaire['Body type'],
+    experiment_level = user_questionnaire['Experiment level'],
+    eye_color = user_questionnaire['Eye color'],
+    frequent_events = user_questionnaire['Frequent events'],
+    hair_color = user_questionnaire['Hair color'],
+    preferred_style = user_questionnaire['Preferred style'],
+    skin_tone = user_questionnaire['Skin tone'],
+    sustainability = user_questionnaire['Sustainability'])
 
-        if chunk.choices[0].delta.content:
-            yield chunk.choices[0].delta.content
+
+    # Instructions for the stylist if input is text
+    if not image_input:
+        messages = [
+            {"role": "system", "content": text_message},
+            {"role": "user", "content": user_query}
+        ]
+    
+     # If the input is an image
+    else:
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": image_message},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": user_query
+                        }
+                    }
+                ]
+            }
+        ]
+
+    if not image_input:
+        # Initial response that we can stream
+        # a reply from if no function calls are required
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo-0125",
+            messages=messages,
+            tools=tools,
+            tool_choice="auto",
+            stream=True
+        )
+
+        functions_required = False
+
+        for chunk in response:
+            if chunk.choices[0].delta.tool_calls is not None:
+                functions_required = True
+                break
+
+            if chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+    else:
+        response = client.chat.completions.create(
+            model="gpt-4-vision-preview",
+            messages=messages,
+            max_tokens=300
+        )
+
+        # Extract relevant features from the response
+        features = response.choices[0].message.content
+
+        functions_required = True
+
+        text_message = '''
+        You are an expert fashion stylist. Draw on all your
+        knowledge to provide concise and detailed answers to what users ask.
+
+        You have been provided a list of clothing items that comprise an outfit
+        based off of an item the user initially supplied - provide recommendations
+        for each item in the list.
+
+        Call the following functions in one go - do not expect follow-up opportunities:
+        1. 'get_local_weather' whenever you need the weather of the user's local area.
+        2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
+        local area.
+        3. 'get_clothing_data' whenever making a specific style recommendation. When determining
+        items to call the function with, keep in mind the user is someone who has an implicit
+        preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
+        with experimenting, has an eye color of {eye_color}, dresses most often for
+        {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
+        and views sustainability as {sustainability} when it comes to shopping for clothes. 
+
+        When citing specific examples using the provided functions, be sure to extract
+        all items when there are multiple. Always extract product links and images.
+
+        Only respond to fashion-related questions. You can only provide recommendations
+        for fashion-related accessories or items.
+
+        Address the user as "you".
+        '''.format(age = user_questionnaire['Age group'], 
+        body_type = user_questionnaire['Body type'],
+        experiment_level = user_questionnaire['Experiment level'],
+        eye_color = user_questionnaire['Eye color'],
+        frequent_events = user_questionnaire['Frequent events'],
+        hair_color = user_questionnaire['Hair color'],
+        preferred_style = user_questionnaire['Preferred style'],
+        skin_tone = user_questionnaire['Skin tone'],
+        sustainability = user_questionnaire['Sustainability'])
+
+        messages = [
+            {"role": "system", "content": text_message},
+            {"role": "user", 
+            "content": f"Give me some recommendations for these items: {features}"}
+        ]
 
     # Alternatively, if functions are required...
     if functions_required:
@@ -428,9 +528,11 @@ class LangServeHandle(APIView):
             serializer.is_valid(raise_exception=True)
             query = serializer.validated_data['text']
             questionnaire = request.data['questionnaire']
+            image_flag = request.data['imageFlag']
 
             return StreamingHttpResponse(
-                send_stylist_response(query, questionnaire), content_type="text/event-stream")
+                send_stylist_response(query, questionnaire, image_flag), 
+                    content_type="text/event-stream")
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

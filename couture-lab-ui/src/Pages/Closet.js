@@ -66,10 +66,12 @@ const Closet = () => {
 
     const handleQuery = async (event) => {
         
-        let userInput;
+        let userInput, imageFlag;
 
         if (typeof(event) === "object") {
             event.preventDefault();
+
+            imageFlag = false;
 
             // Catching empty inputs
             if (!event.target[0].value.trim()) {
@@ -79,6 +81,7 @@ const Closet = () => {
             userInput = event.target[0].value.trim();
         }
         else {
+            imageFlag = true;
             userInput = event;
         }
 
@@ -95,7 +98,11 @@ const Closet = () => {
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            body: JSON.stringify({"text": userInput, "questionnaire": questionnaireRef.current})
+            body: JSON.stringify({
+                "text": userInput,
+                "questionnaire": questionnaireRef.current,
+                "imageFlag": imageFlag
+            })
         });
 
         // Here we start prepping for the streaming response
