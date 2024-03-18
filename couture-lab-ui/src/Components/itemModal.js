@@ -47,7 +47,7 @@ export default function ItemModal({
             return;
         }
 
-        toast("Item deleted successfully!");
+        toast.success("Item deleted successfully!");
         handleClose();
 
         const itemsRef = doc(db, 'virtual-closet', 'items');
@@ -61,7 +61,7 @@ export default function ItemModal({
         };
 
         let updateObj = {};
-        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove(deletedItem);
+        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove('fsd');
 
         await updateDoc(itemsRef, updateObj);
 

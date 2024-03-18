@@ -1,7 +1,7 @@
 // Utility-related modules
 import { useState } from 'react';
 import { db, FirebaseAuth } from '../Utilities/firebase';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, query, documentId, where, getDocs, arrayUnion, setDoc, doc } from 'firebase/firestore';
 
 // UI-related modules
 import {
@@ -16,14 +16,11 @@ export default function OutfitModal({
     isOpen, 
     onClose, 
     deletingStatus, 
-    setDeletingStatus, 
     selectedItems, 
-    setGalleryData, 
-    setFilteredGallery, 
-    handleToggleSelect 
 }) {
     const [outfitName, setOutfitName] = useState('');
 
+    // Probably has to be refactored
     const handleCreateOutfit = async () => {
         // Checks if input has outfit name
         if (outfitName === '') {
@@ -31,22 +28,65 @@ export default function OutfitModal({
             return;
         }
 
-        const outfitsRef = doc(db, 'virtual-closet', 'outfits');
+        let outfitNameUsed = false;
+        let userOutfitDataExists = false;
 
-        const storageNames = selectedItems.map((item) => item.storageName);
+        const colRef = collection(db, 'virtual-closet');
+        const outfitRef = doc(db, 'virtual-closet', "outfits");
+        const outfitItems = query(colRef,
+            where(documentId(), "==", "outfits"));
 
-        const newItem = {
+        const outfitSnapshot = await getDocs(outfitItems);
+
+        outfitSnapshot.forEach((doc) => {
+            const userItems = doc.data()[FirebaseAuth.currentUser.uid];
+            if (userItems) {
+                userOutfitDataExists = true;
+                // Checks if outfit name has already been used
+                if (userItems[outfitName]) {
+                    toast.error('Outfit name already used!');
+                    outfitNameUsed = true;
+                    return;
+                }
+                return;
+            }
+        });
+
+        // Ends function if outfit name has already been used
+        if (outfitNameUsed) {
+            return;
+        }
+
+        // Ends function if outfit name has already been used
+        const itemUrls = selectedItems.map((item) => item.url);
+
+        const newOutfit = {
             [FirebaseAuth.currentUser.uid]: {
                 // outfitName as array and value for userID map
-                [outfitName]: arrayUnion(...storageNames),
+                [outfitName]: arrayUnion(...itemUrls),
             }
         };
-
-        const updateObj = newItem;
-        await updateDoc(outfitsRef, updateObj);
-
-        toast.success("Created outfit!");
-        handleCloseModal();
+        
+        if (userOutfitDataExists) {
+            try {
+                await setDoc(outfitRef, newOutfit, { merge: true });
+                toast.success("Created outfit");
+                handleCloseModal();
+            }
+            catch (error) {
+                toast.error("Error creating outfit");
+            }
+        }
+        else {
+            try {
+                await setDoc(outfitRef, newOutfit);
+                toast.success("Created outfit");
+                handleCloseModal();
+            }
+            catch (error) {
+                toast.error("Error creating outfit");
+            }
+        }
     }
 
     // Reset outfitName when modal is closed
@@ -63,6 +103,7 @@ export default function OutfitModal({
             closeOnOverlayClick={!deletingStatus}
             isOpen={isOpen}
             isCentered
+            size="xl"
         >
             <AlertDialogOverlay />
             <AlertDialogContent className={styles['closet-dialog-content']}>

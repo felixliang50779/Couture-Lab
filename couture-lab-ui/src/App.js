@@ -3,8 +3,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 
 import Home from './Pages/Home';
 import Closet from './Pages/Closet';
-import Calendar from './Pages/Calendar';
-import Recommend from './Pages/Recommend';
 import SignIn from './Pages/SignIn';
 import SignUp from './Pages/SignUp';
 import Contact from './Pages/Contact'
@@ -31,8 +29,6 @@ function App() {
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/closet' element={<PrivateRoute><Closet /></PrivateRoute>} />
-            <Route path='/calendar' element={<Calendar />} />
-            <Route path='/recommend' element={<Recommend />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/verifyemail' element={<PrivateRoute><VerifyEmail /></PrivateRoute>} />
             <Route path='/basicinfo' element={<PrivateRoute><BasicInfo /></PrivateRoute>} />
