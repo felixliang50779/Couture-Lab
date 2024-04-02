@@ -45,7 +45,7 @@
 .form-input:focus {
     outline: none;
     border-color: #9ecaed;
-    box-shadow: 0 0 5px #9ecaed;   
+    box-shadow: 0 0 5px #9ecaed;
 }
 
 .contact-form-holder {
@@ -71,7 +71,8 @@
     cursor: pointer;
 }
 
-.contact-form-disabled, .contact-form-disabled:hover {
+.contact-form-disabled,
+.contact-form-disabled:hover {
     background-color: gray;
     cursor: default;
 }
@@ -81,7 +82,8 @@
         display: flex;
         flex-direction: column;
     }
+
     .form-input {
-        width: 90%; 
+        width: 90%;
     }
 }
