@@ -1,10 +1,11 @@
 // Utility-related modules
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import
 {
     collection, query, documentId, where, getDocs
 } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
+import { SettingsContext } from '../Utilities/settingscontext';
 import { useNavigate } from 'react-router-dom';
 
 // UI-related modules
@@ -50,6 +51,9 @@ const Closet = () => {
     const [chatInput, setChatInput] = useState("");
     const [queryLog, setQueryLog] = useState([]);
     const [responseLog, setResponseLog] = useState([]);
+
+    // Styling assistant settings
+    const { fetchSettings } = useContext(SettingsContext);
     
     // Refs
     const questionnaireRef = useRef({});
@@ -90,6 +94,9 @@ const Closet = () => {
 
         setChatInput('');
 
+        const settings = await fetchSettings();
+        const personalizeResponse = settings.personalizeResponses;
+
         const API = 'http://127.0.0.1:8000/langserve/';
         // const API = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
 
@@ -102,6 +109,7 @@ const Closet = () => {
             body: JSON.stringify({
                 "text": userInput,
                 "questionnaire": questionnaireRef.current,
+                "personalize": personalizeResponse,
                 "imageFlag": imageFlag
             })
         });
@@ -166,27 +174,6 @@ const Closet = () => {
             }
         });
     }
-
-    /*const loadOutfit = async () => {
-        const closetRef = collection(db, "virtual-closet");
-
-        const items = query(closetRef,
-            where(documentId(), "==", "outfits"));
-
-        const closetSnapshot = await getDocs(items);
-        closetSnapshot.forEach(doc => {
-            const userItems = doc.data()[FirebaseAuth.currentUser.uid];
-            
-            if (userItems !== undefined) {
-                setLoadingGallery(false);
-                setFilteredGallery(userItems);
-            }
-            else if (userItems === undefined) {
-                // Makes the spinner disappear if the user has no items
-                setLoadingGallery(false);
-            }
-        });
-    }*/
     
     const checkUserQuestionnaire = useCallback(async () => {
         const closetRef = collection(db, "virtual-closet");

@@ -67,7 +67,7 @@ export default function BasicInfo() {
         const formData = watch(); // Get the current form data
         const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
         
-        let updateObj = {}
+        let updateObj = {};
         updateObj[FirebaseAuth.currentUser.uid] = formData;
 
         // Update Firebase display name

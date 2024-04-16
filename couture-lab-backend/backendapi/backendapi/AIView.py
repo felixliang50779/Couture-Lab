@@ -83,39 +83,46 @@ async def get_local_weather(session):
 async def get_clothing_item(
     item,
     session,
-    gender,
-    budget,
+    gender=None,
+    budget=None,
     country="US"
 ):
     url = "https://real-time-product-search.p.rapidapi.com/search"
 
-    if gender == "Male":
-        query = "men's {}".format(item)
-        other_filters = "1020288|1020289"
-    else:
-        query = "women's {}".format(item)
-        other_filters = "1020288|1020290"
+    if gender != None:
+        if gender == "Male":
+            query = "men's {}".format(item)
+            other_filters = "1020288|1020289"
+        else:
+            query = "women's {}".format(item)
+            other_filters = "1020288|1020290"
 
-    if budget == "Low":
-        max_price = 50
-    elif budget == "Medium":
-        max_price = 200
+        if budget == "Low":
+            max_price = 50
+        elif budget == "Medium":
+            max_price = 200
 
-    if (budget == "Low") or (budget == "Medium"):
-        querystring = \
-            {
-                "q": query,
-                "other_filters": other_filters,
-                "max_price": max_price,
-                "country": country
-            }
+        if (budget == "Low") or (budget == "Medium"):
+            querystring = \
+                {
+                    "q": query,
+                    "other_filters": other_filters,
+                    "max_price": max_price,
+                    "country": country
+                }
+        else:
+            querystring = \
+                {
+                    "q": query,
+                    "other_filters": other_filters,
+                    "country": country
+                }
     else:
         querystring = \
-            {
-                "q": query,
-                "other_filters": other_filters,
-                "country": country
-            }
+                {
+                    "q": item,
+                    "country": country
+                }
 
     headers = {
         "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
@@ -217,7 +224,7 @@ async def get_weather_data(location, session):
         return f"Error: Unable to fetch geolocation data. Status code: {response.status}"
 
 # Asynchronous function for the styling assistant to process any function calls concurrently
-async def process_functions(messages, tools, user_gender, user_budget):
+async def process_functions(messages, tools, user_gender=None, user_budget=None):
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
@@ -288,7 +295,7 @@ async def process_functions(messages, tools, user_gender, user_budget):
         return messages
 
 # Generate response based on user query
-def send_stylist_response(user_query, user_questionnaire, image_input):
+def send_stylist_response(user_query, user_questionnaire, personalized_response, image_input):
 
     # Providing descriptions of all
     # available functions for the stylist to call
@@ -341,7 +348,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         }
     ]
 
-    if not len(user_questionnaire):
+    if personalized_response == '0':
         text_personalization_instructions, image_personalization_instructions = '', ''
     else:
         text_personalization_instructions = '''
@@ -510,8 +517,11 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
 
     # Alternatively, if functions are required...
     if functions_required:
-        messages = asyncio.run(process_functions(
-            messages, tools, user_questionnaire['Gender'], user_questionnaire['Budget']))
+        if personalized_response == '1':
+            messages = asyncio.run(process_functions(
+                messages, tools, user_questionnaire['Gender'], user_questionnaire['Budget']))
+        else:
+            messages = asyncio.run(process_functions(messages, tools))
 
         refined_response = client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
@@ -534,10 +544,11 @@ class LangServeHandle(APIView):
             serializer.is_valid(raise_exception=True)
             query = serializer.validated_data['text']
             questionnaire = request.data['questionnaire']
+            personalize = request.data['personalize']
             image_flag = request.data['imageFlag']
 
             return StreamingHttpResponse(
-                send_stylist_response(query, questionnaire, image_flag), 
+                send_stylist_response(query, questionnaire, personalize, image_flag), 
                     content_type="text/event-stream")
 
         except Exception as e:

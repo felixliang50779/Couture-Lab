@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { FirebaseAuth} from '../Utilities/firebase.js';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db, FirebaseAuth } from '../Utilities/firebase';
 
 import { toast } from 'react-toastify';
 
@@ -39,6 +40,16 @@ const SignUp = () => {
         try {
             await createUserWithEmailAndPassword(FirebaseAuth, email, password);
             await sendEmailVerification(FirebaseAuth.currentUser);
+
+            // Once the user has been successfully created
+            // set their default personalization preference to true
+            const settingsRef = doc(db, 'virtual-closet', 'settings');
+
+            let updateObj = {};
+            updateObj[FirebaseAuth.currentUser.uid] = {"personalizeResponses": "1"};
+
+            updateDoc(settingsRef, updateObj);
+
         } catch (error) {
             console.log(error);
             toast.error('Failed to sign up.')

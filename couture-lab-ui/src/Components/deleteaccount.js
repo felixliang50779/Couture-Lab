@@ -21,11 +21,22 @@ const DeleteAccountModal = ({isOpen, onClose}) => {
     let { logoutUser } = useContext(AuthContext);
 
     const deleteAccount = async () => {
+        const closetRef = doc(db, 'virtual-closet', 'items');
         const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
+        const settingsRef = doc(db, 'virtual-closet', 'settings');
+        
+        // Deletes user items in Firestore Database
+        await updateDoc(closetRef, {
+            [FirebaseAuth.currentUser.uid]: deleteField()
+        });
         // Deletes user styling preferences in Firestore Database
         await updateDoc(questionnaireRef, {
            [FirebaseAuth.currentUser.uid]: deleteField()
         });
+        // Deletes user settings in Firestore Database
+        await updateDoc(settingsRef, {
+            [FirebaseAuth.currentUser.uid]: deleteField()
+         });
         // Closes dialog
         onClose();
 

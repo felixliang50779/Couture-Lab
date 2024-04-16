@@ -50,6 +50,21 @@
     font-size: 1.2em;
 }
 
+.assistant-settings-container {
+    margin: 1em 1em 1em 1.5em;
+}
+
+.assistant-settings-card-header {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.assistant-settings-card-subheader {
+    font-size: 1.2em;
+    text-decoration: underline;
+    margin: 0.5em 0 1.5em 0;
+}
+
 .profile-stylingbutton, .profile-updatebutton {
     color: #ffffff;
     padding: 0.5em 1em;
