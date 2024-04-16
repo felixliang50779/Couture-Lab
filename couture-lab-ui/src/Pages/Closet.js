@@ -166,27 +166,6 @@ const Closet = () => {
             }
         });
     }
-
-    /*const loadOutfit = async () => {
-        const closetRef = collection(db, "virtual-closet");
-
-        const items = query(closetRef,
-            where(documentId(), "==", "outfits"));
-
-        const closetSnapshot = await getDocs(items);
-        closetSnapshot.forEach(doc => {
-            const userItems = doc.data()[FirebaseAuth.currentUser.uid];
-            
-            if (userItems !== undefined) {
-                setLoadingGallery(false);
-                setFilteredGallery(userItems);
-            }
-            else if (userItems === undefined) {
-                // Makes the spinner disappear if the user has no items
-                setLoadingGallery(false);
-            }
-        });
-    }*/
     
     const checkUserQuestionnaire = useCallback(async () => {
         const closetRef = collection(db, "virtual-closet");
@@ -270,18 +249,6 @@ const Closet = () => {
             </div>
         </label>
     );
-
-    const OutfitGalleryItem = ({ name }) => {
-        return (
-            <label 
-                className={styles['outfit-item-label']} 
-                onClick={!selectMode ? () => handleItemClick(name) : undefined}>
-                <div className={styles['gallery-item']}>
-                    <h1 className={styles['outfit-gallery-name']}>{name}</h1>
-                </div> 
-            </label>
-        );
-    }
 
     return (
         <main className={styles['page-main']}>
