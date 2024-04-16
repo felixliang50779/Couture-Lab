@@ -345,10 +345,6 @@ const Closet = () => {
                     <div className={styles['closet-gallery-container']}>
                         { loadingGallery ? (
                             <Spinner size='lg' /> 
-                        ) : selectedCategory === 'outfit' ? (
-                            filteredGallery.map((str, index) => (
-                                <OutfitGalleryItem key={index} name={str}/>
-                            ))
                         ) : filteredGallery.length > 0 ? (
                             filteredGallery.map(item => <GalleryItem key={item.storageName} item={item} />)
                         ) : (
