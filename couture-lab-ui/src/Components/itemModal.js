@@ -61,7 +61,7 @@ export default function ItemModal({
         };
 
         let updateObj = {};
-        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove('fsd');
+        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove(deletedItem);
 
         await updateDoc(itemsRef, updateObj);
 

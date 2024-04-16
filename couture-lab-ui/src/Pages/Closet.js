@@ -40,7 +40,6 @@ const Closet = () => {
     const [selectMode, setSelectMode] = useState(false);
     const [loadingGallery, setLoadingGallery] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [outfitGalleryData, setOutfitGalleryData] = useState(false);
     
 
     // Styling assistant states
@@ -177,7 +176,6 @@ const Closet = () => {
             
             if (userItems !== undefined) {
                 setLoadingGallery(false);
-                setOutfitGalleryData(userItems);
                 setFilteredGallery(userItems);
             }
             else if (userItems === undefined) {
@@ -229,17 +227,9 @@ const Closet = () => {
     }
 
     const galleryFilter = (category, galleryData) => {
-        if (category === 'outfit') {
-            // Stores user outfit names 
-            let outfitNames = Object.keys(outfitGalleryData);
-            setSelectedCategory(category);
-            setFilteredGallery(outfitNames);
-        }
-        else {
-            const filterData = galleryData.filter((item) => item.category === category);
-            setSelectedCategory(category);
-            setFilteredGallery(filterData);
-        }
+        const filterData = galleryData.filter((item) => item.category === category);
+        setSelectedCategory(category);
+        setFilteredGallery(filterData);
     };
 
     const GalleryItem = ({ item }) => (

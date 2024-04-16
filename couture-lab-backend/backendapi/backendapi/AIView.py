@@ -341,6 +341,25 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         }
     ]
 
+    if not len(user_questionnaire):
+        text_personalization_instructions, image_personalization_instructions = '', ''
+    else:
+        text_personalization_instructions = '''
+        When determining items to call the function with, keep in mind the user is someone who has an implicit
+        preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
+        with experimenting, has an eye color of {eye_color}, dresses most often for
+        {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
+        and views sustainability as {sustainability} when it comes to shopping for clothes.
+        '''
+
+        image_personalization_instructions = '''
+        When determining items for the outfit, keep in mind the user is someone who has an implicit
+        preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
+        with experimenting, has an eye color of {eye_color}, dresses most often for
+        {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
+        and views sustainability as {sustainability} when it comes to shopping for clothes.
+        '''
+
     text_message = '''
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
@@ -352,12 +371,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     1. 'get_local_weather' whenever you need the weather of the user's local area.
     2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
     local area.
-    3. 'get_clothing_data' whenever making a specific style recommendation. When determining
-    items to call the function with, keep in mind the user is someone who has an implicit
-    preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
-    with experimenting, has an eye color of {eye_color}, dresses most often for
-    {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
-    and views sustainability as {sustainability} when it comes to shopping for clothes. 
+    3. 'get_clothing_data' whenever making a specific style recommendation. {text_personalization_instructions}
 
     When citing specific examples using the provided functions, be sure to extract
     all items when there are multiple. Always extract product links and images.
@@ -374,7 +388,8 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     hair_color = user_questionnaire['Hair color'],
     preferred_style = user_questionnaire['Preferred style'],
     skin_tone = user_questionnaire['Skin tone'],
-    sustainability = user_questionnaire['Sustainability'])
+    sustainability = user_questionnaire['Sustainability'],
+    text_personalization_instructions = text_personalization_instructions)
 
 
     image_message = '''
@@ -383,11 +398,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     off of the provided image of a clothing item. Your response should be NOTHING BUT A LIST
     of the recommended items, e.g. "White T-shirt, Blue Jeans, Red Hoodie". 
     
-    When determining items for the outfit, keep in mind the user is someone who has an implicit
-    preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
-    with experimenting, has an eye color of {eye_color}, dresses most often for
-    {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
-    and views sustainability as {sustainability} when it comes to shopping for clothes. 
+    {image_personalization_instructions}
 
     Only respond to fashion-related images. You can only provide recommendations
     for fashion-related accessories or items.
@@ -401,7 +412,8 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     hair_color = user_questionnaire['Hair color'],
     preferred_style = user_questionnaire['Preferred style'],
     skin_tone = user_questionnaire['Skin tone'],
-    sustainability = user_questionnaire['Sustainability'])
+    sustainability = user_questionnaire['Sustainability'],
+    image_personalization_instructions = image_personalization_instructions)
 
 
     # Instructions for the stylist if input is text
@@ -472,12 +484,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         1. 'get_local_weather' whenever you need the weather of the user's local area.
         2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
         local area.
-        3. 'get_clothing_data' whenever making a specific style recommendation. When determining
-        items to call the function with, keep in mind the user is someone who has an implicit
-        preferred style of {preferred_style}, a body type of {body_type}, is {experiment_level}
-        with experimenting, has an eye color of {eye_color}, dresses most often for
-        {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
-        and views sustainability as {sustainability} when it comes to shopping for clothes. 
+        3. 'get_clothing_data' whenever making a specific style recommendation. {text_personalization_instructions}
 
         When citing specific examples using the provided functions, be sure to extract
         all items when there are multiple. Always extract product links and images.
@@ -494,7 +501,8 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         hair_color = user_questionnaire['Hair color'],
         preferred_style = user_questionnaire['Preferred style'],
         skin_tone = user_questionnaire['Skin tone'],
-        sustainability = user_questionnaire['Sustainability'])
+        sustainability = user_questionnaire['Sustainability'],
+        text_personalization_instructions = text_personalization_instructions)
 
         messages = [
             {"role": "system", "content": text_message},
