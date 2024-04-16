@@ -1,5 +1,5 @@
 // Utility-related modules
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import
 {
     collection, query, documentId, where, getDocs
@@ -188,7 +188,7 @@ const Closet = () => {
         });
     }*/
     
-    const checkUserQuestionnaire = async () => {
+    const checkUserQuestionnaire = useCallback(async () => {
         const closetRef = collection(db, "virtual-closet");
         const questionnaires = query(closetRef,
             where(documentId(), "==", "questionnaires"));
@@ -200,9 +200,7 @@ const Closet = () => {
                 navigate('/basicinfo');
             }
         });
-
-        console.log(userAnswered);
-    };
+    }, [navigate]);
 
     useEffect(() => {
         loadCloset();   
