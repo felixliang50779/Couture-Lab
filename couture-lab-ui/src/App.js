@@ -3,8 +3,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 
 import Home from './Pages/Home';
 import Closet from './Pages/Closet';
-import Calendar from './Pages/Calendar';
-import Recommend from './Pages/Recommend';
 import SignIn from './Pages/SignIn';
 import SignUp from './Pages/SignUp';
 import Contact from './Pages/Contact'

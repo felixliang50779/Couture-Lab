@@ -19,6 +19,7 @@ import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
 import OutfitModal from '../Components/outfitModal';
+import OutfitItemModal from '../Components/outfitItemModal';
 import Sheet from 'react-modal-sheet';
 
 import styles from '../PageStyles/Closet.module.css';
@@ -30,6 +31,7 @@ const Closet = () => {
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
     const { isOpen: OutfitModalOpen, onOpen: onOutfitModalOpen, onClose: onOutfitModalClose } = useDisclosure();
+    const { isOpen: outfitItemModalOpen, onOpen: onOutfitItemModalOpen, onClose: onOutfitItemModalClose } = useDisclosure();
 
     // Gallery states
 	const [clothesPicture, setClothesPicture] = useState();
@@ -39,10 +41,12 @@ const Closet = () => {
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
-    const [multiOutfitStatus, setMultiOutfitStatus] = useState(false);
     const [selectMode, setSelectMode] = useState(false);
     const [loadingGallery, setLoadingGallery] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [outfitGalleryData, setOutfitGalleryData] = useState(false);
+    
+    const [currentOutfit, setCurrentOutfit] = useState('');
 
     // Styling assistant states
     const [collapsed, setCollapsed] = useState(true);
@@ -166,8 +170,31 @@ const Closet = () => {
         });
     }
 
+    const loadOutfit = async () => {
+        const closetRef = collection(db, "virtual-closet");
+
+        const items = query(closetRef,
+            where(documentId(), "==", "outfits"));
+
+        const closetSnapshot = await getDocs(items);
+        closetSnapshot.forEach(doc => {
+            const userItems = doc.data()[FirebaseAuth.currentUser.uid];
+            
+            if (userItems !== undefined) {
+                setLoadingGallery(false);
+                setOutfitGalleryData(userItems);
+                setFilteredGallery(userItems);
+            }
+            else if (userItems === undefined) {
+                // Makes the spinner disappear if the user has no items
+                setLoadingGallery(false);
+            }
+        });
+    }
+
     useEffect(() => {
         loadCloset();
+        loadOutfit();
     }, []);
 
     const handleToggleSelect = () => {
@@ -187,8 +214,15 @@ const Closet = () => {
     }
 
     const handleItemClick = item => {
-        selectedItem.current = item;
-        onItemModalOpen();
+        if (selectedCategory === 'outfit') {
+            selectedItem.current = item;
+            setCurrentOutfit(item);
+            onOutfitItemModalOpen(); 
+        }
+        else {
+            selectedItem.current = item;
+            onItemModalOpen();  
+        }
     }
 
     const handleItemSelect = item => {
@@ -207,9 +241,17 @@ const Closet = () => {
     }
 
     const galleryFilter = (category, galleryData) => {
-        const filterData = galleryData.filter((item) => item.category === category);
-        setSelectedCategory(category);
-        setFilteredGallery(filterData);
+        if (category === 'outfit') {
+            // Stores user outfit names 
+            let outfitNames = Object.keys(outfitGalleryData);
+            setSelectedCategory(category);
+            setFilteredGallery(outfitNames);
+        }
+        else {
+            const filterData = galleryData.filter((item) => item.category === category);
+            setSelectedCategory(category);
+            setFilteredGallery(filterData);
+        }
     };
 
     const GalleryItem = ({ item }) => (
@@ -232,8 +274,19 @@ const Closet = () => {
                 />
             </div>
         </label>
-
     );
+
+    const OutfitGalleryItem = ({ name }) => {
+        return (
+            <label 
+                className={styles['outfit-item-label']} 
+                onClick={!selectMode ? () => handleItemClick(name) : undefined}>
+                <div className={styles['gallery-item']}>
+                    <h1 className={styles['outfit-gallery-name']}>{name}</h1>
+                </div> 
+            </label>
+        );
+    }
 
     return (
         <main className={styles['page-main']}>
@@ -257,37 +310,37 @@ const Closet = () => {
                                 setFilteredGallery(galleryData);
                                 setSelectedCategory('all');
                             }}>
-                                All
+                                <h1>All</h1>
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'top' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('top', galleryData)}>
                                 <IoShirtOutline className={styles.icon} />
-                                Tops
+                                <h1 className={styles['closet-category-text']}>Tops</h1>
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'bottom' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('bottom', galleryData)}>
                                 <PiPantsDuotone className={styles.icon} />
-                                Bottoms
+                                <h1 className={styles['closet-category-text']}>Bottoms</h1>
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'shoe' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('shoe', galleryData)}>
                                 <PiSneaker className={styles.icon} />
-                                Shoes
+                                <h1 className={styles['closet-category-text']}>Shoes</h1>
                         </button>
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'accessory' && styles['category-button-active']}`}
                             onClick={() => galleryFilter('accessory', galleryData)}>
                                 <GiCrystalEarrings className={`${styles.icon} ${styles['accessory-icon']}`} />
-                                Accessories
+                                <h1 className={styles['closet-category-text']}>Accessories</h1>
                         </button>        
                         <button
                             className={`${styles['closet-category-button']} ${selectedCategory === 'outfit' && styles['category-button-active']}`}
-                            onClick={() => galleryFilter('outfit', galleryData)}>
+                            onClick={() => galleryFilter('outfit', outfitGalleryData)}>
                                 <GiClothes className={`${styles.icon} ${styles['accessory-icon']}`} />
-                                Outfits
+                                <h1 className={styles['closet-category-text']}>Outfits</h1>
                         </button>                 
                     </div>
                     <button
@@ -296,13 +349,17 @@ const Closet = () => {
                         onClick={handleToggleSelect}>
                             <PiCursorClickFill className={styles.icon} />
                             <span className={styles.spacer} />
-                            Select
+                            <h1 className={styles['closet-category-text']}>Select</h1>
                     </button>   
 				</div>
                 <div>
                     <div className={styles['closet-gallery-container']}>
                         { loadingGallery ? (
                             <Spinner size='lg' /> 
+                        ) : selectedCategory === 'outfit' ? (
+                            filteredGallery.map((str, index) => (
+                                <OutfitGalleryItem key={index} name={str}/>
+                            ))
                         ) : filteredGallery.length > 0 ? (
                             filteredGallery.map(item => <GalleryItem key={item.storageName} item={item} />)
                         ) : (
@@ -356,12 +413,19 @@ const Closet = () => {
             <OutfitModal
                 isOpen={OutfitModalOpen}
                 onClose={onOutfitModalClose}
-                deletingStatus={multiOutfitStatus}
-                setDeletingStatus={setMultiOutfitStatus}
+                deletingStatus={deletingStatus}
                 selectedItems={selectedItems}
+            />
+            <OutfitItemModal
+                isOpen={outfitItemModalOpen}
+                onClose={onOutfitItemModalClose}
+                deletingStatus={deletingStatus}
+                setDeletingStatus={setDeletingStatus}
                 setGalleryData={setGalleryData}
+                selectedOutfit={currentOutfit}
                 setFilteredGallery={setFilteredGallery}
-                handleToggleSelect={handleToggleSelect} 
+                handleQuery={handleQuery}
+                openStylist={openStylist}
             />
             <Sheet
                 ref={sheetRef}
@@ -374,54 +438,54 @@ const Closet = () => {
                     console.log('> Current snap point index:', snapIndex)
                 }
             >
-                    <Sheet.Container>
-                        <Sheet.Header className={styles['sheet-modal-header']}>
-                            <button onClick={() => snapTo(1)}>
-                                <IoIosArrowDown className={styles['down-arrow']} color="white" size={25}  />
-                            </button>
-                        </Sheet.Header>
-                        <Sheet.Content className={styles['sheet-modal-container']}>
-                            <p className={styles['sheet-modal-content']}>
-                                <p className={styles['sheet-modal-label']}>
-                                    {`${selectedItems.length} ${selectedItems.length === 1 ? 'item' : 'items'} selected`}
-                                </p>
-                                <div className={styles['sheet-modal-button-container']}>
-                                    <button
-                                        className={styles['sheet-modal-create-oufit']}
-                                        disabled={OutfitModalOpen}
-                                        onClick={() => {
-                                            if (!selectedItems.length) {
-                                                toast.error("Please select at least 1 item!");
-                                                return;
-                                            } 
-                                            else if (selectedItems.length > 8) {
-                                                toast.error("Please select a max of 8 items!");
-                                                return;
-                                            }
-                                            onOutfitModalOpen();
-                                        }} 
-                                    >
-                                        Create Outfit
-                                    </button>
-                                    <button
-                                        className={styles['sheet-modal-button']}
-                                        disabled={deleteModalOpen}
-                                        onClick={() => {
-                                            if (!selectedItems.length) {
-                                                toast("Please select at least one item!");
-                                                return;
-                                            }
-                                            onDeleteModalOpen();
-                                        }} 
-                                    >
-                                        Delete Selected
-                                    </button>
-                                </div>
+                <Sheet.Container>
+                    <Sheet.Header className={styles['sheet-modal-header']}>
+                        <button onClick={() => snapTo(1)}>
+                            <IoIosArrowDown className={styles['down-arrow']} color="white" size={25}  />
+                        </button>
+                    </Sheet.Header>
+                    <Sheet.Content className={styles['sheet-modal-container']}>
+                        <p className={styles['sheet-modal-content']}>
+                            <p className={styles['sheet-modal-label']}>
+                                {`${selectedItems.length} ${selectedItems.length === 1 ? 'item' : 'items'} selected`}
                             </p>
-                        </Sheet.Content>
-                    </Sheet.Container>
-                    <Sheet.Backdrop />
-                </Sheet>
+                            <div className={styles['sheet-modal-button-container']}>
+                                <button
+                                    className={styles['sheet-modal-create-oufit']}
+                                    disabled={OutfitModalOpen}
+                                    onClick={() => {
+                                        if (!selectedItems.length) {
+                                            toast.error("Please select at least 1 item!");
+                                            return;
+                                        } 
+                                        else if (selectedItems.length > 8) {
+                                            toast.error("Please select a max of 8 items!");
+                                            return;
+                                        }
+                                        onOutfitModalOpen();
+                                    }} 
+                                >
+                                    Create Outfit
+                                </button>
+                                <button
+                                    className={styles['sheet-modal-button']}
+                                    disabled={deleteModalOpen}
+                                    onClick={() => {
+                                        if (!selectedItems.length) {
+                                            toast("Please select at least one item!");
+                                            return;
+                                        }
+                                        onDeleteModalOpen();
+                                    }} 
+                                >
+                                    Delete Selected
+                                </button>
+                            </div>
+                        </p>
+                    </Sheet.Content>
+                </Sheet.Container>
+                <Sheet.Backdrop />
+            </Sheet>
         </main>
     );
 };

@@ -8,7 +8,7 @@
 }
 
 .contact-header {
-    font-size: 4em;
+    font-size: 3em;
 }
 
 .contact-info-container {
@@ -21,12 +21,12 @@
 
 .contact-form-container {
     background-color: #ffffff;
-    padding: 3em 0 5em 10em;
+    padding: 3em 0 5em 5em;
     font-family: 'Helvetica';
 }
 
 .contact-form-header {
-    font-size: 3em;
+    font-size: 5em;
 }
 
 .form-input-label {
@@ -45,7 +45,7 @@
 .form-input:focus {
     outline: none;
     border-color: #9ecaed;
-    box-shadow: 0 0 5px #9ecaed;   
+    box-shadow: 0 0 5px #9ecaed;
 }
 
 .contact-form-holder {
@@ -71,7 +71,8 @@
     cursor: pointer;
 }
 
-.contact-form-disabled, .contact-form-disabled:hover {
+.contact-form-disabled,
+.contact-form-disabled:hover {
     background-color: gray;
     cursor: default;
 }
@@ -80,5 +81,9 @@
     .contact-intro-container {
         display: flex;
         flex-direction: column;
+    }
+
+    .form-input {
+        width: 90%;
     }
 }

@@ -81,9 +81,8 @@
     color: white;
 }
 
-.item-label {
+.item-label, .outfit-item-label {
     cursor: pointer;
-    height: fit-content;
     background-color: white;
     transition: all 0.2s;
     margin-bottom: 2vh;
@@ -91,6 +90,14 @@
     border-style: dashed;
     border-color: black;
     border-width: 0.1vw;
+}
+
+.item-label {
+    height: fit-content;   
+}
+
+.outfit-item-label {
+    padding: 7.5em 9em 9em 9em;
 }
 
 .item-label:hover {
@@ -101,6 +108,10 @@
 .gallery-item {
     z-index: 0;
     background-color: white;
+}
+
+.outfit-gallery-name {
+    font-size: 3em;
 }
 
 .checkbox {
@@ -223,4 +234,10 @@
 
 .spacer {
     width: 0.5vw;
+}
+
+@media only screen and (max-width : 1250px) {
+    .closet-category-text {
+        display: none;
+    }
 }

@@ -159,3 +159,12 @@
     display: flex;
     gap: 5.5vw;
 }
+
+.outfit-image-container {
+    display: flex;
+    gap: 1em;
+}
+
+.outfit-clothes-img {
+    width: 15em;
+}
