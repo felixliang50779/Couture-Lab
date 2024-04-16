@@ -5,6 +5,7 @@ import
     collection, query, documentId, where, getDocs
 } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
+import { useNavigate } from 'react-router-dom';
 
 // UI-related modules
 import { useDisclosure, Spinner } from '@chakra-ui/react';
@@ -24,6 +25,9 @@ import styles from '../PageStyles/Closet.module.css';
 
 
 const Closet = () => {
+    // Redirect 
+    const navigate = useNavigate();
+
     // Modal controllers
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
@@ -41,7 +45,6 @@ const Closet = () => {
     const [loadingGallery, setLoadingGallery] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('all');
     
-
     // Styling assistant states
     const [collapsed, setCollapsed] = useState(true);
     const [chatInput, setChatInput] = useState("");
@@ -164,7 +167,7 @@ const Closet = () => {
         });
     }
 
-    const loadOutfit = async () => {
+    /*const loadOutfit = async () => {
         const closetRef = collection(db, "virtual-closet");
 
         const items = query(closetRef,
@@ -183,12 +186,28 @@ const Closet = () => {
                 setLoadingGallery(false);
             }
         });
-    }
+    }*/
+    
+    const checkUserQuestionnaire = async () => {
+        const closetRef = collection(db, "virtual-closet");
+        const questionnaires = query(closetRef,
+            where(documentId(), "==", "questionnaires"));
+        
+        const querySnapshot = await getDocs(questionnaires);
+        querySnapshot.forEach((doc) => {
+            // If not found, navigates to basic info
+            if (!doc.data()[FirebaseAuth.currentUser.uid]) {
+                navigate('/basicinfo');
+            }
+        });
+
+        console.log(userAnswered);
+    };
 
     useEffect(() => {
-        loadCloset();
-        loadOutfit();
-    }, []);
+        loadCloset();   
+        checkUserQuestionnaire();
+    }, [checkUserQuestionnaire]);
 
     const handleToggleSelect = () => {
         // Resetting all the checkboxes
