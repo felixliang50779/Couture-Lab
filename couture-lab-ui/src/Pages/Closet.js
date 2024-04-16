@@ -258,18 +258,6 @@ const Closet = () => {
         </label>
     );
 
-    const OutfitGalleryItem = ({ name }) => {
-        return (
-            <label 
-                className={styles['outfit-item-label']} 
-                onClick={!selectMode ? () => handleItemClick(name) : undefined}>
-                <div className={styles['gallery-item']}>
-                    <h1 className={styles['outfit-gallery-name']}>{name}</h1>
-                </div> 
-            </label>
-        );
-    }
-
     return (
         <main className={styles['page-main']}>
             <StylingAssistant
@@ -332,10 +320,6 @@ const Closet = () => {
                     <div className={styles['closet-gallery-container']}>
                         { loadingGallery ? (
                             <Spinner size='lg' /> 
-                        ) : selectedCategory === 'outfit' ? (
-                            filteredGallery.map((str, index) => (
-                                <OutfitGalleryItem key={index} name={str}/>
-                            ))
                         ) : filteredGallery.length > 0 ? (
                             filteredGallery.map(item => <GalleryItem key={item.storageName} item={item} />)
                         ) : (
