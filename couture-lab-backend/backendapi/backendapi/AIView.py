@@ -350,7 +350,15 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         with experimenting, has an eye color of {eye_color}, dresses most often for
         {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
         and views sustainability as {sustainability} when it comes to shopping for clothes.
-        '''
+        '''.format(age = user_questionnaire['Age group'], 
+        body_type = user_questionnaire['Body type'],
+        experiment_level = user_questionnaire['Experiment level'],
+        eye_color = user_questionnaire['Eye color'],
+        frequent_events = user_questionnaire['Frequent events'],
+        hair_color = user_questionnaire['Hair color'],
+        preferred_style = user_questionnaire['Preferred style'],
+        skin_tone = user_questionnaire['Skin tone'],
+        sustainability = user_questionnaire['Sustainability'])
 
         image_personalization_instructions = '''
         When determining items for the outfit, keep in mind the user is someone who has an implicit
@@ -358,7 +366,15 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
         with experimenting, has an eye color of {eye_color}, dresses most often for
         {frequent_events}, has a hair color of {hair_color}, has a {skin_tone} skin tone,
         and views sustainability as {sustainability} when it comes to shopping for clothes.
-        '''
+        '''.format(age = user_questionnaire['Age group'], 
+        body_type = user_questionnaire['Body type'],
+        experiment_level = user_questionnaire['Experiment level'],
+        eye_color = user_questionnaire['Eye color'],
+        frequent_events = user_questionnaire['Frequent events'],
+        hair_color = user_questionnaire['Hair color'],
+        preferred_style = user_questionnaire['Preferred style'],
+        skin_tone = user_questionnaire['Skin tone'],
+        sustainability = user_questionnaire['Sustainability'])
 
     text_message = '''
     You are an expert fashion stylist. Draw on all your
@@ -380,16 +396,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     for fashion-related accessories or items.
 
     Address the user as "you".
-    '''.format(age = user_questionnaire['Age group'], 
-    body_type = user_questionnaire['Body type'],
-    experiment_level = user_questionnaire['Experiment level'],
-    eye_color = user_questionnaire['Eye color'],
-    frequent_events = user_questionnaire['Frequent events'],
-    hair_color = user_questionnaire['Hair color'],
-    preferred_style = user_questionnaire['Preferred style'],
-    skin_tone = user_questionnaire['Skin tone'],
-    sustainability = user_questionnaire['Sustainability'],
-    text_personalization_instructions = text_personalization_instructions)
+    '''.format(text_personalization_instructions = text_personalization_instructions)
 
 
     image_message = '''
@@ -404,16 +411,7 @@ def send_stylist_response(user_query, user_questionnaire, image_input):
     for fashion-related accessories or items.
 
     Address the user as "you".
-    '''.format(age = user_questionnaire['Age group'], 
-    body_type = user_questionnaire['Body type'],
-    experiment_level = user_questionnaire['Experiment level'],
-    eye_color = user_questionnaire['Eye color'],
-    frequent_events = user_questionnaire['Frequent events'],
-    hair_color = user_questionnaire['Hair color'],
-    preferred_style = user_questionnaire['Preferred style'],
-    skin_tone = user_questionnaire['Skin tone'],
-    sustainability = user_questionnaire['Sustainability'],
-    image_personalization_instructions = image_personalization_instructions)
+    '''.format(image_personalization_instructions = image_personalization_instructions)
 
 
     # Instructions for the stylist if input is text
