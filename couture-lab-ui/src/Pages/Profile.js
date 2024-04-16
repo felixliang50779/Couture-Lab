@@ -1,12 +1,11 @@
 // Utility-related modules
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { collection, query, where, documentId, getDocs } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
-import { SettingsContext } from '../Utilities/settingscontext';
 import { useNavigate } from 'react-router-dom';
 
 // UI-related modules
-import { useDisclosure, Spinner, RadioGroup, Radio, Stack } from '@chakra-ui/react';
+import { useDisclosure, Spinner } from '@chakra-ui/react';
 import DeleteAccountModal from '../Components/deleteaccount';
 import CollapseForm from '../Components/collapse';
 
@@ -48,8 +47,6 @@ export default function Profile() {
     const currentUsername = currentUser.displayName;
     const currentUserEmail = currentUser.email;
 
-    // State vars for styling assistant settings
-    const { isPersonalized, setIsPersonalized } = useContext(SettingsContext);
 
     useEffect(() => {
         async function fetchData() {
@@ -69,49 +66,21 @@ export default function Profile() {
         <div className={styles['profile-container']}>
             <DashboardNavBar />
             <div className={styles['profile-main-container']}>
-                <div className={styles['profile-secondary-container']}>
-                    <div className={styles['profile-userinfo-card']}>
-                        <div className={styles['profile-userinfo-card-inner']}>
-                            <img className={styles['profile-userimg']} src='https://eu.ui-avatars.com/api/?name=wss&size=300' alt='ProfilePic' loading='lazy' />
-                            <div className={styles['profile-userinfo-text']}>
-                                <p>@{currentUsername}</p>
-                                <p>{currentUserEmail}</p>
-                            </div>
-                        </div>  
-                        <button className={styles['profile-deleteaccount']} onClick={onDeleteAccountModalOpen}>
-                            Delete Account
-                        </button>
-                        <DeleteAccountModal
-                            isOpen={deleteAccountModalOpen}
-                            onClose={onDeleteAccountModalClose}
-                        />
-                    </div>
-                    <div className={styles['profile-userinfo-card']}>
-                        <div className={styles['profile-userinfo-card-inner']}>
-                            <div className={styles['assistant-settings-container']}>
-                                <h1 className={styles['assistant-settings-card-header']}>
-                                    Personalized Styling Recommendations
-                                </h1>
-                                <h2 className={styles['assistant-settings-card-subheader']}>
-                                    Customize Your Styling Assistant
-                                </h2>
-                                <RadioGroup onChange={setIsPersonalized} value={isPersonalized}>
-                                    <Stack spacing={4} direction="column">
-                                        <Radio
-                                            colorScheme="blackAlpha"
-                                            value='0'>
-                                                Use the vanilla styling assistant 
-                                        </Radio>
-                                        <Radio
-                                            colorScheme="blackAlpha"
-                                            value='1'>
-                                                Inform the styling assistant of my preferences
-                                        </Radio>
-                                    </Stack>
-                                </RadioGroup>
-                            </div>
-                        </div>  
-                    </div>
+                <div className={styles['profile-userinfo-card']}>
+                    <div className={styles['profile-userinfo-card-inner']}>
+                        <img className={styles['profile-userimg']} src='https://eu.ui-avatars.com/api/?name=wss&size=300' alt='ProfilePic' loading='lazy' />
+                        <div className={styles['profile-userinfo-text']}>
+                            <p>@{currentUsername}</p>
+                            <p>{currentUserEmail}</p>
+                        </div>
+                    </div>  
+                    <button className={styles['profile-deleteaccount']} onClick={onDeleteAccountModalOpen}>
+                        Delete Account
+                    </button>
+                    <DeleteAccountModal
+                        isOpen={deleteAccountModalOpen}
+                        onClose={onDeleteAccountModalClose}
+                    />
                 </div>
                 <div className={styles['profile-styling-card']}>
                     { loadingStylingPreferences ? (

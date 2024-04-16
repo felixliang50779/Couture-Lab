@@ -11,15 +11,13 @@ import { useDisclosure, Spinner } from '@chakra-ui/react';
 import { PiCursorClickFill, PiPantsDuotone, PiSneaker } from "react-icons/pi";
 import { IoMdAdd, IoIosArrowDown } from "react-icons/io";
 import { IoShirtOutline } from "react-icons/io5";
-import { GiCrystalEarrings, GiClothes } from "react-icons/gi";
+import { GiCrystalEarrings } from "react-icons/gi";
 import { toast } from 'react-toastify';
 import DashboardNavbar from '../Components/dashboardnavbar';
 import StylingAssistant from '../Components/stylingAssistant';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
-import OutfitModal from '../Components/outfitModal';
-import OutfitItemModal from '../Components/outfitItemModal';
 import Sheet from 'react-modal-sheet';
 
 import styles from '../PageStyles/Closet.module.css';
@@ -30,8 +28,6 @@ const Closet = () => {
     const { isOpen: uploadModalOpen, onOpen: onUploadModalOpen, onClose: onUploadModalClose } = useDisclosure();
     const { isOpen: itemModalOpen, onOpen: onItemModalOpen, onClose: onItemModalClose } = useDisclosure();
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
-    const { isOpen: OutfitModalOpen, onOpen: onOutfitModalOpen, onClose: onOutfitModalClose } = useDisclosure();
-    const { isOpen: outfitItemModalOpen, onOpen: onOutfitItemModalOpen, onClose: onOutfitItemModalClose } = useDisclosure();
 
     // Gallery states
 	const [clothesPicture, setClothesPicture] = useState();
@@ -46,7 +42,6 @@ const Closet = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [outfitGalleryData, setOutfitGalleryData] = useState(false);
     
-    const [currentOutfit, setCurrentOutfit] = useState('');
 
     // Styling assistant states
     const [collapsed, setCollapsed] = useState(true);
@@ -214,15 +209,8 @@ const Closet = () => {
     }
 
     const handleItemClick = item => {
-        if (selectedCategory === 'outfit') {
-            selectedItem.current = item;
-            setCurrentOutfit(item);
-            onOutfitItemModalOpen(); 
-        }
-        else {
-            selectedItem.current = item;
-            onItemModalOpen();  
-        }
+        selectedItem.current = item;
+        onItemModalOpen();
     }
 
     const handleItemSelect = item => {
@@ -335,13 +323,7 @@ const Closet = () => {
                             onClick={() => galleryFilter('accessory', galleryData)}>
                                 <GiCrystalEarrings className={`${styles.icon} ${styles['accessory-icon']}`} />
                                 <h1 className={styles['closet-category-text']}>Accessories</h1>
-                        </button>        
-                        <button
-                            className={`${styles['closet-category-button']} ${selectedCategory === 'outfit' && styles['category-button-active']}`}
-                            onClick={() => galleryFilter('outfit', outfitGalleryData)}>
-                                <GiClothes className={`${styles.icon} ${styles['accessory-icon']}`} />
-                                <h1 className={styles['closet-category-text']}>Outfits</h1>
-                        </button>                 
+                        </button>      
                     </div>
                     <button
                         className={
@@ -410,23 +392,6 @@ const Closet = () => {
                 setFilteredGallery={setFilteredGallery}
                 handleToggleSelect={handleToggleSelect} 
             />
-            <OutfitModal
-                isOpen={OutfitModalOpen}
-                onClose={onOutfitModalClose}
-                deletingStatus={deletingStatus}
-                selectedItems={selectedItems}
-            />
-            <OutfitItemModal
-                isOpen={outfitItemModalOpen}
-                onClose={onOutfitItemModalClose}
-                deletingStatus={deletingStatus}
-                setDeletingStatus={setDeletingStatus}
-                setGalleryData={setGalleryData}
-                selectedOutfit={currentOutfit}
-                setFilteredGallery={setFilteredGallery}
-                handleQuery={handleQuery}
-                openStylist={openStylist}
-            />
             <Sheet
                 ref={sheetRef}
                 isOpen={selectMode}
@@ -450,23 +415,6 @@ const Closet = () => {
                                 {`${selectedItems.length} ${selectedItems.length === 1 ? 'item' : 'items'} selected`}
                             </p>
                             <div className={styles['sheet-modal-button-container']}>
-                                <button
-                                    className={styles['sheet-modal-create-oufit']}
-                                    disabled={OutfitModalOpen}
-                                    onClick={() => {
-                                        if (!selectedItems.length) {
-                                            toast.error("Please select at least 1 item!");
-                                            return;
-                                        } 
-                                        else if (selectedItems.length > 8) {
-                                            toast.error("Please select a max of 8 items!");
-                                            return;
-                                        }
-                                        onOutfitModalOpen();
-                                    }} 
-                                >
-                                    Create Outfit
-                                </button>
                                 <button
                                     className={styles['sheet-modal-button']}
                                     disabled={deleteModalOpen}

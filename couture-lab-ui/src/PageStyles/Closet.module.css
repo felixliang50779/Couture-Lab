@@ -207,7 +207,7 @@
     gap: 1em;
 }
 
-.sheet-modal-button, .sheet-modal-create-oufit {
+.sheet-modal-button, .sheet-modal-create-outfit {
     display: flex;
     align-items: center;
     z-index: 2;

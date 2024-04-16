@@ -102,9 +102,6 @@ export default function ItemModal({
                         <p className={styles['closet-delete-category']}>
                             Category: {selectedItem?.category?.charAt(0).toUpperCase() + selectedItem?.category?.slice(1)}
                         </p>
-                        <p className={styles['closet-delete-category']}>
-                            Used In: 0 Outfits
-                        </p>
                     </div>
                     <div className={styles['item-modal-buttons']}>
                         { selectedItem.category !== "outfit" &&
