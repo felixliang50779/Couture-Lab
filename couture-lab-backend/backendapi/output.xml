@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.11.9 on win32)" generated="2024-05-10T15:56:39.428699" rpa="false" schemaversion="5">
+<suite id="s1" name="Tests" source="C:\Users\flian\Couture-Lab\couture-lab-backend\backendapi\tests">
+<suite id="s1-s1" name="AIView" source="C:\Users\flian\Couture-Lab\couture-lab-backend\backendapi\tests\AIView.robot">
+<test id="s1-s1-t1" name="Site Navigation" line="10">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:39.626443" level="INFO">Opening browser 'chrome' to base url 'https://couture-lab-backend.web.app/'.</msg>
+<arg>https://couture-lab-backend.web.app/</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2024-05-10T15:56:39.626443" elapsed="2.477308"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.103751" elapsed="0.083377"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:42.187128" level="INFO">Clicking element 'xpath=//*[@id="root"]/div[2]/nav/a[2]'.</msg>
+<arg>xpath=//*[@id="root"]/div[2]/nav/a[2]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.187128" elapsed="0.193944"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:42.382636" level="INFO">Typing text 'fliangmi@gmail.com' into text field 'css:input[placeholder="E.u. lebronjames"]'.</msg>
+<arg>css:input[placeholder="E.u. lebronjames"]</arg>
+<arg>fliangmi@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.382353" elapsed="0.146851"/>
+</kw>
+<kw name="Input Password" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:42.530231" level="INFO">Typing password into text field 'css:input[placeholder="Enter Your Password"]'.</msg>
+<msg time="2024-05-10T15:56:42.562282" level="INFO">Temporally setting log level to: NONE</msg>
+<arg>css:input[placeholder="Enter Your Password"]</arg>
+<arg>felixhi</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.529204" elapsed="0.086630"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:42.616833" level="INFO">Clicking element 'xpath=//*[@id="root"]/div[2]/div/div[2]/div[2]/form/input[3]'.</msg>
+<arg>xpath=//*[@id="root"]/div[2]/div/div[2]/div[2]/form/input[3]</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.616833" elapsed="0.047292"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>xpath=//*[@id="root"]/main/div[1]/button</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-05-10T15:56:42.664125" elapsed="0.475869"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:43.139994" level="INFO">Clicking element 'xpath=//*[@id="root"]/main/div[1]/button'.</msg>
+<arg>xpath=//*[@id="root"]/main/div[1]/button</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:43.139994" elapsed="0.044195"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>css:input[placeholder="Chat with Your Styling Assistant"]</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-05-10T15:56:43.184189" elapsed="0.230221"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-05-10T15:56:43.429212" level="INFO">Typing text 'Give me an outfit to wear in the summer' into text field 'css:input[placeholder="Chat with Your Styling Assistant"]'.</msg>
+<arg>css:input[placeholder="Chat with Your Styling Assistant"]</arg>
+<arg>Give me an outfit to wear in the summer</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:43.428973" elapsed="0.268851"/>
+</kw>
+<kw name="Press Key" owner="SeleniumLibrary">
+<arg>css:input[placeholder="Chat with Your Styling Assistant"]</arg>
+<arg>\\13</arg>
+<doc>Simulates user pressing key on element identified by ``locator``.</doc>
+<status status="PASS" start="2024-05-10T15:56:43.697824" elapsed="0.047647"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>xpath=//*[@id="root"]/main/div[1]/aside/div/div/div[1]/p[2]</arg>
+<arg>30</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2024-05-10T15:56:43.746489" elapsed="14.392477"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2024-05-10T15:56:58.139961" elapsed="2.174339"/>
+</kw>
+<status status="PASS" start="2024-05-10T15:56:39.626443" elapsed="20.687857"/>
+</test>
+<test id="s1-s1-t2" name="Simple Query (NO API CALLS)" line="33">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2024-05-10T15:57:00.336496" level="INFO">GET Request : url=http://localhost:8000/langserve (redirected) 
+ path_url=/langserve 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2024-05-10T15:57:00.337045" level="INFO">GET Response : url=http://localhost:8000/langserve/ 
+ status=200, reason=OK 
+ headers={'Date': 'Fri, 10 May 2024 19:57:00 GMT', 'Server': 'WSGIServer/0.2 CPython/3.10.14', 'Content-Type': 'application/json', 'Vary': 'Accept, origin', 'Allow': 'GET, POST, HEAD, OPTIONS', 'X-Frame-Options': 'DENY', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'Cross-Origin-Opener-Policy': 'same-origin', 'Content-Length': '6'} 
+ body="test" 
+ </msg>
+<msg time="2024-05-10T15:57:00.337045" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>http://localhost:8000/langserve</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2024-05-10T15:57:00.314300" elapsed="0.022745"/>
+</kw>
+<kw name="Pass Execution If" owner="BuiltIn">
+<arg>'${response}' == 'fafwefwae'</arg>
+<arg>GET method working!</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" start="2024-05-10T15:57:00.337577" elapsed="0.000554"/>
+</kw>
+<status status="PASS" start="2024-05-10T15:57:00.314300" elapsed="0.024381"/>
+</test>
+<status status="PASS" start="2024-05-10T15:56:39.468083" elapsed="20.871684"/>
+</suite>
+<status status="PASS" start="2024-05-10T15:56:39.428699" elapsed="20.912156"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="Tests">Tests</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s1" name="AIView">Tests.AIView</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

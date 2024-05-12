@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.11.9 on win32)" generated="2024-05-10T18:03:58.599974" rpa="false" schemaversion="5">
+<suite id="s1" name="AIView" source="c:\Users\flian\Couture-Lab\couture-lab-backend\backendapi\tests\AIView.robot">
+<test id="s1-t1" name="Simple Query (NO API CALLS)" line="34">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2024-05-10T18:03:58.813023" level="INFO">GET Request : url=http://localhost:8000/langserve/ 
+ path_url=/langserve/ 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2024-05-10T18:03:58.814620" level="INFO">GET Response : url=http://localhost:8000/langserve/ 
+ status=200, reason=OK 
+ headers={'Date': 'Fri, 10 May 2024 22:03:58 GMT', 'Server': 'WSGIServer/0.2 CPython/3.10.14', 'Content-Type': 'application/json', 'Vary': 'Accept, origin', 'Allow': 'GET, POST, HEAD, OPTIONS', 'X-Frame-Options': 'DENY', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'Cross-Origin-Opener-Policy': 'same-origin', 'Content-Length': '6'} 
+ body="test" 
+ </msg>
+<msg time="2024-05-10T18:03:58.814620" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>http://localhost:8000/langserve/</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.790334" elapsed="0.024817"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response.text}</arg>
+<arg>"test"</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.815687" elapsed="0.000551"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2024-05-10T18:03:58.817905" level="INFO">&amp;{questionnaire} = { Age group=18 to 25 | Body type=Hourglass | Budget=Medium | Experiment level=Very Comfortable | Eye color=Brown | Frequent events=Work | Gender=Female | Hair color=Brown | Preferred style=Casual | Sk...</msg>
+<var>&amp;{questionnaire}</var>
+<arg>Age group=18 to 25</arg>
+<arg>Body type=Hourglass</arg>
+<arg>Budget=Medium</arg>
+<arg>Experiment level=Very Comfortable</arg>
+<arg>Eye color=Brown</arg>
+<arg>Frequent events=Work</arg>
+<arg>Gender=Female</arg>
+<arg>Hair color=Brown</arg>
+<arg>Preferred style=Casual</arg>
+<arg>Skin tone=Fair</arg>
+<arg>Sustainability=Not Important</arg>
+<arg>name=Olivia</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.817349" elapsed="0.000556"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2024-05-10T18:03:58.818984" level="INFO">&amp;{body} = { text=Give me an affordable fall outfit | questionnaire={'Age group': '18 to 25', 'Body type': 'Hourglass', 'Budget': 'Medium', 'Experiment level': 'Very Comfortable', 'Eye color': 'Brown', 'Frequent...</msg>
+<var>&amp;{body}</var>
+<arg>text=Give me an affordable fall outfit</arg>
+<arg>questionnaire=&amp;{questionnaire}</arg>
+<arg>personalize=1</arg>
+<arg>imageFlag=${False}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.818446" elapsed="0.001077"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2024-05-10T18:03:58.820606" level="INFO">${stringified_body} = {"text": "Give me an affordable fall outfit", "questionnaire": {"Age group": "18 to 25", "Body type": "Hourglass", "Budget": "Medium", "Experiment level": "Very Comfortable", "Eye color": "Brown", "Fr...</msg>
+<var>${stringified_body}</var>
+<arg>json.dumps(&amp;{body})</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.820059" elapsed="0.000547"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2024-05-10T18:03:58.821691" level="INFO">&amp;{headers} = { Content-Type=application/json }</msg>
+<var>&amp;{headers}</var>
+<arg>Content-Type</arg>
+<arg>application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.821150" elapsed="0.000541"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2024-05-10T18:04:17.943082" level="INFO">POST Request : url=http://localhost:8000/langserve/ 
+ path_url=/langserve/ 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '410'} 
+ body={"text": "Give me an affordable fall outfit", "questionnaire": {"Age group": "18 to 25", "Body type": "Hourglass", "Budget": "Medium", "Experiment level": "Very Comfortable", "Eye color": "Brown", "Frequent events": "Work", "Gender": "Female", "Hair color": "Brown", "Preferred style": "Casual", "Skin tone": "Fair", "Sustainability": "Not Important", "name": "Olivia"}, "personalize": "1", "imageFlag": false} 
+ </msg>
+<msg time="2024-05-10T18:04:17.943082" level="INFO">POST Response : url=http://localhost:8000/langserve/ 
+ status=200, reason=OK 
+ headers={'Date': 'Fri, 10 May 2024 22:04:10 GMT', 'Server': 'WSGIServer/0.2 CPython/3.10.14', 'Content-Type': 'text/event-stream', 'Vary': 'Accept, origin', 'Allow': 'GET, POST, HEAD, OPTIONS', 'X-Frame-Options': 'DENY', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'Cross-Origin-Opener-Policy': 'same-origin', 'Connection': 'close'} 
+ body=For an affordable fall outfit, I recommend the following items:
+1. **Sweater**: 
+   - **Product:** [Dokotoo Womens Short Sleeve Sweaters Tops Crew Neck Pullover Shirt](https://google.com/shopping/product/14012657981992923031?gl=us&amp;hl=en&amp;prds=pid%3A5171933796852833661)
+   - **Price:** Affordable
+   - **Image:** 
+     ![Sweater](https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcR9BRpcfFbN9J-m0q82TZ_GBGQwKt6B0RJuFnvWnIPyzOFofzXf86iHPbYev3TQ0Jf_g0fDfmihTiavpXF2IyBTUk4_Gdqn&amp;usqp=CAE)
+  
+2. **Jeans**:
+   - **Product:** [GRAPENT Womens Flare Jeans High Waisted Wide Leg Baggy Jean for Women](https://google.com/shopping/product/10075724266129485237?gl=us&amp;hl=en&amp;prds=pid%3A1066671704534564055)
+   - **Price:** Affordable
+   - **Image:** 
+     ![Jeans](https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcS0HJy5fb8WTXAHPdkve6-KfKHnVXXT4fvIQiTjxxXCilutUyY2FsDnLRdY-DBj62JuHBF7-d8n7mqYjXeO_B3aoebS3ULV&amp;usqp=CAE)
+  
+3. **Ankle Boots**:
+   - **Product:** [Sugar Women's Trixy Ankle Booties - Cognac](https://google.com/shopping/product/15293968045702560494?gl=us&amp;hl=en&amp;prds=pid%3A3763822640459100534)
+   - **Price:** Affordable
+   - **Image:** 
+     ![Ankle Boots](https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRZzlT8cjC_3jui8HpTmE6rmQMNJXFHUN3adxnN64DJFiRZSGPFNrDiJ2pFPK7ZtX0mjKykQVBp9eo0luTv-VflM2K3KMRe&amp;usqp=CAE)
+  
+4. **Scarves**:
+   - **Product:** [QIUTIMIY Scarf for Women Lightweight Soft Floral Leopard Printed Scarves Fall Winter Fashion Shawl Wrap](https://google.com/shopping/product/17428602516293219410?gl=us&amp;hl=en&amp;prds=pid%3A13543027551953278959)
+   - **Price:** Affordable
+   - **Image:** 
+     ![Scarf](https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcS_yZyC-ymPvlnLZvVRoC9XeEy3qjaVM7Rw6RydK1ocCVcBsaUe0TneHso1d7eba6k1DlrYwI4jGU323cf6qdwtRUdZoYfa&amp;usqp=CAE)
+
+This outfit combination of a comfortable sweater, stylish jeans, chic ankle boots, and a cozy scarf is perfect for a casual fall day! 
+ </msg>
+<msg time="2024-05-10T18:04:17.943691" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>http://localhost:8000/langserve/</arg>
+<arg>${stringified_body}</arg>
+<arg>headers=&amp;{headers}</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2024-05-10T18:03:58.822245" elapsed="19.121446"/>
+</kw>
+<status status="PASS" start="2024-05-10T18:03:58.790334" elapsed="19.154562"/>
+</test>
+<status status="PASS" start="2024-05-10T18:03:58.601045" elapsed="19.345499"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="AIView">AIView</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
