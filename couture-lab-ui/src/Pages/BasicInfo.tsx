@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';  
 import { doc, updateDoc, collection, query, where, documentId, getDocs } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import FormSelect from '../Components/formselect';
 import { db, FirebaseAuth } from '../Utilities/firebase';
+import { PersonalizationFormObject } from '../Components/collapse';
+import FormSelect from '../Components/formselect';
 
 // UI-related modules
 import { toast } from 'react-toastify';
@@ -67,11 +68,11 @@ export default function BasicInfo() {
         const formData = watch(); // Get the current form data
         const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
         
-        let updateObj = {};
-        updateObj[FirebaseAuth.currentUser.uid] = formData;
+        let updateObj = {} as PersonalizationFormObject;
+        updateObj[FirebaseAuth.currentUser!.uid] = formData;
 
         // Update Firebase display name
-        updateProfile(FirebaseAuth.currentUser, {
+        updateProfile(FirebaseAuth.currentUser!, {
             displayName: formData.name
         });
 
@@ -94,7 +95,7 @@ export default function BasicInfo() {
 
         const questionnaireSnapshot = await getDocs(questionnaires);
         questionnaireSnapshot.forEach(doc => {
-            if (doc.data()[FirebaseAuth.currentUser.uid]) {
+            if (doc.data()[FirebaseAuth.currentUser!.uid]) {
                 setUserAlreadyAnswered(true);
                 setLoadingStatus(false); 
                 return;
@@ -130,7 +131,7 @@ export default function BasicInfo() {
                                 />
                                 {errors.name && 
                                     <p className={styles['form-errormsg']}>
-                                        {errors.name.message}
+                                        {errors.name.message as string}
                                     </p>
                                 }
                                 <FormSelect 

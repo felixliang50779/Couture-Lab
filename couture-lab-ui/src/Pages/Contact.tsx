@@ -18,7 +18,7 @@ export default function Contact() {
         message: ''
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -30,7 +30,7 @@ export default function Contact() {
 
     const isFormValid = name && email && message;
 
-    const submitContactMessage = (event) => {
+    const submitContactMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         // send email to dxiong372@gmail.com using firebase using name, email, and message in the form
         toast.success('Message submitted.');

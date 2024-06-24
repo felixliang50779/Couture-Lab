@@ -10,9 +10,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
     background-image: linear-gradient(#ffffff, #f2e9ff);
-    padding: 8.5em 0 20em 2em;
+    padding: 8.5em 0 20em 0;
     color: #000000;
     font-family: 'Helvetica';
 }
@@ -164,5 +163,11 @@
         flex-direction: column;
         align-items: center;
         padding: 9em 4em 9em 4em;
+    }
+
+    .intro-container {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 }

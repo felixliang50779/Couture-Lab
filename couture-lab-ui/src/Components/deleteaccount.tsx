@@ -1,5 +1,5 @@
 // Utility-related modules
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { deleteUser } from 'firebase/auth';
 import { doc, deleteField, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -14,11 +14,18 @@ import {
 import { toast } from 'react-toastify';
 
 
-const DeleteAccountModal = ({isOpen, onClose}) => {
+interface Props {
+    isOpen: boolean,
+    onClose: () => void
+}
+
+const DeleteAccountModal = ({isOpen, onClose}: Props) => {
     // Redirect management
     const navigate = useNavigate();
     // Logout user function
     let { logoutUser } = useContext(AuthContext);
+
+    const cancelRef = useRef(null);
 
     const deleteAccount = async () => {
         const closetRef = doc(db, 'virtual-closet', 'items');
@@ -27,21 +34,21 @@ const DeleteAccountModal = ({isOpen, onClose}) => {
         
         // Deletes user items in Firestore Database
         await updateDoc(closetRef, {
-            [FirebaseAuth.currentUser.uid]: deleteField()
+            [FirebaseAuth.currentUser!.uid]: deleteField()
         });
         // Deletes user styling preferences in Firestore Database
         await updateDoc(questionnaireRef, {
-           [FirebaseAuth.currentUser.uid]: deleteField()
+           [FirebaseAuth.currentUser!.uid]: deleteField()
         });
         // Deletes user settings in Firestore Database
         await updateDoc(settingsRef, {
-            [FirebaseAuth.currentUser.uid]: deleteField()
+            [FirebaseAuth.currentUser!.uid]: deleteField()
          });
         // Closes dialog
         onClose();
 
         // Deletes user account
-        deleteUser(FirebaseAuth.currentUser).then(() => {
+        deleteUser(FirebaseAuth.currentUser!).then(() => {
             toast.success('Deleted account');
         }).catch((error) => {
             // Firebase needs to reauthenticate if user has not signed in a while
@@ -56,6 +63,7 @@ const DeleteAccountModal = ({isOpen, onClose}) => {
     return (
         <AlertDialog
             motionPreset='slideInBottom'
+            leastDestructiveRef={cancelRef}
             onClose={onClose}
             isOpen={isOpen}
             isCentered
@@ -69,7 +77,7 @@ const DeleteAccountModal = ({isOpen, onClose}) => {
                     Are you sure? You can't undo this.
                 </AlertDialogBody>  
                 <AlertDialogFooter>
-                    <Button onClick={onClose}>
+                    <Button ref={cancelRef} onClick={onClose}>
                         Cancel
                     </Button>
                     <Button colorScheme='red' onClick={deleteAccount} ml={3}>

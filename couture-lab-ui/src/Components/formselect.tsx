@@ -1,7 +1,17 @@
-import styles from './formselect.module.css';
+import { UseFormRegister, FieldValues, FieldErrors } from 'react-hook-form';
+import styles from '../ComponentStyles/formselect.module.css';
 
 
-export default function FormSelect({ name, options, register, defaultSelect, errors, placeholder }) {
+interface Props {
+    name: string,
+    options: string[],
+    register: UseFormRegister<FieldValues>,
+    defaultSelect: string,
+    errors: FieldErrors<FieldValues>,
+    placeholder: string
+}
+
+export default function FormSelect({ name, options, register, defaultSelect, errors, placeholder }: Props) {
     // Refactor so profile.js and formselect.js don't both need to get the firestore data
 
     return (
@@ -15,7 +25,7 @@ export default function FormSelect({ name, options, register, defaultSelect, err
                     <option key={index} value={option}>{option}</option>
                 ))}
             </select>
-            {errors[name] && <p className={styles['form-errormsg']}>{errors[name].message}</p>}
+            {errors[name] && <p className={styles['form-errormsg']}>{errors[name]!.message as string}</p>}
         </div>
     );
 }

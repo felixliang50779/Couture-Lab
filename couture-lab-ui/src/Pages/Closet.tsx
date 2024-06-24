@@ -1,11 +1,12 @@
 // Utility-related modules
-import { useState, useEffect, useRef, useCallback, useContext } from 'react';
+import { useState, useEffect, useRef, useCallback, useContext, MutableRefObject } from 'react';
 import
 {
     collection, query, documentId, where, getDocs
 } from 'firebase/firestore';
 import { db, FirebaseAuth } from '../Utilities/firebase';
 import { SettingsContext } from '../Utilities/settingscontext';
+import { ClosetItem } from '../Components/deleteModal';
 import { useNavigate } from 'react-router-dom';
 
 // UI-related modules
@@ -20,9 +21,14 @@ import StylingAssistant from '../Components/stylingAssistant';
 import UploadModal from '../Components/uploadModal';
 import ItemModal from '../Components/itemModal';
 import DeleteModal from '../Components/deleteModal';
-import Sheet from 'react-modal-sheet';
+import Sheet, { SheetRef } from 'react-modal-sheet';
 
 import styles from '../PageStyles/Closet.module.css';
+
+
+interface GalleryItemProp {
+    item: ClosetItem
+}
 
 
 const Closet = () => {
@@ -35,10 +41,10 @@ const Closet = () => {
     const { isOpen: deleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
 
     // Gallery states
-	const [clothesPicture, setClothesPicture] = useState();
-    const [galleryData, setGalleryData] = useState([]);
-    const [filteredGallery, setFilteredGallery] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]);
+	const [clothesPicture, setClothesPicture] = useState<File>();
+    const [galleryData, setGalleryData] = useState<Array<ClosetItem>>([]);
+    const [filteredGallery, setFilteredGallery] = useState<Array<ClosetItem>>([]);
+    const [selectedItems, setSelectedItems] = useState<Array<ClosetItem>>([]);
     const [uploadingStatus, setUploadingStatus] = useState(false);
     const [deletingStatus, setDeletingStatus] = useState(false);
     const [multiDeleteStatus, setMultiDeleteStatus] = useState(false);
@@ -49,8 +55,8 @@ const Closet = () => {
     // Styling assistant states
     const [collapsed, setCollapsed] = useState(true);
     const [chatInput, setChatInput] = useState("");
-    const [queryLog, setQueryLog] = useState([]);
-    const [responseLog, setResponseLog] = useState([]);
+    const [queryLog, setQueryLog] = useState<string[]>([]);
+    const [responseLog, setResponseLog] = useState<string[]>([]);
 
     // Styling assistant settings
     const { fetchSettings } = useContext(SettingsContext);
@@ -62,16 +68,16 @@ const Closet = () => {
     const selectedItem = useRef({});
     
     // Sheets snap
-    const sheetRef = useRef();
-    const snapTo = (i) => sheetRef.current?.snapTo(i);
+    const sheetRef = useRef<SheetRef>();
+    const snapTo = (i: number) => sheetRef.current!.snapTo(i);
 
     const openStylist = () => {
         setCollapsed(false);
     }
 
-    const handleQuery = async (event) => {
+    const handleQuery = async (event: string | React.FormEvent<HTMLFormElement>) => {
         
-        let userInput, imageFlag;
+        let userInput = '', imageFlag;
 
         if (typeof(event) === "object") {
             event.preventDefault();
@@ -79,11 +85,11 @@ const Closet = () => {
             imageFlag = false;
 
             // Catching empty inputs
-            if (!event.target[0].value.trim()) {
+            if (!(event.target as any)[0].value.trim()) {
                 return;
             }
 
-            userInput = event.target[0].value.trim();
+            userInput = (event.target as any)[0].value.trim();
         }
         else {
             imageFlag = true;
@@ -97,8 +103,8 @@ const Closet = () => {
         const settings = await fetchSettings();
         const personalizeResponse = settings.personalizeResponses;
 
-        // const API = 'http://127.0.0.1:8000/langserve/';
-        const API = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
+        const API = 'http://127.0.0.1:8000/langserve/';
+        // const API = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
 
         const response = await fetch(API,
         {
@@ -115,7 +121,7 @@ const Closet = () => {
         });
 
         // Here we start prepping for the streaming response
-        const reader = response.body.getReader();
+        const reader = response.body!.getReader();
         const decoder = new TextDecoder();
         const loopRunner = true;
         const imgLabel = /!\[.*?\]/g;
@@ -161,7 +167,7 @@ const Closet = () => {
 
         const closetSnapshot = await getDocs(items);
         closetSnapshot.forEach(doc => {
-            const userItems = doc.data()[FirebaseAuth.currentUser.uid];
+            const userItems = doc.data()[FirebaseAuth.currentUser!.uid];
             
             if (userItems !== undefined) {
                 setLoadingGallery(false);
@@ -183,7 +189,7 @@ const Closet = () => {
         const querySnapshot = await getDocs(questionnaires);
         querySnapshot.forEach((doc) => {
             // If not found, navigates to basic info
-            if (!doc.data()[FirebaseAuth.currentUser.uid]) {
+            if (!doc.data()[FirebaseAuth.currentUser!.uid]) {
                 navigate('/basicinfo');
             }
         });
@@ -198,7 +204,7 @@ const Closet = () => {
         // Resetting all the checkboxes
         // when select mode is toggled
         for (const item of galleryData) {
-            window[item.storageName] = false;
+            (window as { [key: string]: any })[item.storageName] = false;
         }
 
         setSelectMode(prevState => {
@@ -210,38 +216,38 @@ const Closet = () => {
         });
     }
 
-    const handleItemClick = item => {
+    const handleItemClick = (item: ClosetItem) => {
         selectedItem.current = item;
         onItemModalOpen();
     }
 
-    const handleItemSelect = item => {
-        if (selectedItems.filter(currItem => currItem.storageName === item.storageName).length) {
-            window[item.storageName] = false;
+    const handleItemSelect = (item: ClosetItem) => {
+        if (selectedItems.filter((currItem: ClosetItem) => currItem.storageName === item.storageName).length) {
+            (window as { [key: string]: any })[item.storageName] = false;
             setSelectedItems(prevState => {
-                return prevState.filter(currItem => currItem.storageName !== item.storageName);
+                return prevState.filter((currItem: ClosetItem) => currItem.storageName !== item.storageName);
             });
         }
         else {
-            window[item.storageName] = true;
+            (window as { [key: string]: any })[item.storageName] = true;
             setSelectedItems(prevState => {
                 return [...prevState, item];
             });
         }
     }
 
-    const galleryFilter = (category, galleryData) => {
+    const galleryFilter = (category: string, galleryData: Array<ClosetItem>) => {
         const filterData = galleryData.filter((item) => item.category === category);
         setSelectedCategory(category);
         setFilteredGallery(filterData);
     };
 
-    const GalleryItem = ({ item }) => (
+    const GalleryItem = ({ item }: GalleryItemProp) => (
         <label className={styles['item-label']} onClick={!selectMode ? () => handleItemClick(item) : undefined}>
             <input
                 type="checkbox" 
                 disabled={!selectMode}
-                checked={window[item.storageName]}
+                checked={(window as { [key: string]: any })[item.storageName]}
                 onChange={() => {
                     handleItemSelect(item);
                 }}
@@ -338,12 +344,12 @@ const Closet = () => {
             <UploadModal
                 isOpen={uploadModalOpen}
                 onClose={onUploadModalClose}
-                clothesPicture={clothesPicture}
-                setClothesPicture={setClothesPicture}
+                clothesPicture={clothesPicture as File}
+                setClothesPicture={setClothesPicture as React.Dispatch<React.SetStateAction<File | null>>}
                 uploadingStatus={uploadingStatus}
                 setUploadingStatus={setUploadingStatus}
                 uploadName={uploadName} 
-                uploadCategory={uploadCategory}
+                uploadCategory={uploadCategory as MutableRefObject<HTMLSelectElement>}
                 setGalleryData={setGalleryData}
                 selectedCategory={selectedCategory}
                 setFilteredGallery={setFilteredGallery} 
@@ -353,7 +359,7 @@ const Closet = () => {
                 onClose={onItemModalClose}
                 deletingStatus={deletingStatus}
                 setDeletingStatus={setDeletingStatus}
-                selectedItem={selectedItem.current}
+                selectedItem={selectedItem.current as ClosetItem}
                 selectedCategory={selectedCategory}
                 setGalleryData={setGalleryData}
                 setFilteredGallery={setFilteredGallery}

@@ -15,6 +15,22 @@ import DashboardNavBar from '../Components/dashboardnavbar';
 // Styling
 import styles from '../PageStyles/Profile.module.css';
 
+
+export interface StylingPreferences {
+    Gender: string,
+    "Age group": string,
+    "Body type": string,
+    Budget: string,
+    "Experiment level": string,
+    "Eye color": string,
+    "Frequent events": string,
+    "Hair color": string,
+    "Preferred style": string,
+    "Skin tone": string,
+    Sustainability: string,
+    name: string
+}
+
 // Displays user styling preferences on profile
 export const displayUserStylingPreferences = async () => {
     const closetRef = collection(db, "virtual-closet");
@@ -26,8 +42,8 @@ export const displayUserStylingPreferences = async () => {
 
     const querySnapshot = await getDocs(questionnaires);
     querySnapshot.forEach((doc) => {
-        if (doc.data()[FirebaseAuth.currentUser.uid]) {
-            questionnaireData = doc.data()[FirebaseAuth.currentUser.uid];
+        if (doc.data()[FirebaseAuth.currentUser!.uid]) {
+            questionnaireData = doc.data()[FirebaseAuth.currentUser!.uid];
         }
     });
 
@@ -39,18 +55,18 @@ export default function Profile() {
 
     const [loadingStylingPreferences, setLoadingStylingPreferences] = useState(true);
     // Stores user styling preferences data for displaying
-    const [userStylingPreferences, setUserStylingPreferences] = useState({});
+    const [userStylingPreferences, setUserStylingPreferences] = useState<StylingPreferences | {}>({});
     // Manages opening and closing of delete account dialog
     const { isOpen: deleteAccountModalOpen, onOpen: onDeleteAccountModalOpen, onClose: onDeleteAccountModalClose } = useDisclosure();
 
     // User information
     const currentUser = FirebaseAuth.currentUser;
-    const currentUsername = currentUser.displayName;
-    const currentUserEmail = currentUser.email;
+    const currentUsername = currentUser!.displayName;
+    const currentUserEmail = currentUser!.email;
 
     // State vars for styling assistant settings
     const [loadingAssistantSettings, setLoadingAssistantSettings] = useState(true);
-    const [isPersonalized, setIsPersonalized] = useState(null);
+    const [isPersonalized, setIsPersonalized] = useState<string>("");
 
     const { fetchSettings, setSettings } = useContext(SettingsContext);
 
@@ -142,17 +158,17 @@ export default function Profile() {
                             <h1 className={styles['profile-styling-card-header']}>Styling Preferences</h1>
                             <h2 className={styles['profile-styling-card-current']}>Current Styling Preferences</h2>
                             <section className={styles['profile-styling-card-current-preferences']}>
-                                <p>Gender: {userStylingPreferences["Gender"]}</p> 
-                                <p>Age Group: {userStylingPreferences["Age group"]}</p>
-                                <p>Preferred Style: {userStylingPreferences["Preferred style"]}</p>
-                                <p>Hair Color: {userStylingPreferences["Hair color"]}</p>
-                                <p>Skin Tone: {userStylingPreferences["Skin tone"]}</p>
-                                <p>Eye Color: {userStylingPreferences["Eye color"]}</p>
-                                <p>Body Type: {userStylingPreferences["Body type"]}</p>
-                                <p>Experimental Level: {userStylingPreferences["Experiment level"]}</p>
-                                <p>Budget: {userStylingPreferences["Budget"]}</p>
-                                <p>Sustainability Importance: {userStylingPreferences["Sustainability"]}</p>
-                                <p>Frequent Events: {userStylingPreferences["Frequent events"]}</p>
+                                <p>Gender: {(userStylingPreferences as StylingPreferences)["Gender"]}</p> 
+                                <p>Age Group: {(userStylingPreferences as StylingPreferences)["Age group"]}</p>
+                                <p>Preferred Style: {(userStylingPreferences as StylingPreferences)["Preferred style"]}</p>
+                                <p>Hair Color: {(userStylingPreferences as StylingPreferences)["Hair color"]}</p>
+                                <p>Skin Tone: {(userStylingPreferences as StylingPreferences)["Skin tone"]}</p>
+                                <p>Eye Color: {(userStylingPreferences as StylingPreferences)["Eye color"]}</p>
+                                <p>Body Type: {(userStylingPreferences as StylingPreferences)["Body type"]}</p>
+                                <p>Experimental Level: {(userStylingPreferences as StylingPreferences)["Experiment level"]}</p>
+                                <p>Budget: {(userStylingPreferences as StylingPreferences)["Budget"]}</p>
+                                <p>Sustainability Importance: {(userStylingPreferences as StylingPreferences)["Sustainability"]}</p>
+                                <p>Frequent Events: {(userStylingPreferences as StylingPreferences)["Frequent events"]}</p>
                             </section>
                             <CollapseForm
                                 userStylingPreferences={userStylingPreferences}

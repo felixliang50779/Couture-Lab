@@ -30,7 +30,7 @@
 .profile-userinfo-card {
     max-height: 14em;
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .profile-userinfo-card-inner {

@@ -15,11 +15,11 @@ export default function VerifyEmail() {
     const user = FirebaseAuth.currentUser;
 
     // Resends verification email
-    const resendVerifyEmail = async (e) => {
+    const resendVerifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         try {
-            sendEmailVerification(user);
+            sendEmailVerification(user!);
             console.log("Clicked verify email");
         } catch (error) {
             console.log(error);

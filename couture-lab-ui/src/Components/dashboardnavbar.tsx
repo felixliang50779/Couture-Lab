@@ -11,7 +11,7 @@ import {
     PopoverBody,
     PopoverArrow,
 } from '@chakra-ui/react'
-import styles from './dashboardnavbar.module.css';
+import styles from '../ComponentStyles/dashboardnavbar.module.css';
 
 
 export default function DashboardNavBar() {

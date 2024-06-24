@@ -2,7 +2,9 @@
 import { uploadBytes, ref } from 'firebase/storage';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
+import { useRef } from 'react';
 import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+import { ClosetItem, UpdateItemObject } from './deleteModal';
 import FormData from 'form-data';
 
 // UI-related modules
@@ -14,6 +16,21 @@ import {
 import { toast } from 'react-toastify';
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import styles from '../PageStyles/Modal.module.css';
+import { MutableRefObject } from 'react';
+
+interface Props {
+    isOpen: boolean,
+    onClose: () => void,
+    clothesPicture: File,
+    setClothesPicture: React.Dispatch<React.SetStateAction<File | null>>,
+    uploadingStatus: boolean,
+    setUploadingStatus: React.Dispatch<React.SetStateAction<boolean>>,
+    uploadName: MutableRefObject<string>,
+    uploadCategory: MutableRefObject<HTMLSelectElement>,
+    setGalleryData: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>,
+    selectedCategory: string,
+    setFilteredGallery: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>
+}
 
 const UploadModal = ({
     isOpen, 
@@ -27,7 +44,9 @@ const UploadModal = ({
     setGalleryData, 
     selectedCategory, 
     setFilteredGallery 
-}) => {
+}: Props) => {
+
+    const cancelRef = useRef(null);
 
     const handleClose = () => {
         setClothesPicture(null);
@@ -72,7 +91,7 @@ const UploadModal = ({
                 headers: {
                     'X-api-key': removebgKey
                 },
-                body: formData
+                body: formData as any   // couldn't find proper way to convert to acceptable type
             });
     
             processedPicture = await res.blob();
@@ -104,8 +123,8 @@ const UploadModal = ({
             url: `https://firebasestorage.googleapis.com/v0/b/couture-lab-backend.appspot.com/o/${storageName}?alt=media`
         }
     
-        let updateObj = {}
-        updateObj[FirebaseAuth.currentUser.uid] = arrayUnion(newItem);
+        let updateObj = {} as UpdateItemObject;
+        updateObj[FirebaseAuth.currentUser!.uid] = arrayUnion(newItem);
     
         await updateDoc(itemsRef, updateObj);
     
@@ -125,12 +144,13 @@ const UploadModal = ({
         <AlertDialog
             motionPreset='slideInBottom'
             onClose={handleClose}
+            leastDestructiveRef={cancelRef}
             closeOnEsc={false}
             closeOnOverlayClick={!uploadingStatus}
             isOpen={isOpen}
             isCentered
         >
-            <AlertDialogOverlay /> 
+            <AlertDialogOverlay ref={cancelRef} /> 
             <AlertDialogContent className={styles['closet-dialog-content']}>
                 <AlertDialogHeader>
                     New Item
@@ -139,7 +159,7 @@ const UploadModal = ({
                 <AlertDialogBody>
                     <label>
                         <input type='file' hidden accept=".jpg,.png"
-                            onChange={(e) => setClothesPicture(e.target.files[0])}
+                            onChange={(e) => setClothesPicture(e.target.files![0])}
                         />
                         { uploadingStatus ? <Progress isIndeterminate colorScheme="teal" /> :
                         clothesPicture ?

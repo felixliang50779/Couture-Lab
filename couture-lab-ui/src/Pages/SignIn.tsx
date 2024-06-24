@@ -1,62 +1,60 @@
-// Utility-related modules
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db, FirebaseAuth } from '../Utilities/firebase';
-
-import { toast } from 'react-toastify';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { FirebaseAuth } from '../Utilities/firebase';
+import { AuthContext } from '../Utilities/authcontext';
 
 import styles from '../PageStyles/SignIn.module.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-const SignUp = () => {
+const SignIn = () => {
+
     const navigate = useNavigate();
 
+    const { currentUser } = useContext(AuthContext);
+
+    // Checks if user is currentlysigned in or not
     const [userSignedIn, setUserSignedIn] = useState(false);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    /* Checks if user is signed in. However, if the user goes to '/signup' after they are logged in, 
-    it automatically redirects to 'verifyemail'. Will fix later */
+    // Checks if user is signed in
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(FirebaseAuth, (user) => {
             if (user) {
                 setUserSignedIn(true);
-                navigate('/verifyemail');
             } else {
                 setUserSignedIn(false);
             }
         });
 
+        // Cleanup function
         return () => unsubscribe();
-    }, [navigate]);
+    }, []);
 
-    const handleSignUp = async (e) => {
+    const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // Creates user in Firebase
+        // Log in user in Firebase
         try {
-            await createUserWithEmailAndPassword(FirebaseAuth, email, password);
-            await sendEmailVerification(FirebaseAuth.currentUser);
-
-            // Once the user has been successfully created
-            // set their default personalization preference to true
-            const settingsRef = doc(db, 'virtual-closet', 'settings');
-
-            let updateObj = {};
-            updateObj[FirebaseAuth.currentUser.uid] = {"personalizeResponses": "1"};
-
-            updateDoc(settingsRef, updateObj);
-
+            const userCredential = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+            const user = userCredential.user;
+            console.log(user);
+            navigate("/closet");
         } catch (error) {
             console.log(error);
-            toast.error('Failed to sign up.')
+            toast.error('Failed to sign in.')
         }
     };
 
+    if (currentUser) {
+        navigate('/closet');
+    }
+    
     return (
+        
         <div className={styles['signin-container']}>
             <div className={styles['signin-card']}>
                 <div className={styles['card-header']}>
@@ -64,14 +62,14 @@ const SignUp = () => {
                 </div>
                 <div className={styles['signin-content']}>
                     <div className={styles['signin-content-text']}>
-                        <h1 className={styles['signin-header']}>Sign up</h1>
-                        <h2 className={styles['signin-welcomeback']}>Create account</h2>
+                        <h1 className={styles['signin-header']}>Sign in</h1>
+                        <h2 className={styles['signin-welcomeback']}>Welcome back</h2>
                     </div>
                     { userSignedIn ? (
                         <h1>You are already signed in</h1>
                     ) : (
                         <div className={styles['signin-input-container']}>
-                            <form className={styles['signin-form']} onSubmit={handleSignUp}>
+                            <form className={styles['signin-form']} onSubmit={handleSignIn}>
                                 <h2 className={styles['form-title']}>Email</h2>
                                 <input
                                     className={styles['form-input']}
@@ -93,10 +91,10 @@ const SignUp = () => {
                                 <input className={styles['signin-submit']} type="submit" />
                             </form>
                             <div className={styles['signin-register']}>
-                                <h2>Already Registered?</h2>
+                                <h2>Not Registered Yet?</h2>
                                 <i>
-                                    <a className={styles['signin-register-link']} href="/signin">
-                                        Login
+                                    <a className={styles['signin-register-link']} href="/signup">
+                                        Register
                                     </a>
                                 </i>
                             </div>
@@ -108,4 +106,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default SignIn;

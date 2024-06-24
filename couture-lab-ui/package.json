@@ -17,6 +17,8 @@
     "@testing-library/user-event": "^13.5.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.3.0",
+    "@types/react": "^18.3.3",
+    "@types/uuid": "^10.0.0",
     "animation-wrapper": "^1.1.1",
     "debounce": "^2.0.0",
     "firebase": "^10.7.2",
@@ -37,6 +39,7 @@
     "react-router-dom": "^6.18.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.4",
+    "tsparticles": "^3.4.0",
     "tsparticles-engine": "^2.12.0",
     "tsparticles-shape-image": "^2.12.0",
     "uuid": "^9.0.1",
@@ -54,6 +57,7 @@
       "react-app/jest"
     ]
   },
+  "main": "src/index.tsx",
   "browserslist": {
     "production": [
       ">0.2%",

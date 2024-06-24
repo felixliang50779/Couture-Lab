@@ -1,12 +1,26 @@
+// Internal modules
 import { useDisclosure, Collapse } from '@chakra-ui/react';
-import { db, FirebaseAuth } from '../Utilities/firebase';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { StylingPreferences } from '../Pages/Profile';
+import FormSelect from './formselect';
+import styles from '../PageStyles/Profile.module.css';
+
+// Externally imported modules
+import { db, FirebaseAuth } from '../Utilities/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import FormSelect from '../Components/formselect';
 
-import { toast } from 'react-toastify';
-import styles from '../PageStyles/Profile.module.css';
+type FieldValues = Record<string, string>   // MOVE TO PROFILE.TSX
+
+export interface PersonalizationFormObject {    // MOVE TO PROFILE.TSX
+    [key: string]: FieldValues | string
+}
+
+interface Props {
+    userStylingPreferences: PersonalizationFormObject | StylingPreferences,
+    setUserStylingPreferences: React.Dispatch<React.SetStateAction<PersonalizationFormObject>>
+}
 
 // Temporary for collapse and options, will have to refactor to reduce duplicate code
 const options = {
@@ -23,7 +37,7 @@ const options = {
     frequentEvents: ['Work', 'Casual Outings', 'Formal Events', 'Fitness', 'Travel', 'Other'],
 };
 
-function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
+function CollapseForm({ userStylingPreferences, setUserStylingPreferences }: Props) {
 
     const { 
         watch, 
@@ -35,8 +49,8 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
         const formData = watch(); // Get the current form data
         const questionnaireRef = doc(db, 'virtual-closet', 'questionnaires');
         
-        let updateObj = {}
-        updateObj[FirebaseAuth.currentUser.uid] = formData;
+        let updateObj = {} as PersonalizationFormObject
+        updateObj[FirebaseAuth.currentUser!.uid as string] = formData;
 
         try {
             if (!isValid) {
@@ -45,7 +59,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
             }
 
             // Update Firebase display name
-            updateProfile(FirebaseAuth.currentUser, {
+            updateProfile(FirebaseAuth.currentUser!, {
                 displayName: formData.name
             });
 
@@ -70,7 +84,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <h1 className={styles['form-header']}>Basic Information</h1>
                         <FormSelect 
                             name="Gender" 
-                            defaultSelect={userStylingPreferences["Gender"]} 
+                            defaultSelect={userStylingPreferences["Gender"] as string} 
                             options={options.gender} 
                             register={register} 
                             errors={errors} 
@@ -79,7 +93,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>Your age group helps us tailor suggestions more appropriately</label>
                         <FormSelect 
                             name="Age group" 
-                            defaultSelect={userStylingPreferences["Age group"]} 
+                            defaultSelect={userStylingPreferences["Age group"] as string}
                             options={options.ageGroup} 
                             register={register} 
                             errors={errors} 
@@ -89,7 +103,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>Which style best describes your everyday fashion?</label>
                         <FormSelect 
                             name="Preferred style" 
-                            defaultSelect={userStylingPreferences["Preferred style"]} 
+                            defaultSelect={userStylingPreferences["Preferred style"] as string} 
                             options={options.preferredStyle} 
                             register={register} 
                             errors={errors} 
@@ -99,7 +113,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <h2>These questions help the AI suggest colors that complement your look</h2>
                         <FormSelect 
                             name="Hair color" 
-                            defaultSelect={userStylingPreferences["Hair color"]} 
+                            defaultSelect={userStylingPreferences["Hair color"] as string} 
                             options={options.hairColor} 
                             register={register} 
                             errors={errors} 
@@ -108,7 +122,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>What's your skin tone?</label>
                         <FormSelect 
                             name="Skin tone" 
-                            defaultSelect={userStylingPreferences["Skin tone"]} 
+                            defaultSelect={userStylingPreferences["Skin tone"] as string} 
                             options={options.skinTone} 
                             register={register} 
                             errors={errors} 
@@ -117,7 +131,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>What's your eye color?</label>
                         <FormSelect 
                             name="Eye color" 
-                            defaultSelect={userStylingPreferences["Eye color"]} 
+                            defaultSelect={userStylingPreferences["Eye color"] as string}
                             options={options.eyeColor} 
                             register={register} 
                             errors={errors}
@@ -127,7 +141,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>Identifying your body type helps us suggest the most flattering outfits</label>
                         <FormSelect 
                             name="Body type" 
-                            defaultSelect={userStylingPreferences["Body type"]} 
+                            defaultSelect={userStylingPreferences["Body type"] as string} 
                             options={options.bodyType} 
                             register={register} 
                             errors={errors} 
@@ -136,7 +150,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>How open are you to trying new fashion styles?</label>
                         <FormSelect 
                             name="Experiment level"
-                            defaultSelect={userStylingPreferences["Experiment level"]}  
+                            defaultSelect={userStylingPreferences["Experiment level"] as string}  
                             options={options.experimentLevel} 
                             register={register} 
                             errors={errors} 
@@ -146,7 +160,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>Understanding your budget allows us to recommend clothes that fit your wallet</label>
                         <FormSelect 
                             name="Budget"
-                            defaultSelect={userStylingPreferences["Budget"]}   
+                            defaultSelect={userStylingPreferences["Budget"] as string}
                             options={options.budget} 
                             register={register} 
                             errors={errors} 
@@ -154,7 +168,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>How important is sustainability in fashion to you?</label>
                         <FormSelect 
                             name="Sustainability" 
-                            defaultSelect={userStylingPreferences["Sustainability"]}   
+                            defaultSelect={userStylingPreferences["Sustainability"] as string}  
                             options={options.sustainabilityImportance} 
                             register={register} 
                             errors={errors}     
@@ -164,7 +178,7 @@ function CollapseForm({ userStylingPreferences, setUserStylingPreferences }) {
                         <label>What types of events do you dress for most often?</label>
                         <FormSelect 
                             name="Frequent events" 
-                            defaultSelect={userStylingPreferences["Frequent events"]}   
+                            defaultSelect={userStylingPreferences["Frequent events"] as string} 
                             options={options.frequentEvents} 
                             register={register} 
                             errors={errors} 

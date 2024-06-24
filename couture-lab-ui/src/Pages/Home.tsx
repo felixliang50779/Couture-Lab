@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState, useMemo } from 'react';
+import { useContext, useEffect, useState, useMemo, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { Container } from "tsparticles-engine";
 import { loadSlim } from "@tsparticles/slim";
 
 import { AuthContext } from '../Utilities/authcontext';
@@ -17,9 +18,14 @@ import ChatbotImage from '../Assets/Images/chatbot.png'
 
 import styles from '../PageStyles/Home.module.css';
 
+type StaggeredText = { text: string };
+
+interface LoadOnViewProps {
+  children: ReactNode
+};
 
 // Loads content on scroll
-const LoadOnView = ({children}) => (
+const LoadOnView = ({children}:  LoadOnViewProps) => (
     <motion.div initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -29,7 +35,7 @@ const LoadOnView = ({children}) => (
     </motion.div>
 );
 
-const StaggeredTextAnimation = (text) => {
+const StaggeredTextAnimation = (text: StaggeredText) => {
     return (
         <div className={styles['intro-header']}>
             {text.text.split("").map((char, index) => (
@@ -76,7 +82,7 @@ export default function Home() {
       });
     }, []);
   
-    const particlesLoaded = (container) => {
+    const particlesLoaded = async (container: Container | undefined) => {
       console.log(container);
     };
   
@@ -162,8 +168,8 @@ export default function Home() {
             <NavBar />
             {init ? <Particles
                     className={styles.tsparticles}
-                    particlesLoaded={particlesLoaded}
-                    options={options} /> : <></>}
+                    particlesLoaded={particlesLoaded as any}
+                    options={options as any} /> : <></>}
             <LoadOnView>
                 <section className={styles['intro-container']}>
                     <StaggeredTextAnimation text="Revolutionizing Fashion." />

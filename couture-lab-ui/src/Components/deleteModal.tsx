@@ -1,7 +1,8 @@
 // Utility-related modules
 import { deleteObject, ref } from 'firebase/storage';
-import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, arrayRemove, FieldValue } from 'firebase/firestore';
 import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+import { useRef } from 'react';
 
 // UI-related modules
 import {
@@ -12,7 +13,30 @@ import { toast } from 'react-toastify';
 import styles from '../PageStyles/Modal.module.css';
 
 
-export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeletingStatus, selectedItems, setGalleryData, setFilteredGallery, handleToggleSelect }) {
+export interface UpdateItemObject {
+    [key: string]: FieldValue
+}
+
+export interface ClosetItem {
+    category: string,
+    displayName: string,
+    storageName: string,
+    url: string
+}
+
+interface Props {
+    isOpen: boolean,
+    onClose: () => void,
+    deletingStatus: boolean,
+    setDeletingStatus: React.Dispatch<React.SetStateAction<boolean>>,
+    selectedItems: Array<ClosetItem>,
+    setGalleryData: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>,
+    setFilteredGallery: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>,
+    handleToggleSelect: () => void
+}
+
+export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeletingStatus, selectedItems, setGalleryData, setFilteredGallery, handleToggleSelect }: Props) {
+    const cancelRef = useRef(null);
 
     const handleClose = () => {
         setDeletingStatus(false);
@@ -56,8 +80,8 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
                 url: item.url
             };
     
-            let updateObj = {};
-            updateObj[FirebaseAuth.currentUser.uid] = arrayRemove(deletedItem);
+            let updateObj = {} as UpdateItemObject;
+            updateObj[FirebaseAuth.currentUser!.uid] = arrayRemove(deletedItem);
 
             databaseDeletionPromises.push(updateDoc(itemsRef, updateObj));
         }
@@ -80,12 +104,13 @@ export default function DeleteModal({ isOpen, onClose, deletingStatus, setDeleti
         <AlertDialog
             motionPreset='slideInBottom'
             onClose={onClose}
+            leastDestructiveRef={cancelRef}
             closeOnEsc={false}
             closeOnOverlayClick={!deletingStatus}
             isOpen={isOpen}
             isCentered
         >
-            <AlertDialogOverlay />
+            <AlertDialogOverlay ref={cancelRef} />
             <AlertDialogContent className={styles['closet-dialog-content']}>
                 <AlertDialogHeader>{`Delete ${selectedItems.length} ${selectedItems.length === 1 ? "item" : "items"}`}</AlertDialogHeader>
                 <AlertDialogCloseButton className={`${deletingStatus && styles['closet-upload-disabled']}`}/>

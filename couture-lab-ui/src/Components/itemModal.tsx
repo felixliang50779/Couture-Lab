@@ -2,6 +2,8 @@
 import { deleteObject, ref } from 'firebase/storage';
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { storage, db, FirebaseAuth } from '../Utilities/firebase';
+import { useRef } from 'react';
+import { ClosetItem, UpdateItemObject } from './deleteModal';
 import debounce from "debounce";
 
 // UI-related modules
@@ -13,11 +15,25 @@ import { toast } from 'react-toastify';
 import styles from '../PageStyles/Modal.module.css';
 
 
+interface Props {
+    isOpen: boolean,
+    onClose: () => void,
+    deletingStatus: boolean,
+    setDeletingStatus: React.Dispatch<React.SetStateAction<boolean>>,
+    selectedItem: ClosetItem,
+    selectedCategory: string,
+    setGalleryData: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>,
+    setFilteredGallery: React.Dispatch<React.SetStateAction<Array<ClosetItem>>>,
+    openStylist: () => void,
+    handleQuery: (event: React.FormEvent<HTMLFormElement> | string) => void
+}
+
 export default function ItemModal({ 
     onClose, isOpen, deletingStatus, setDeletingStatus, selectedItem,
     selectedCategory, setGalleryData, setFilteredGallery, openStylist,
     handleQuery
-}) {
+}: Props) {
+    const cancelRef = useRef(null);
 
     // Prevent double clicks from querying the assistant twice
     const handleImageQuery = debounce(handleQuery, 200);
@@ -60,8 +76,8 @@ export default function ItemModal({
             url: selectedItem.url
         };
 
-        let updateObj = {};
-        updateObj[FirebaseAuth.currentUser.uid] = arrayRemove(deletedItem);
+        let updateObj = {} as UpdateItemObject;
+        updateObj[FirebaseAuth.currentUser!.uid] = arrayRemove(deletedItem);
 
         await updateDoc(itemsRef, updateObj);
 
@@ -80,12 +96,13 @@ export default function ItemModal({
         <AlertDialog
             motionPreset='slideInBottom'
             onClose={onClose}
+            leastDestructiveRef={cancelRef}
             closeOnEsc={false}
             closeOnOverlayClick={!deletingStatus}
             isOpen={isOpen}
             isCentered
         >
-            <AlertDialogOverlay /> 
+            <AlertDialogOverlay ref={cancelRef} />
             <AlertDialogContent className={styles['closet-dialog-content']}>
                 <AlertDialogHeader>
                     {selectedItem.displayName}

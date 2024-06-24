@@ -1,9 +1,9 @@
 // UI-related modules
-import { useEffect } from "react";
+import { MutableRefObject, useEffect } from "react";
 import { Input } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Sidebar } from "react-pro-sidebar";
-import styles from './stylingAssistant.module.css';
+import styles from '../ComponentStyles/stylingAssistant.module.css';
 import 'react-dots-loader/index.css';
 
 // Utility modules
@@ -13,10 +13,21 @@ import { AutoScrollContainer } from "react-auto-scroll-container";
 import Loader from "react-dots-loader";
 import Linkify from "linkify-react";
 
+interface Props {
+    collapsed: boolean,
+    chatInput: string,
+    queryLog: string[],
+    setCollapsed: React.Dispatch<React.SetStateAction<boolean>>,
+    handleQuery: (event: React.FormEvent<HTMLFormElement> | string) => void,
+    questionnaireRef: MutableRefObject<object>,
+    responseLog: string[],
+    setChatInput: React.Dispatch<React.SetStateAction<string>>
+}
+
 export default function StylingAssistant({ 
             collapsed, chatInput, queryLog, setCollapsed, handleQuery,
             questionnaireRef, responseLog, setChatInput
-}) {
+}: Props) {
 
     const toggleCollapse = () => {
         setCollapsed(prevState => {
