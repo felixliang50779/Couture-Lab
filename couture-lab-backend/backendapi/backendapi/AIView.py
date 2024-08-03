@@ -228,7 +228,7 @@ async def process_functions(messages, tools, user_gender=None, user_budget=None)
     async with aiohttp.ClientSession() as session:
         for i in range(2):
             response = client.chat.completions.create(
-                model="gpt-4-turbo-preview",
+                model="gpt-4o",
                 messages=messages,
                 tools=tools,
                 tool_choice="auto"
@@ -449,7 +449,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
         # Initial response that we can stream
         # a reply from if no function calls are required
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-0125",
+            model="gpt-4o-mini",
             messages=messages,
             tools=tools,
             tool_choice="auto",
@@ -467,7 +467,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
                 yield chunk.choices[0].delta.content
     else:
         response = client.chat.completions.create(
-            model="gpt-4-vision-preview",
+            model="gpt-4o",
             messages=messages,
             max_tokens=300
         )
@@ -524,7 +524,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
             messages = asyncio.run(process_functions(messages, tools))
 
         refined_response = client.chat.completions.create(
-            model="gpt-3.5-turbo-0125",
+            model="gpt-4o-mini",
             messages=messages,
             stream=True
         )
