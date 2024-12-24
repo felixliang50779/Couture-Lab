@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import AISerializer
 # Comment out for docker build and prod deploy
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from openai import OpenAI
 from django.http import StreamingHttpResponse
 from random import sample
@@ -555,7 +555,7 @@ class LangServeHandle(APIView):
 
 
 # DEVELOPMENT ONLY - load api keys from .env file so everything works
-# load_dotenv()
+load_dotenv()
 
 openai_key = os.getenv("OPENAI_API_KEY")
 rapidapi_key = os.getenv("RAPIDAPI_KEY")

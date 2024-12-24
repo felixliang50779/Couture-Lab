@@ -53,9 +53,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backendapi.urls'
-# CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # DEV
-CORS_ALLOWED_ORIGINS = ["https://couture-lab-backend.web.app", 
-"https://couture-lab-backend.firebaseapp.com", "https://couturelab.app"]  # PROD
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # DEV
+# CORS_ALLOWED_ORIGINS = ["https://couture-lab-backend.web.app", 
+# "https://couture-lab-backend.firebaseapp.com", "https://couturelab.app"]  # PROD
 CORS_ALLOW_HEADERS = ["content-type"]
 
 TEMPLATES = [
