@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import AISerializer
-from dotenv import load_dotenv
+# Comment out for docker build and prod deploy
+# from dotenv import load_dotenv
 from openai import OpenAI
 from django.http import StreamingHttpResponse
 from random import sample
@@ -23,7 +24,7 @@ async def get_country_code(session):
     querystring = {"format":"json"}
 
     headers = {
-    	"X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+    	"X-RapidAPI-Key": rapidapi_key,
     	"X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
     }
 
@@ -44,7 +45,7 @@ async def get_local_weather(session):
     querystring = {"format":"json"}
 
     headers = {
-        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Key": rapidapi_key,
         "X-RapidAPI-Host": "ip-geo-location.p.rapidapi.com"
     }
 
@@ -59,7 +60,7 @@ async def get_local_weather(session):
             querystring = {"q":f"{latitude},{longitude}"}
 
             headers = {
-                "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+                "X-RapidAPI-Key": rapidapi_key,
                 "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
             }
 
@@ -125,7 +126,7 @@ async def get_clothing_item(
                 }
 
     headers = {
-        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Key": rapidapi_key,
         "X-RapidAPI-Host": "real-time-product-search.p.rapidapi.com"
     }
 
@@ -136,17 +137,17 @@ async def get_clothing_item(
             product_recommendations = sample(product_dict['data'], 2)
 
             for product_index in range(len(product_recommendations)):
-                del product_recommendations[product_index]["product_id"]
-                del product_recommendations[product_index]["product_rating"]
-                del product_recommendations[product_index]["typical_price_range"]
-                del product_recommendations[product_index]["product_description"]
-                del product_recommendations[product_index]["product_attributes"]
-                del product_recommendations[product_index]["product_offers_page_url"]
-                del product_recommendations[product_index]["product_specs_page_url"]
-                del product_recommendations[product_index]["product_reviews_page_url"]
-                del product_recommendations[product_index]["product_num_reviews"]
-                del product_recommendations[product_index]["product_num_offers"]
-                del product_recommendations[product_index]["offer"]
+                product_recommendations[product_index].pop("product_id", None)
+                product_recommendations[product_index].pop("product_rating", None)
+                product_recommendations[product_index].pop("typical_price_range", None)
+                product_recommendations[product_index].pop("product_description", None)
+                product_recommendations[product_index].pop("product_attributes", None)
+                product_recommendations[product_index].pop("product_offers_page_url", None)
+                product_recommendations[product_index].pop("product_specs_page_url", None)
+                product_recommendations[product_index].pop("product_reviews_page_url", None)
+                product_recommendations[product_index].pop("product_num_reviews", None)
+                product_recommendations[product_index].pop("product_num_offers", None)
+                product_recommendations[product_index].pop("offer", None)
 
             return product_recommendations
 
@@ -185,7 +186,7 @@ async def get_weather_data(location, session):
     querystring = {"text":location,"language":"en"}
 
     headers = {
-        "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+        "X-RapidAPI-Key": rapidapi_key,
         "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
     }
 
@@ -203,7 +204,7 @@ async def get_weather_data(location, session):
             querystring = {"place_id": location_id,"timezone":"auto","language":"en","units":"metric"}
 
             headers = {
-                "X-RapidAPI-Key": "20dfc80653mshd4c08e26d51b7b5p14974ajsn55eb2643fcb4",
+                "X-RapidAPI-Key": rapidapi_key,
                 "X-RapidAPI-Host": "ai-weather-by-meteosource.p.rapidapi.com"
             }
 
@@ -387,13 +388,12 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
     You are an expert fashion stylist. Draw on all your
     knowledge to provide concise and detailed answers to what users ask.
 
-    When asked for an outfit, provide a complete color matching set of items, including tops,
+    When asked for an outfit, provide a complete set of items, including tops,
     hats, bottoms, and accessories. Provide pictures for items. 
 
-    Call the following functions in one go - do not expect follow-up opportunities:
-    1. 'get_local_weather' whenever you need the weather of the user's local area.
-    2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
-    local area.
+    Call the following functions in one go - DO NOT EXPECT FOLLOW UP OPPORTUNITIES:
+    1. 'get_local_weather' ALWAYS, unless the user explicitly specifies a location.
+    2. 'get_weather_data' whenever the user explicitly specifies a location
     3. 'get_clothing_data' whenever making a specific style recommendation. {text_personalization_instructions}
 
     When citing specific examples using the provided functions, be sure to extract
@@ -449,7 +449,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
         # Initial response that we can stream
         # a reply from if no function calls are required
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=messages,
             tools=tools,
             tool_choice="auto",
@@ -467,7 +467,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
                 yield chunk.choices[0].delta.content
     else:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=messages,
             max_tokens=300
         )
@@ -485,10 +485,9 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
         based off of an item the user initially supplied - provide recommendations
         for each item in the list.
 
-        Call the following functions in one go - do not expect follow-up opportunities:
-        1. 'get_local_weather' whenever you need the weather of the user's local area.
-        2. 'get_weather_data' whenever you need the weather of somewhere other than the user's
-        local area.
+        Call the following functions in one go - DO NOT EXPECT FOLLOW UP OPPORTUNITIES:
+        1. 'get_local_weather' ALWAYS, unless the user explicitly specifies a location.
+        2. 'get_weather_data' whenever the user explicitly specifies a location
         3. 'get_clothing_data' whenever making a specific style recommendation. {text_personalization_instructions}
 
         When citing specific examples using the provided functions, be sure to extract
@@ -524,7 +523,7 @@ def send_stylist_response(user_query, user_questionnaire, personalized_response,
             messages = asyncio.run(process_functions(messages, tools))
 
         refined_response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=messages,
             stream=True
         )
@@ -555,9 +554,10 @@ class LangServeHandle(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Load OpenAI api key from .env file so everything works
-load_dotenv()
+# DEVELOPMENT ONLY - load api keys from .env file so everything works
+# load_dotenv()
 
 openai_key = os.getenv("OPENAI_API_KEY")
+rapidapi_key = os.getenv("RAPIDAPI_KEY")
 
 client = OpenAI()

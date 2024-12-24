@@ -103,6 +103,7 @@ const Closet = () => {
         const settings = await fetchSettings();
         const personalizeResponse = settings.personalizeResponses;
 
+        // DIFFERENT FOR DEV vs PROD
         const API = 'http://127.0.0.1:8000/langserve/';
         // const API = 'https://styling-assistant-bqhufkgsnq-uc.a.run.app/langserve/';
 
